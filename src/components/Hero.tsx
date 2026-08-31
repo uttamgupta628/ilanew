@@ -1,21 +1,34 @@
 import { motion, useMotionValue, animate, useScroll, useTransform } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import heroMain from '../assets/images/hero-main.jpg';
 import { stats } from '../data/content';
 
 const headlineLines = ['Standing against', 'executions and', 'oppression.'];
 
-const embers = [
-  { left: '8%', size: 3, duration: 9, delay: 0, driftX: 14 },
-  { left: '18%', size: 2, duration: 12, delay: 2.4, driftX: -10 },
-  { left: '27%', size: 4, duration: 10.5, delay: 1 },
-  { left: '41%', size: 2.5, duration: 14, delay: 4, driftX: 18 },
-  { left: '58%', size: 3, duration: 11, delay: 3.2, driftX: -16 },
-  { left: '69%', size: 2, duration: 13, delay: 0.6, driftX: 8 },
-  { left: '80%', size: 3.5, duration: 9.5, delay: 5, driftX: -12 },
-  { left: '90%', size: 2, duration: 12.5, delay: 2 },
-];
+// jagged "torn edge" mask for the image panel
+const tornEdge: CSSProperties = {
+  clipPath:
+    'polygon(9% 0%, 100% 0%, 100% 100%, 7% 100%, 11% 93%, 4% 87%, 10% 80%, 3% 74%, 9% 67%, 2% 61%, 8% 54%, 1% 48%, 7% 41%, 0% 35%, 6% 28%, 2% 22%, 8% 15%, 3% 9%)',
+};
+
+function ArrowIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M7 17L17 7M17 7H9M17 7V15" />
+    </svg>
+  );
+}
+
+function SmileIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+      <circle cx="9" cy="9" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="9" r="1" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="9" />
+    </svg>
+  );
+}
 
 function StatValue({ value }: { value: string }) {
   const numeric = parseInt(value.replace(/[^\d]/g, ''), 10) || 0;
@@ -26,7 +39,7 @@ function StatValue({ value }: { value: string }) {
   useEffect(() => {
     const controls = animate(motionVal, numeric, {
       duration: 1.4,
-      delay: 1.3,
+      delay: 1.2,
       ease: [0.16, 1, 0.3, 1],
       onUpdate: (v) => setDisplay(Math.floor(v).toString()),
     });
@@ -44,71 +57,42 @@ function StatValue({ value }: { value: string }) {
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
-  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '14%']);
+
+  const primaryStat = stats[0];
 
   return (
-    <section ref={sectionRef} className="relative bg-ink text-paper overflow-hidden">
-      <div className="relative h-[92vh] min-h-[560px] max-h-[820px] flex flex-col">
-        <motion.div style={{ y: imageY }} className="absolute inset-0 h-[118%]">
+    <section ref={sectionRef} className="relative bg-[#0e2a1f] text-paper overflow-hidden min-h-screen">
+      {/* image panel — torn/jagged edge, bleeds to the right and bottom of the viewport */}
+      <div className="absolute top-[104px] sm:top-[124px] bottom-0 right-0 w-[46%] sm:w-[44%] min-w-[320px]">
+        <motion.div style={{ y: imageY, ...tornEdge }} className="relative w-full h-[110%]">
           <img
             src={heroMain}
             alt="ILA volunteers and community members speaking at an event"
             className="animate-ken-burns w-full h-full object-cover object-[center_25%]"
           />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-ink/25 to-transparent" />
+      </div>
 
-        {/* ambient gold glow, the one non-user-triggered flourish in the hero */}
-        <div
-          className="glow-orb absolute -left-24 top-1/3 w-[420px] h-[420px] rounded-full bg-gold/25 blur-[110px] pointer-events-none"
-          aria-hidden="true"
-        />
-
-        {/* drifting embers — echoes the vigil candles carried through the site */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          {embers.map((e, i) => (
-            <span
-              key={i}
-              className="ember"
-              style={
-                {
-                  left: e.left,
-                  width: e.size,
-                  height: e.size,
-                  animationDuration: `${e.duration}s`,
-                  animationDelay: `${e.delay}s`,
-                  '--drift-x': `${e.driftX ?? 0}px`,
-                } as CSSProperties
-              }
-            />
-          ))}
-        </div>
-
-        <motion.div
-          style={{ y: contentY, opacity: contentOpacity }}
-          className="relative z-10 flex-1 min-h-0 max-w-[1200px] w-full mx-auto px-5 sm:px-8 flex flex-col justify-center"
-        >
+      <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8 pt-16 sm:pt-20 pb-16">
+        <div className="max-w-[48%] sm:max-w-[46%]">
           <motion.span
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="inline-flex w-fit items-center gap-2.5 text-[13px] text-muted-dark border border-paper/20 rounded-full px-3.5 py-1.5 mb-7"
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="inline-flex w-fit items-center text-[12px] sm:text-[13px] tracking-wide uppercase text-paper border border-paper/30 rounded-full px-4 py-2 mb-8"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-gold shrink-0" />
             UK-registered charity, No. 1160607
           </motion.span>
 
-          <h1 className="font-serif font-medium leading-[1.08] tracking-tight text-[36px] sm:text-[52px] lg:text-[64px] max-w-[15ch] mb-6">
+          <h1 className="font-sans font-extrabold leading-[1.04] tracking-tight text-[32px] sm:text-[44px] lg:text-[56px] mb-6">
             {headlineLines.map((line, i) => (
               <span key={line} className="block overflow-hidden">
                 <motion.span
                   className="block"
                   initial={{ y: '110%' }}
                   animate={{ y: 0 }}
-                  transition={{ duration: 0.85, delay: 0.28 + i * 0.12, ease: [0.2, 0.8, 0.2, 1] }}
+                  transition={{ duration: 0.85, delay: 0.22 + i * 0.12, ease: [0.2, 0.8, 0.2, 1] }}
                 >
                   {line}
                 </motion.span>
@@ -119,8 +103,8 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.68 }}
-            className="text-[17.5px] text-muted-dark max-w-[42ch] mb-9"
+            transition={{ duration: 0.7, delay: 0.6 }}
+            className="text-[15.5px] sm:text-[17px] text-muted-dark mb-9"
           >
             A volunteer-led charity building stronger, more resilient communities across the UK, while defending the
             rights of the vulnerable worldwide.
@@ -129,41 +113,54 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.8 }}
-            className="flex flex-wrap gap-4"
+            transition={{ duration: 0.7, delay: 0.72 }}
           >
             <a
               href="https://iliberty.org.uk/donate-2/"
-              className="inline-flex items-center px-6 py-3 bg-gold text-ink rounded-sm text-[14.5px] font-medium hover:bg-gold-bright transition-colors"
+              className="group inline-flex items-center gap-4 pl-6 pr-2 py-2 bg-gold text-ink rounded-full text-[14.5px] font-semibold hover:bg-gold-bright transition-colors"
             >
               Donate now
-            </a>
-            <a
-              href="https://iliberty.org.uk/campaign/helping-survivors-rebuild-in-the-uk-2/"
-              className="inline-flex items-center px-6 py-3 border border-paper/25 rounded-sm text-[14.5px] font-medium hover:border-gold hover:text-gold-bright transition-colors"
-            >
-              See our work
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-ink text-gold group-hover:rotate-45 transition-transform duration-300">
+                <ArrowIcon className="w-4 h-4" />
+              </span>
             </a>
           </motion.div>
-        </motion.div>
+        </div>
 
-        {/* ledger strip — the one carried-over signature moment, doubles as the hero/next-section seam */}
+        {/* bottom band: avatar+stat cluster, divider, floating "See our work" card */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1 }}
-          className="relative z-10 shrink-0 bg-ink/70 backdrop-blur-sm border-t border-paper/15"
+          className="flex flex-wrap items-center gap-6 sm:gap-8 mt-16 sm:mt-24"
         >
-          <div className="max-w-[1200px] mx-auto px-5 sm:px-8 grid grid-cols-3 divide-x divide-paper/15">
-            {stats.map((s) => (
-              <div key={s.l} className="py-5 sm:py-6 px-4 sm:px-6 first:pl-0 last:pr-0">
-                <div className="font-serif text-[26px] sm:text-[32px] leading-none">
-                  <StatValue value={s.n} />
-                </div>
-                <div className="text-[12px] sm:text-[13px] text-muted-dark mt-1.5 max-w-[16ch]">{s.l}</div>
+          <div className="flex items-center gap-4">
+            <div className="flex -space-x-3 shrink-0">
+              {['#C9A15A', '#7A2E22', '#4A5D52'].map((c, i) => (
+                <span key={i} className="w-9 h-9 rounded-full border-2 border-ink" style={{ backgroundColor: c }} />
+              ))}
+            </div>
+            <div>
+              <div className="font-serif text-[24px] sm:text-[28px] leading-none">
+                <StatValue value={primaryStat.n} />
               </div>
-            ))}
+              <div className="text-[12px] sm:text-[13px] text-muted-dark mt-1 max-w-[16ch]">{primaryStat.l}</div>
+            </div>
           </div>
+
+          <span className="hidden sm:block w-px h-12 bg-paper/15" />
+
+          <a
+            href="https://iliberty.org.uk/campaign/helping-survivors-rebuild-in-the-uk-2/"
+            className="inline-flex items-center gap-3 bg-paper text-ink rounded-2xl pl-4 pr-5 py-3.5 shadow-xl hover:-translate-y-0.5 transition-transform"
+          >
+            <SmileIcon className="w-8 h-8 shrink-0" />
+            <span className="font-serif font-semibold text-[15px] leading-tight uppercase">
+              See our
+              <br />
+              work
+            </span>
+          </a>
         </motion.div>
       </div>
     </section>
