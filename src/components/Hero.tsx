@@ -905,7 +905,7 @@ export default function Hero() {
                   mt-1
                   max-w-[16ch]
                   text-[12px]
-                  text-black/70
+                  text-black
                   sm:text-[13px]
                 "
               >
