@@ -52,16 +52,19 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-10 z-50 px-2 pt-2 sm:px-4 sm:pt-3 lg:px-5">
+    <header className="fixed inset-x-0 top-12 z-50 px-2 pt-2 sm:px-4 sm:pt-3 lg:px-5">
       {/* =====================================================
           NAVBAR CONTAINER
+          overflow-visible so the oversized logo can spill out
       ====================================================== */}
 
       <div
         className="
+          relative
           mx-auto
           w-full
           max-w-[90%]
+          overflow-visible
           rounded-[24px]
           bg-paper
           px-3
@@ -81,24 +84,29 @@ export default function Navbar() {
           
           {/* =================================================
               LOGO
+              Sized larger than the pill and allowed to overflow
+              top/bottom via negative margins + z-index
           ================================================== */}
 
           <a
             href="#top"
-            className="flex shrink-0 items-center gap-2 sm:gap-2.5"
+            className="relative z-10 flex shrink-0 items-center gap-2 sm:gap-2.5"
           >
             <img
               src={logo}
               alt="International Liberty Association"
               className="
-                h-16
-                w-16
+                h-20
+                w-20
                 shrink-0
                 object-contain
-                sm:h-20
-                sm:w-20
-                lg:h-[88px]
-                lg:w-[88px]
+                -my-3
+                sm:h-28
+                sm:w-28
+                sm:-my-6
+                lg:h-32
+                lg:w-32
+                lg:-my-8
               "
             />
 
@@ -174,10 +182,18 @@ export default function Navbar() {
               href="https://iliberty.org.uk/donate-2/"
               style={{ backgroundColor: RED }}
               whileHover={{
-                scale: 1.03,
+                scale: 1.04,
+                y: -2,
+                boxShadow: '0 10px 24px rgba(200,16,46,0.35)',
               }}
               whileTap={{
                 scale: 0.97,
+                y: 0,
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 400,
+                damping: 20,
               }}
               className="
                 inline-flex
@@ -189,8 +205,6 @@ export default function Navbar() {
                 text-[16px]
                 font-semibold
                 text-white
-                transition-opacity
-                hover:opacity-90
                 2xl:px-7
                 2xl:py-3.5
                 2xl:text-[17px]
@@ -198,7 +212,17 @@ export default function Navbar() {
             >
               Donate
 
-              <ArrowIcon className="h-[18px] w-[18px]" />
+              <motion.span
+                className="flex items-center"
+                whileHover={{ rotate: 45 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 15,
+                }}
+              >
+                <ArrowIcon className="h-[18px] w-[18px]" />
+              </motion.span>
             </motion.a>
 
             {/* Shop */}
@@ -210,10 +234,19 @@ export default function Navbar() {
                 borderColor: RED,
               }}
               whileHover={{
-                scale: 1.03,
+                scale: 1.04,
+                y: -2,
+                backgroundColor: RED,
+                color: '#FFFFFF',
               }}
               whileTap={{
                 scale: 0.97,
+                y: 0,
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 400,
+                damping: 20,
               }}
               className="
                 inline-flex
@@ -224,8 +257,6 @@ export default function Navbar() {
                 py-3
                 text-[16px]
                 font-semibold
-                transition-colors
-                hover:bg-black/[0.03]
                 2xl:px-8
                 2xl:py-3.5
                 2xl:text-[17px]
@@ -245,6 +276,8 @@ export default function Navbar() {
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
             className="
+              relative
+              z-10
               flex
               h-10
               w-10
@@ -421,6 +454,10 @@ export default function Navbar() {
                     style={{
                       backgroundColor: RED,
                     }}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: '0 8px 20px rgba(200,16,46,0.3)',
+                    }}
                     whileTap={{
                       scale: 0.97,
                     }}
@@ -447,6 +484,11 @@ export default function Navbar() {
                     style={{
                       color: RED,
                       borderColor: RED,
+                    }}
+                    whileHover={{
+                      scale: 1.02,
+                      backgroundColor: RED,
+                      color: '#FFFFFF',
                     }}
                     whileTap={{
                       scale: 0.97,

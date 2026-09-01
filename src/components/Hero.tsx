@@ -446,7 +446,7 @@ export default function Hero() {
               CHARITY LABEL
           ================================================== */}
 
-          <motion.span
+          {/* <motion.span
             initial={{
               opacity: 0,
               y: 8,
@@ -478,7 +478,7 @@ export default function Hero() {
           >
             UK-registered charity,
             No. 1160607
-          </motion.span>
+          </motion.span> */}
 
 
           {/* =================================================
