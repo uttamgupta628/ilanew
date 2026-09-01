@@ -13,7 +13,8 @@ import {
   type CSSProperties,
 } from 'react';
 
-import heroMain from '../assets/images/hero-main.jpg';
+import heroPanelLeft from '../assets/images/panel-left.png';
+import heroPanelRight from '../assets/images/panel-right.png';
 import { stats } from '../data/content';
 
 /* =========================================================
@@ -305,12 +306,24 @@ export default function Hero() {
       >
         <div className="hero-image-track">
           <img
-            src={heroMain}
-            alt="ILA volunteers and community members speaking at an event"
+            src={heroPanelLeft}
+            alt="ILA volunteers and community members speaking at an event, part one"
           />
 
           <img
-            src={heroMain}
+            src={heroPanelRight}
+            alt="ILA volunteers and community members speaking at an event, part two"
+          />
+
+          {/* Duplicated pair — makes the loop seamless */}
+          <img
+            src={heroPanelLeft}
+            alt=""
+            aria-hidden="true"
+          />
+
+          <img
+            src={heroPanelRight}
             alt=""
             aria-hidden="true"
           />
@@ -387,12 +400,24 @@ export default function Hero() {
         >
           <div className="hero-image-track">
             <img
-              src={heroMain}
-              alt="ILA volunteers and community members speaking at an event"
+              src={heroPanelLeft}
+              alt="ILA volunteers and community members speaking at an event, part one"
             />
 
             <img
-              src={heroMain}
+              src={heroPanelRight}
+              alt="ILA volunteers and community members speaking at an event, part two"
+            />
+
+            {/* Duplicated pair — makes the loop seamless */}
+            <img
+              src={heroPanelLeft}
+              alt=""
+              aria-hidden="true"
+            />
+
+            <img
+              src={heroPanelRight}
               alt=""
               aria-hidden="true"
             />
@@ -441,45 +466,6 @@ export default function Hero() {
             max-w-[620px]
           "
         >
-
-          {/* =================================================
-              CHARITY LABEL
-          ================================================== */}
-
-          {/* <motion.span
-            initial={{
-              opacity: 0,
-              y: 8,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.7,
-              delay: 0.1,
-            }}
-            className="
-              mb-8
-              inline-flex
-              w-fit
-              items-center
-              rounded-full
-              border
-              border-paper/30
-              px-4
-              py-2
-              text-[12px]
-              uppercase
-              tracking-wide
-              text-paper
-              sm:text-[13px]
-            "
-          >
-            UK-registered charity,
-            No. 1160607
-          </motion.span> */}
-
 
           {/* =================================================
               HEADLINE

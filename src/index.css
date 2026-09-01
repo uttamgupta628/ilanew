@@ -87,18 +87,19 @@ button:focus-visible {
 /* =========================================================
    CONTINUOUS HERO IMAGE SLIDER
 ========================================================= */
-
 .hero-image-track {
   display: flex;
 
-  /* Two identical images side by side */
-  width: 200%;
+  /* Four images now (two panels, duplicated once) */
+  width: 400%;
   height: 100%;
 
   /*
     Slide the entire image track continuously.
-    Since each image is exactly 50% of the track,
-    moving -50% creates a seamless loop.
+    Each image is 25% of the 400% track.
+    Moving -50% shifts past exactly the first
+    pair (panel-left, panel-right) landing on
+    the identical duplicate pair — seamless loop.
   */
   animation: hero-slide-left 20s linear infinite;
 
@@ -112,43 +113,22 @@ button:focus-visible {
 
 .hero-image-track img {
   /*
-    Each image occupies exactly half
-    of the 200% track.
+    Each image occupies exactly a quarter
+    of the 400% track.
   */
-  width: 50%;
+  width: 25%;
   height: 100%;
 
-  flex: 0 0 50%;
+  flex: 0 0 25%;
 
-  /*
-    IMPORTANT:
-    Cover makes the image fill the entire
-    available height and width.
-
-    This removes the empty blue/white areas
-    caused by object-fit: contain.
-  */
   object-fit: contain;
-
-  /*
-    Adjust this if you want the visible
-    portion of the photo to move up/down.
-  */
   object-position: center center;
 
-  /*
-    Prevent Tailwind/global img rules
-    from changing the slider geometry.
-  */
   max-width: none;
 
   user-select: none;
   pointer-events: none;
 
-  /*
-    Prevent tiny rendering gaps between
-    duplicated images.
-  */
   display: block;
 }
 

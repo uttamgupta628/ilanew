@@ -1,22 +1,64 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import logo from '../assets/images/logo.png';
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import logo from "../assets/images/logo.png";
 
-const navLinks = [
-  { label: 'Home', href: '#top', active: true },
-  { label: 'Campaigns', href: '#campaigns', hasChevron: true },
-  { label: 'Who We Are', href: '#who-we-are', hasChevron: true },
-  { label: 'How To Help', href: '#how-to-help', hasChevron: true },
+type DropdownItem = {
+  label: string;
+  href: string;
+};
+
+type NavLink = {
+  label: string;
+  href: string;
+  active?: boolean;
+  hasChevron?: boolean;
+  dropdown?: DropdownItem[];
+};
+
+const navLinks: NavLink[] = [
+  { label: "Home", href: "#top", active: true },
   {
-    label: 'News & Updates',
-    href: 'https://iliberty.org.uk/news/',
+    label: "Campaigns",
+    href: "#campaigns",
+    hasChevron: true,
+    dropdown: [
+      { label: "Raising Awareness", href: "#raising-awareness" },
+      { label: "Community Support", href: "#community-support" },
+    ],
+  },
+  {
+    label: "Who We Are",
+    href: "#who-we-are",
+    hasChevron: true,
+    dropdown: [
+      { label: "About Us", href: "#about-us" },
+      { label: "Stories & Voices", href: "#stories-voices" },
+      { label: "Contact Us", href: "#contact-us" },
+      { label: "Feedback form", href: "#feedback-form" },
+      { label: "FAQ", href: "#faq" },
+    ],
+  },
+  {
+    label: "How To Help",
+    href: "#how-to-help",
+    hasChevron: true,
+    dropdown: [
+      { label: "Leave a Legacy", href: "#leave-a-legacy" },
+      { label: "Donate", href: "https://iliberty.org.uk/donate-2/" },
+      { label: "Partnerships", href: "#partnerships" },
+      { label: "Volunteer Form", href: "#volunteer-form" },
+    ],
+  },
+  {
+    label: "News & Updates",
+    href: "https://iliberty.org.uk/news/",
   },
 ];
 
-const RED = '#C8102E';
-const BLUE = '#5B8DBE';
+const RED = "#C8102E";
+const BLUE = "#5B8DBE";
 
-function ChevronIcon({ className = '' }: { className?: string }) {
+function ChevronIcon({ className = "" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -32,7 +74,23 @@ function ChevronIcon({ className = '' }: { className?: string }) {
   );
 }
 
-function ArrowIcon({ className = '' }: { className?: string }) {
+function ChevronRightIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M9 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+function ArrowIcon({ className = "" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -50,6 +108,8 @@ function ArrowIcon({ className = '' }: { className?: string }) {
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [desktopDropdown, setDesktopDropdown] = useState<string | null>(null);
+  const [mobileDropdown, setMobileDropdown] = useState<string | null>(null);
 
   return (
     <header className="fixed inset-x-0 top-12 z-50 px-2 pt-2 sm:px-4 sm:pt-3 lg:px-5">
@@ -81,7 +141,6 @@ export default function Navbar() {
         ==================================================== */}
 
         <div className="flex min-h-[54px] items-center justify-between gap-2">
-          
           {/* =================================================
               LOGO
               Sized larger than the pill and allowed to overflow
@@ -96,18 +155,19 @@ export default function Navbar() {
               src={logo}
               alt="International Liberty Association"
               className="
-                h-20
-                w-20
-                shrink-0
-                object-contain
-                -my-3
-                sm:h-28
-                sm:w-28
-                sm:-my-6
-                lg:h-32
-                lg:w-32
-                lg:-my-8
-              "
+    h-14
+    w-14
+    shrink-0
+    object-contain
+    -my-1.5
+    sm:h-20
+    sm:w-20
+    -mx-5.5
+    sm:-my-3
+    lg:h-28
+    lg:w-28
+    lg:-my-4
+  "
             />
 
             <span className="hidden flex-col font-serif leading-[1.02] sm:flex">
@@ -138,7 +198,16 @@ export default function Navbar() {
           <nav className="hidden xl:block">
             <ul className="flex items-center gap-4 2xl:gap-6">
               {navLinks.map((link) => (
-                <li key={link.label}>
+                <li
+                  key={link.label}
+                  className="relative"
+                  onMouseEnter={() =>
+                    link.dropdown && setDesktopDropdown(link.label)
+                  }
+                  onMouseLeave={() =>
+                    link.dropdown && setDesktopDropdown(null)
+                  }
+                >
                   <a
                     href={link.href}
                     style={link.active ? { color: RED } : undefined}
@@ -147,24 +216,98 @@ export default function Navbar() {
                       items-center
                       gap-1
                       whitespace-nowrap
-                      text-[14px]
+                      text-[15px]
                       font-semibold
                       transition-colors
                       duration-200
-                      2xl:text-[15px]
-                      ${
-                        link.active
-                          ? ''
-                          : 'text-ink/80 hover:text-ink'
-                      }
+                      2xl:text-[16px]
+                      ${link.active ? "" : "text-ink/80 hover:text-ink"}
                     `}
                   >
                     {link.label}
 
                     {link.hasChevron && (
-                      <ChevronIcon className="h-3.5 w-3.5" />
+                      <ChevronIcon
+                        className={`
+                          h-3.5
+                          w-3.5
+                          transition-transform
+                          duration-200
+                          ${
+                            desktopDropdown === link.label
+                              ? "rotate-180"
+                              : ""
+                          }
+                        `}
+                      />
                     )}
                   </a>
+
+                  {/* ===========================================
+                      DESKTOP DROPDOWN PANEL
+                  ============================================ */}
+
+                  {link.dropdown && (
+                    <AnimatePresence>
+                      {desktopDropdown === link.label && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 8 }}
+                          transition={{ duration: 0.18, ease: "easeOut" }}
+                          className="
+                            absolute
+                            left-1/2
+                            top-full
+                            z-20
+                            mt-3
+                            w-64
+                            -translate-x-1/2
+                            rounded-2xl
+                            bg-white
+                            p-3
+                            shadow-[0_18px_45px_rgba(0,0,0,0.18)]
+                          "
+                        >
+                          <ul>
+                            {link.dropdown.map((item, index) => (
+                              <li key={item.label}>
+                                <a
+                                  href={item.href}
+                                  className={`
+                                    flex
+                                    items-center
+                                    justify-between
+                                    gap-2
+                                    px-2
+                                    py-2.5
+                                    text-[15px]
+                                    font-semibold
+                                    text-ink
+                                    transition-colors
+                                    ${
+                                      index !== link.dropdown!.length - 1
+                                        ? "border-b border-ink/10"
+                                        : ""
+                                    }
+                                  `}
+                                  onMouseEnter={(e) =>
+                                    (e.currentTarget.style.color = RED)
+                                  }
+                                  onMouseLeave={(e) =>
+                                    (e.currentTarget.style.color = "")
+                                  }
+                                >
+                                  <span>{item.label}</span>
+                                  <ChevronRightIcon className="h-4 w-4 shrink-0 opacity-60" />
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  )}
                 </li>
               ))}
             </ul>
@@ -175,7 +318,6 @@ export default function Navbar() {
           ================================================== */}
 
           <div className="hidden shrink-0 items-center gap-2.5 xl:flex">
-            
             {/* Donate */}
 
             <motion.a
@@ -184,14 +326,14 @@ export default function Navbar() {
               whileHover={{
                 scale: 1.04,
                 y: -2,
-                boxShadow: '0 10px 24px rgba(200,16,46,0.35)',
+                boxShadow: "0 10px 24px rgba(200,16,46,0.35)",
               }}
               whileTap={{
                 scale: 0.97,
                 y: 0,
               }}
               transition={{
-                type: 'spring',
+                type: "spring",
                 stiffness: 400,
                 damping: 20,
               }}
@@ -211,12 +353,11 @@ export default function Navbar() {
               "
             >
               Donate
-
               <motion.span
                 className="flex items-center"
                 whileHover={{ rotate: 45 }}
                 transition={{
-                  type: 'spring',
+                  type: "spring",
                   stiffness: 300,
                   damping: 15,
                 }}
@@ -237,14 +378,14 @@ export default function Navbar() {
                 scale: 1.04,
                 y: -2,
                 backgroundColor: RED,
-                color: '#FFFFFF',
+                color: "#FFFFFF",
               }}
               whileTap={{
                 scale: 0.97,
                 y: 0,
               }}
               transition={{
-                type: 'spring',
+                type: "spring",
                 stiffness: 400,
                 damping: 20,
               }}
@@ -272,7 +413,7 @@ export default function Navbar() {
 
           <button
             type="button"
-            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
             className="
@@ -374,7 +515,7 @@ export default function Navbar() {
                 opacity: 0,
               }}
               animate={{
-                height: 'auto',
+                height: "auto",
                 opacity: 1,
               }}
               exit={{
@@ -409,37 +550,121 @@ export default function Navbar() {
                         duration: 0.3,
                       }}
                     >
-                      <a
-                        href={link.href}
-                        onClick={() => setOpen(false)}
-                        style={
-                          link.active
-                            ? { color: RED }
-                            : undefined
-                        }
-                        className={`
-                          flex
-                          items-center
-                          justify-between
-                          rounded-xl
-                          px-3
-                          py-2.5
-                          text-[16px]
-                          font-semibold
-                          transition-colors
-                          ${
-                            link.active
-                              ? 'bg-red-50'
-                              : 'text-ink hover:bg-black/[0.04]'
-                          }
-                        `}
-                      >
-                        <span>{link.label}</span>
+                      {link.dropdown ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setMobileDropdown((current) =>
+                                current === link.label ? null : link.label
+                              )
+                            }
+                            style={link.active ? { color: RED } : undefined}
+                            className={`
+                              flex
+                              w-full
+                              items-center
+                              justify-between
+                              rounded-xl
+                              px-3
+                              py-2.5
+                              text-[17px]
+                              font-semibold
+                              transition-colors
+                              ${
+                                link.active
+                                  ? "bg-red-50"
+                                  : "text-ink hover:bg-black/[0.04]"
+                              }
+                            `}
+                          >
+                            <span>{link.label}</span>
 
-                        {link.hasChevron && (
-                          <ChevronIcon className="h-4 w-4 opacity-60" />
-                        )}
-                      </a>
+                            <ChevronIcon
+                              className={`
+                                h-4
+                                w-4
+                                opacity-60
+                                transition-transform
+                                duration-200
+                                ${
+                                  mobileDropdown === link.label
+                                    ? "rotate-180"
+                                    : ""
+                                }
+                              `}
+                            />
+                          </button>
+
+                          <AnimatePresence initial={false}>
+                            {mobileDropdown === link.label && (
+                              <motion.ul
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{
+                                  duration: 0.25,
+                                  ease: [0.22, 1, 0.36, 1],
+                                }}
+                                className="overflow-hidden pl-4"
+                              >
+                                {link.dropdown.map((item) => (
+                                  <li key={item.label}>
+                                    <a
+                                      href={item.href}
+                                      onClick={() => {
+                                        setOpen(false);
+                                        setMobileDropdown(null);
+                                      }}
+                                      className="
+                                        flex
+                                        items-center
+                                        justify-between
+                                        gap-2
+                                        rounded-xl
+                                        px-3
+                                        py-2.5
+                                        text-[15px]
+                                        font-semibold
+                                        text-ink/85
+                                        transition-colors
+                                        hover:bg-black/[0.04]
+                                      "
+                                    >
+                                      <span>{item.label}</span>
+                                      <ChevronRightIcon className="h-3.5 w-3.5 opacity-50" />
+                                    </a>
+                                  </li>
+                                ))}
+                              </motion.ul>
+                            )}
+                          </AnimatePresence>
+                        </>
+                      ) : (
+                        <a
+                          href={link.href}
+                          onClick={() => setOpen(false)}
+                          style={link.active ? { color: RED } : undefined}
+                          className={`
+                            flex
+                            items-center
+                            justify-between
+                            rounded-xl
+                            px-3
+                            py-2.5
+                            text-[17px]
+                            font-semibold
+                            transition-colors
+                            ${
+                              link.active
+                                ? "bg-red-50"
+                                : "text-ink hover:bg-black/[0.04]"
+                            }
+                          `}
+                        >
+                          <span>{link.label}</span>
+                        </a>
+                      )}
                     </motion.li>
                   ))}
                 </motion.ul>
@@ -456,7 +681,7 @@ export default function Navbar() {
                     }}
                     whileHover={{
                       scale: 1.02,
-                      boxShadow: '0 8px 20px rgba(200,16,46,0.3)',
+                      boxShadow: "0 8px 20px rgba(200,16,46,0.3)",
                     }}
                     whileTap={{
                       scale: 0.97,
@@ -488,7 +713,7 @@ export default function Navbar() {
                     whileHover={{
                       scale: 1.02,
                       backgroundColor: RED,
-                      color: '#FFFFFF',
+                      color: "#FFFFFF",
                     }}
                     whileTap={{
                       scale: 0.97,
