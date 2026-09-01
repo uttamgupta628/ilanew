@@ -1,14 +1,19 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600;700;800&display=swap');
 
 @theme {
   --color-ink: #14161c;
   --color-ink-soft: #1d212b;
+
   --color-paper: #f6f2e9;
   --color-paper-dim: #ede7d8;
+
   --color-gold: #c6a15b;
   --color-gold-bright: #e4c68a;
+
   --color-maroon: #6e2b23;
+
   --color-muted-dark: #a7adbb;
   --color-muted-light: #5b5748;
 
@@ -16,63 +21,13 @@
   --font-sans: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 html {
   scroll-behavior: smooth;
-}
-
-@keyframes ken-burns {
-  0% {
-    transform: scale(1) translate3d(0, 0, 0);
-  }
-  100% {
-    transform: scale(1.09) translate3d(-0.5%, -1%, 0);
-  }
-}
-
-@keyframes drift-up {
-  0% {
-    transform: translateY(0) translateX(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(-120px) translateX(var(--drift-x, 10px));
-    opacity: 0;
-  }
-}
-
-@keyframes glow-pulse {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scale(1.08);
-  }
-}
-
-.animate-ken-burns {
-  animation: ken-burns 22s ease-out forwards;
-}
-
-.ember {
-  position: absolute;
-  bottom: 0;
-  border-radius: 50%;
-  background: var(--color-gold-bright);
-  box-shadow: 0 0 6px 1px var(--color-gold-bright);
-  animation: drift-up linear infinite;
-}
-
-.glow-orb {
-  animation: glow-pulse 7s ease-in-out infinite;
+  overflow-x: hidden;
 }
 
 body {
@@ -81,6 +36,27 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 a:focus-visible,
@@ -89,13 +65,226 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
+/* =========================================================
+   KEN BURNS
+========================================================= */
+
+@keyframes ken-burns {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.09);
+  }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 22s ease-out forwards;
+}
+
+/* =========================================================
+   CONTINUOUS HERO IMAGE SLIDER
+========================================================= */
+
+.hero-image-track {
+  display: flex;
+  width: 200%;
+  height: 100%;
+
+  animation: hero-slide-left 20s linear infinite;
+
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.hero-image-track img {
+  width: 50%;
+  height: 100%;
+
+  flex: 0 0 50%;
+
+  object-fit: cover;
+  object-position: center 25%;
+
+  max-width: none;
+
+  user-select: none;
+  pointer-events: none;
+}
+
+/*
+  The track moves exactly 50%.
+
+  Because there are two identical images,
+  the second image takes the exact position
+  of the first image at the end of the animation.
+
+  This creates a seamless loop.
+*/
+
+@keyframes hero-slide-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* =========================================================
+   HERO IMAGE OVERLAY
+========================================================= */
+
+.hero-image-overlay {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.04),
+      rgba(0, 0, 0, 0.08)
+    );
+}
+
+/* =========================================================
+   FLOATING EMBERS
+========================================================= */
+
+@keyframes drift-up {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0.7;
+  }
+
+  100% {
+    transform:
+      translateY(-120px)
+      translateX(var(--drift-x, 10px));
+
+    opacity: 0;
+  }
+}
+
+.ember {
+  position: absolute;
+  bottom: 0;
+
+  border-radius: 50%;
+
+  background: var(--color-gold-bright);
+
+  box-shadow:
+    0 0 6px 1px var(--color-gold-bright);
+
+  animation: drift-up linear infinite;
+}
+
+/* =========================================================
+   GLOW ORB
+========================================================= */
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+.glow-orb {
+  animation: glow-pulse 7s ease-in-out infinite;
+}
+
+/* =========================================================
+   MOBILE HERO IMAGE
+========================================================= */
+
+@media (max-width: 1023px) {
+  .hero-image-track {
+    animation-duration: 16s;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 639px) {
+  .hero-image-track {
+    animation-duration: 14s;
+  }
+}
+
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+  }
+
+  .hero-image-track {
+    animation: none;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+/* =========================================================
+   TOP CONTACT MARQUEE
+========================================================= */
+
+@keyframes contact-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.contact-marquee {
+  animation: contact-marquee 22s linear infinite;
+  will-change: transform;
+}
+
+/* Pause when user hovers */
+.contact-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Slightly faster on mobile */
+@media (max-width: 640px) {
+  .contact-marquee {
+    animation-duration: 16s;
   }
 }
