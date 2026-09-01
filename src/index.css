@@ -35,6 +35,7 @@ body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -89,41 +90,82 @@ button:focus-visible {
 
 .hero-image-track {
   display: flex;
+
+  /* Two identical images side by side */
   width: 200%;
   height: 100%;
 
+  /*
+    Slide the entire image track continuously.
+    Since each image is exactly 50% of the track,
+    moving -50% creates a seamless loop.
+  */
   animation: hero-slide-left 20s linear infinite;
 
   will-change: transform;
   backface-visibility: hidden;
+
   transform: translate3d(0, 0, 0);
 
-  background: #78ADD0;   /* NEW — matches the hero section's bg color */
+  background: #78add0;
 }
 
 .hero-image-track img {
+  /*
+    Each image occupies exactly half
+    of the 200% track.
+  */
   width: 50%;
   height: 100%;
 
   flex: 0 0 50%;
 
-  object-fit: contain;        /* was: cover */
-  object-position: center 25%;
+  /*
+    IMPORTANT:
+    Cover makes the image fill the entire
+    available height and width.
 
+    This removes the empty blue/white areas
+    caused by object-fit: contain.
+  */
+  object-fit: contain;
+
+  /*
+    Adjust this if you want the visible
+    portion of the photo to move up/down.
+  */
+  object-position: center center;
+
+  /*
+    Prevent Tailwind/global img rules
+    from changing the slider geometry.
+  */
   max-width: none;
 
   user-select: none;
   pointer-events: none;
+
+  /*
+    Prevent tiny rendering gaps between
+    duplicated images.
+  */
+  display: block;
 }
 
 /*
-  The track moves exactly 50%.
+  Seamless horizontal image movement.
 
-  Because there are two identical images,
-  the second image takes the exact position
-  of the first image at the end of the animation.
+  0%:
+  [ IMAGE 1 ][ IMAGE 2 ]
 
-  This creates a seamless loop.
+  100%:
+          [ IMAGE 1 ][ IMAGE 2 ]
+             ↑
+        IMAGE 2 replaces IMAGE 1
+
+  Because both images are identical,
+  the transition back to the beginning
+  is visually seamless.
 */
 
 @keyframes hero-slide-left {
@@ -152,6 +194,64 @@ button:focus-visible {
       rgba(0, 0, 0, 0.04),
       rgba(0, 0, 0, 0.08)
     );
+}
+
+/* =========================================================
+   DESKTOP HERO IMAGE
+========================================================= */
+
+@media (min-width: 1024px) {
+  .hero-image-track {
+    animation-duration: 20s;
+  }
+
+  .hero-image-track img {
+    /*
+      Keep the complete hero area filled.
+    */
+    object-fit: contain;
+
+    /*
+      Slightly favor the upper-middle portion
+      of the photograph.
+    */
+    object-position: center center;
+  }
+}
+
+/* =========================================================
+   TABLET / MOBILE HERO IMAGE
+========================================================= */
+
+@media (max-width: 1023px) {
+  .hero-image-track {
+    animation-duration: 16s;
+  }
+
+  .hero-image-track img {
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 639px) {
+  .hero-image-track {
+    animation-duration: 14s;
+  }
+
+  .hero-image-track img {
+    object-fit: cover;
+
+    /*
+      Slightly higher crop on small screens
+      so the important people/content stay visible.
+    */
+    object-position: center center;
+  }
 }
 
 /* =========================================================
@@ -217,26 +317,6 @@ button:focus-visible {
 }
 
 /* =========================================================
-   MOBILE HERO IMAGE
-========================================================= */
-
-@media (max-width: 1023px) {
-  .hero-image-track {
-    animation-duration: 16s;
-  }
-}
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 639px) {
-  .hero-image-track {
-    animation-duration: 14s;
-  }
-}
-
-/* =========================================================
    REDUCE MOTION
 ========================================================= */
 
@@ -259,7 +339,6 @@ button:focus-visible {
   }
 }
 
-
 /* =========================================================
    TOP CONTACT MARQUEE
 ========================================================= */
@@ -276,6 +355,7 @@ button:focus-visible {
 
 .contact-marquee {
   animation: contact-marquee 22s linear infinite;
+
   will-change: transform;
 }
 
@@ -284,7 +364,10 @@ button:focus-visible {
   animation-play-state: paused;
 }
 
-/* Slightly faster on mobile */
+/* =========================================================
+   CONTACT MARQUEE - MOBILE
+========================================================= */
+
 @media (max-width: 640px) {
   .contact-marquee {
     animation-duration: 16s;

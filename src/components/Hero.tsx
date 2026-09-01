@@ -59,7 +59,11 @@ const avatarUrls = [
    ARROW ICON
 ========================================================= */
 
-function ArrowIcon({ className = '' }: { className?: string }) {
+function ArrowIcon({
+  className = '',
+}: {
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -81,7 +85,11 @@ function ArrowIcon({ className = '' }: { className?: string }) {
    SMILE ICON
 ========================================================= */
 
-function SmileIcon({ className = '' }: { className?: string }) {
+function SmileIcon({
+  className = '',
+}: {
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -123,7 +131,11 @@ function SmileIcon({ className = '' }: { className?: string }) {
    ANIMATED STAT
 ========================================================= */
 
-function StatValue({ value }: { value: string }) {
+function StatValue({
+  value,
+}: {
+  value: string;
+}) {
   const numeric =
     parseInt(
       value.replace(/[^\d]/g, ''),
@@ -136,14 +148,15 @@ function StatValue({ value }: { value: string }) {
 
   const motionVal = useMotionValue(0);
 
-  const [display, setDisplay] = useState('0');
+  const [display, setDisplay] =
+    useState('0');
 
   useEffect(() => {
     let cancelled = false;
 
-    let replayTimeout: ReturnType<
-      typeof setTimeout
-    >;
+    let replayTimeout:
+      | ReturnType<typeof setTimeout>
+      | undefined;
 
     let animationControls:
       | ReturnType<typeof animate>
@@ -198,7 +211,12 @@ function StatValue({ value }: { value: string }) {
       cancelled = true;
 
       clearTimeout(startTimeout);
-      clearTimeout(replayTimeout);
+
+      if (replayTimeout) {
+        clearTimeout(
+          replayTimeout
+        );
+      }
 
       animationControls?.stop();
     };
@@ -220,6 +238,10 @@ export default function Hero() {
   const sectionRef =
     useRef<HTMLElement>(null);
 
+  /* =======================================================
+     SCROLL PARALLAX
+  ======================================================= */
+
   const {
     scrollYProgress,
   } = useScroll({
@@ -232,14 +254,17 @@ export default function Hero() {
   });
 
   /*
-    Small vertical parallax effect
-    while scrolling.
+    Very small vertical parallax.
+
+    The actual horizontal movement
+    is handled by hero-image-track
+    in index.css.
   */
 
   const imageY = useTransform(
     scrollYProgress,
     [0, 1],
-    ['0%', '14%']
+    ['0%', '5%']
   );
 
   const primaryStat = stats[0];
@@ -286,18 +311,17 @@ export default function Hero() {
           sm:h-[48vh]
         "
       >
-        {/* Continuous image track */}
+
+        {/* =================================================
+            CONTINUOUS SLIDING IMAGE
+        ================================================== */}
 
         <div className="hero-image-track">
-
-          {/* First image */}
 
           <img
             src={heroMain}
             alt="ILA volunteers and community members speaking at an event"
           />
-
-          {/* Duplicate image for seamless loop */}
 
           <img
             src={heroMain}
@@ -308,11 +332,13 @@ export default function Hero() {
         </div>
 
         <div className="hero-image-overlay" />
+
       </motion.div>
 
 
       {/* =====================================================
           DESKTOP IMAGE
+          FULL HEIGHT + CONTINUOUS SLIDE
       ====================================================== */}
 
       <div
@@ -321,11 +347,13 @@ export default function Hero() {
           inset-y-0
           right-0
           hidden
+          h-full
           w-2/3
           overflow-hidden
           lg:block
         "
       >
+
         <motion.div
           initial={{
             opacity: 0,
@@ -350,25 +378,28 @@ export default function Hero() {
             ...tornEdgeDesktop,
           }}
           className="
-            relative
-            h-[110%]
+            absolute
+            inset-0
+            h-full
             w-full
             overflow-hidden
           "
         >
 
-          {/* Continuous image track */}
+          {/* =================================================
+              CONTINUOUS IMAGE TRACK
+          ================================================== */}
 
           <div className="hero-image-track">
 
-            {/* First image */}
+            {/* ORIGINAL IMAGE */}
 
             <img
               src={heroMain}
               alt="ILA volunteers and community members speaking at an event"
             />
 
-            {/* Duplicate image */}
+            {/* DUPLICATE FOR SEAMLESS LOOP */}
 
             <img
               src={heroMain}
@@ -378,9 +409,14 @@ export default function Hero() {
 
           </div>
 
+          {/* =================================================
+              IMAGE OVERLAY
+          ================================================== */}
+
           <div className="hero-image-overlay" />
 
         </motion.div>
+
       </div>
 
 
@@ -389,32 +425,33 @@ export default function Hero() {
       ====================================================== */}
 
       <div
-  className="
-    relative
-    flex
-    w-full
-    flex-1
-    flex-col
-    justify-center
-    px-5
-    pb-16
-    pt-10
-    sm:px-8
-    lg:px-16
-    lg:pt-40
-    xl:px-20
-    2xl:px-24
-  "
->
+        className="
+          relative
+          flex
+          w-full
+          flex-1
+          flex-col
+          justify-center
+          px-5
+          pb-16
+          pt-10
+          sm:px-8
+          lg:px-12
+          lg:pt-40
+          xl:px-16
+          2xl:px-20
+        "
+      >
 
         <div
-  className="
-    w-full
-    max-w-full
-    sm:max-w-[80%]
-    lg:max-w-[56%]
-  "
->
+          className="
+            w-full
+            max-w-full
+            sm:max-w-[80%]
+            lg:max-w-[54%]
+            xl:max-w-[52%]
+          "
+        >
 
           {/* =================================================
               CHARITY LABEL
@@ -471,6 +508,7 @@ export default function Hero() {
               lg:text-[52px]
             "
           >
+
             {headlineLines.map(
               (line, index) => (
                 <span
@@ -480,6 +518,7 @@ export default function Hero() {
                     overflow-hidden
                   "
                 >
+
                   <motion.span
                     className="block"
                     initial={{
@@ -503,9 +542,11 @@ export default function Hero() {
                   >
                     {line}
                   </motion.span>
+
                 </span>
               )
             )}
+
           </h1>
 
 
@@ -570,7 +611,7 @@ export default function Hero() {
             "
           >
 
-            {/* Donate */}
+            {/* DONATE */}
 
             <a
               href="https://iliberty.org.uk/donate-2/"
@@ -580,15 +621,15 @@ export default function Hero() {
                 items-center
                 gap-4
                 rounded-full
-                bg-[#C8102E] 
+                bg-[#C8102E]
                 py-2
                 pl-6
                 pr-2
                 text-[14.5px]
                 font-semibold
-                text-ink
+                text-white
                 transition-colors
-                hover:bg-gold-bright
+                hover:bg-[#a80d25]
               "
             >
               Donate now
@@ -610,10 +651,11 @@ export default function Hero() {
               >
                 <ArrowIcon className="h-4 w-4" />
               </span>
+
             </a>
 
 
-            {/* Our Work */}
+            {/* OUR WORK */}
 
             <a
               href="#who-we-are"
@@ -625,15 +667,15 @@ export default function Hero() {
                 rounded-full
                 border
                 border-paper/40
-                bg-[#C8102E] 
+                bg-[#C8102E]
                 py-2
                 pl-6
                 pr-2
                 text-[14.5px]
                 font-semibold
-                text-paper
+                text-white
                 transition-colors
-                hover:bg-gold-bright
+                hover:bg-[#a80d25]
               "
             >
               Our Work
@@ -655,6 +697,7 @@ export default function Hero() {
               >
                 <ArrowIcon className="h-4 w-4" />
               </span>
+
             </a>
 
           </motion.div>
@@ -701,6 +744,7 @@ export default function Hero() {
           <div className="flex items-center gap-4">
 
             <div className="flex -space-x-3">
+
               {avatarUrls.map(
                 (src, index) => (
                   <img
@@ -723,6 +767,7 @@ export default function Hero() {
                   />
                 )
               )}
+
             </div>
 
             <div>
@@ -755,6 +800,7 @@ export default function Hero() {
               </div>
 
             </div>
+
           </div>
 
 
@@ -823,6 +869,7 @@ export default function Hero() {
         </motion.div>
 
       </div>
+
     </section>
   );
 }
