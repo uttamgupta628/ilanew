@@ -209,7 +209,7 @@ button:focus-visible {
     /*
       Keep the complete hero area filled.
     */
-    object-fit: contain;
+    object-fit: cover;
 
     /*
       Slightly favor the upper-middle portion

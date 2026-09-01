@@ -253,14 +253,6 @@ export default function Hero() {
     ],
   });
 
-  /*
-    Very small vertical parallax.
-
-    The actual horizontal movement
-    is handled by hero-image-track
-    in index.css.
-  */
-
   const imageY = useTransform(
     scrollYProgress,
     [0, 1],
@@ -311,13 +303,7 @@ export default function Hero() {
           sm:h-[48vh]
         "
       >
-
-        {/* =================================================
-            CONTINUOUS SLIDING IMAGE
-        ================================================== */}
-
         <div className="hero-image-track">
-
           <img
             src={heroMain}
             alt="ILA volunteers and community members speaking at an event"
@@ -328,17 +314,15 @@ export default function Hero() {
             alt=""
             aria-hidden="true"
           />
-
         </div>
 
         <div className="hero-image-overlay" />
-
       </motion.div>
 
 
       {/* =====================================================
           DESKTOP IMAGE
-          FULL HEIGHT + CONTINUOUS SLIDE
+          RIGHT SIDE / FULL HEIGHT
       ====================================================== */}
 
       <div
@@ -348,11 +332,27 @@ export default function Hero() {
           right-0
           hidden
           h-full
-          w-2/3
+          w-[58%]
           overflow-hidden
           lg:block
         "
       >
+        {/* =================================================
+            WHITE TORN-PAPER EDGE
+            Sits behind the image, offset slightly left/up/down
+            so a sliver of white peeks out along the jagged line
+        ================================================== */}
+
+        <div
+          style={tornEdgeDesktop}
+          className="
+            absolute
+            -inset-y-2
+            -left-3
+            right-0
+            bg-paper
+          "
+        />
 
         <motion.div
           initial={{
@@ -385,71 +385,60 @@ export default function Hero() {
             overflow-hidden
           "
         >
-
-          {/* =================================================
-              CONTINUOUS IMAGE TRACK
-          ================================================== */}
-
           <div className="hero-image-track">
-
-            {/* ORIGINAL IMAGE */}
-
             <img
               src={heroMain}
               alt="ILA volunteers and community members speaking at an event"
             />
-
-            {/* DUPLICATE FOR SEAMLESS LOOP */}
 
             <img
               src={heroMain}
               alt=""
               aria-hidden="true"
             />
-
           </div>
 
-          {/* =================================================
-              IMAGE OVERLAY
-          ================================================== */}
-
           <div className="hero-image-overlay" />
-
         </motion.div>
-
       </div>
 
 
       {/* =====================================================
-          MAIN CONTENT
+          LEFT CONTENT AREA
       ====================================================== */}
 
       <div
         className="
           relative
+          z-10
           flex
+          min-h-screen
           w-full
-          flex-1
           flex-col
           justify-center
           px-5
           pb-16
-          pt-10
+          pt-28
           sm:px-8
-          lg:px-12
-          lg:pt-40
-          xl:px-16
+          lg:w-[48%]
+          lg:min-h-screen
+          lg:px-10
+          lg:pb-20
+          lg:pt-32
+          xl:w-[46%]
+          xl:px-14
           2xl:px-20
         "
       >
 
+        {/* =================================================
+            CONTENT
+        ================================================== */}
+
         <div
           className="
             w-full
-            max-w-full
-            sm:max-w-[80%]
-            lg:max-w-[54%]
-            xl:max-w-[52%]
+            max-w-[620px]
           "
         >
 
@@ -504,11 +493,12 @@ export default function Hero() {
               font-extrabold
               leading-[1.04]
               tracking-tight
-              sm:text-[44px]
-              lg:text-[52px]
+              sm:text-[42px]
+              lg:text-[43px]
+              xl:text-[48px]
+              2xl:text-[52px]
             "
           >
-
             {headlineLines.map(
               (line, index) => (
                 <span
@@ -518,7 +508,6 @@ export default function Hero() {
                     overflow-hidden
                   "
                 >
-
                   <motion.span
                     className="block"
                     initial={{
@@ -542,11 +531,9 @@ export default function Hero() {
                   >
                     {line}
                   </motion.span>
-
                 </span>
               )
             )}
-
           </h1>
 
 
@@ -569,9 +556,13 @@ export default function Hero() {
             }}
             className="
               mb-9
-              text-[15.5px]
+              max-w-[570px]
+              text-[15px]
+              leading-[1.65]
               text-black
-              sm:text-[17px]
+              sm:text-[16px]
+              lg:text-[16px]
+              xl:text-[17px]
             "
           >
             We are a UK-based,
@@ -628,8 +619,10 @@ export default function Hero() {
                 text-[14.5px]
                 font-semibold
                 text-white
-                transition-colors
+                transition-all
+                duration-300
                 hover:bg-[#a80d25]
+                hover:-translate-y-0.5
               "
             >
               Donate now
@@ -651,7 +644,6 @@ export default function Hero() {
               >
                 <ArrowIcon className="h-4 w-4" />
               </span>
-
             </a>
 
 
@@ -666,7 +658,7 @@ export default function Hero() {
                 gap-4
                 rounded-full
                 border
-                border-paper/40
+                border-white/40
                 bg-[#C8102E]
                 py-2
                 pl-6
@@ -674,8 +666,10 @@ export default function Hero() {
                 text-[14.5px]
                 font-semibold
                 text-white
-                transition-colors
+                transition-all
+                duration-300
                 hover:bg-[#a80d25]
+                hover:-translate-y-0.5
               "
             >
               Our Work
@@ -688,8 +682,8 @@ export default function Hero() {
                   items-center
                   justify-center
                   rounded-full
-                  bg-paper/15
-                  text-paper
+                  bg-white/15
+                  text-white
                   transition-transform
                   duration-300
                   group-hover:rotate-45
@@ -697,7 +691,6 @@ export default function Hero() {
               >
                 <ArrowIcon className="h-4 w-4" />
               </span>
-
             </a>
 
           </motion.div>
@@ -733,7 +726,8 @@ export default function Hero() {
             sm:mt-16
             sm:flex-nowrap
             sm:gap-8
-            lg:mt-24
+            lg:mt-16
+            xl:mt-20
           "
         >
 
@@ -744,7 +738,6 @@ export default function Hero() {
           <div className="flex items-center gap-4">
 
             <div className="flex -space-x-3">
-
               {avatarUrls.map(
                 (src, index) => (
                   <img
@@ -756,7 +749,7 @@ export default function Hero() {
                       w-9
                       rounded-full
                       border-2
-                      border-gold
+                      border-[#C8102E]
                       object-cover
                     "
                     style={{
@@ -767,17 +760,22 @@ export default function Hero() {
                   />
                 )
               )}
-
             </div>
 
             <div>
 
+              {/* =================================================
+                  HIGHLIGHTED 50K+
+              ================================================== */}
+
               <div
                 className="
                   font-serif
-                  text-[24px]
+                  text-[26px]
+                  font-semibold
                   leading-none
-                  sm:text-[28px]
+                  text-[#C8102E]
+                  sm:text-[30px]
                 "
               >
                 <StatValue
@@ -792,7 +790,7 @@ export default function Hero() {
                   mt-1
                   max-w-[16ch]
                   text-[12px]
-                  text-muted-dark
+                  text-black/70
                   sm:text-[13px]
                 "
               >
@@ -800,7 +798,6 @@ export default function Hero() {
               </div>
 
             </div>
-
           </div>
 
 
@@ -813,7 +810,7 @@ export default function Hero() {
               hidden
               h-12
               w-px
-              bg-paper/15
+              bg-white/30
               sm:block
             "
           />
@@ -841,7 +838,6 @@ export default function Hero() {
               hover:-translate-y-1
             "
           >
-
             <SmileIcon
               className="
                 h-8
@@ -863,13 +859,11 @@ export default function Hero() {
               <br />
               work
             </span>
-
           </a>
 
         </motion.div>
 
       </div>
-
     </section>
   );
 }

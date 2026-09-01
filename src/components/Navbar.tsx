@@ -52,7 +52,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-10 z-50 px-3 pt-3 sm:px-5 sm:pt-4 lg:px-6">
+    <header className="fixed inset-x-0 top-10 z-50 px-2 pt-2 sm:px-4 sm:pt-3 lg:px-5">
       {/* =====================================================
           NAVBAR CONTAINER
       ====================================================== */}
@@ -62,60 +62,61 @@ export default function Navbar() {
           mx-auto
           w-full
           max-w-[90%]
-          rounded-[28px]
+          rounded-[24px]
           bg-paper
-          px-4
-          py-3
+          px-3
+          py-1
           shadow-[0_8px_35px_rgba(0,0,0,0.12)]
           sm:rounded-full
-          sm:px-5
-          sm:py-3
-          lg:px-6
+          sm:px-3.5
+          sm:py-1
+          lg:px-4
         "
       >
         {/* ===================================================
             MAIN NAV
         ==================================================== */}
 
-        <div className="flex min-h-[58px] items-center justify-between gap-3">
+        <div className="flex min-h-[54px] items-center justify-between gap-2">
+          
           {/* =================================================
               LOGO
           ================================================== */}
 
           <a
             href="#top"
-            className="flex shrink-0 items-center gap-2.5 sm:gap-3"
+            className="flex shrink-0 items-center gap-2 sm:gap-2.5"
           >
             <img
               src={logo}
               alt="International Liberty Association"
               className="
-                h-11
-                w-11
+                h-16
+                w-16
                 shrink-0
                 object-contain
-                sm:h-12
-                sm:w-12
-                lg:h-14
-                lg:w-14
+                sm:h-20
+                sm:w-20
+                lg:h-[88px]
+                lg:w-[88px]
               "
             />
 
-            <span className="hidden flex-col font-serif leading-[1.08] sm:flex">
+            <span className="hidden flex-col font-serif leading-[1.02] sm:flex">
               <span
                 style={{ color: BLUE }}
-                className="text-[13px] font-semibold sm:text-[14px] lg:text-[15px]"
+                className="text-[12px] font-semibold sm:text-[13px] lg:text-[14px]"
               >
                 International
               </span>
 
-              <span className="text-[13px] font-extrabold text-ink sm:text-[14px] lg:text-[15px]">
+              <span className="text-[12px] font-extrabold text-ink sm:text-[13px] lg:text-[14px]">
                 Liberty
               </span>
 
               <span
                 style={{ color: BLUE }}
-                className="text-[13px] font-semibold sm:text-[14px] lg:text-[15px]"
+                className="text-[12px] font-semibold sm:text-[13px] lg:text-[14px]"
               >
                 Association
               </span>
@@ -124,11 +125,10 @@ export default function Navbar() {
 
           {/* =================================================
               DESKTOP NAVIGATION
-              xl = 1280px
           ================================================== */}
 
           <nav className="hidden xl:block">
-            <ul className="flex items-center gap-5 2xl:gap-7">
+            <ul className="flex items-center gap-4 2xl:gap-6">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <a
@@ -139,11 +139,11 @@ export default function Navbar() {
                       items-center
                       gap-1
                       whitespace-nowrap
-                      text-[15px]
+                      text-[14px]
                       font-semibold
                       transition-colors
                       duration-200
-                      2xl:text-[16px]
+                      2xl:text-[15px]
                       ${
                         link.active
                           ? ''
@@ -167,7 +167,9 @@ export default function Navbar() {
           ================================================== */}
 
           <div className="hidden shrink-0 items-center gap-2.5 xl:flex">
+            
             {/* Donate */}
+
             <motion.a
               href="https://iliberty.org.uk/donate-2/"
               style={{ backgroundColor: RED }}
@@ -180,24 +182,27 @@ export default function Navbar() {
               className="
                 inline-flex
                 items-center
-                gap-1.5
+                gap-2
                 rounded-full
-                px-4
+                px-6
                 py-3
-                text-[15px]
+                text-[16px]
                 font-semibold
                 text-white
                 transition-opacity
                 hover:opacity-90
-                2xl:px-5
+                2xl:px-7
+                2xl:py-3.5
+                2xl:text-[17px]
               "
             >
               Donate
 
-              <ArrowIcon className="h-3.5 w-3.5" />
+              <ArrowIcon className="h-[18px] w-[18px]" />
             </motion.a>
 
             {/* Shop */}
+
             <motion.a
               href="/shop"
               style={{
@@ -215,13 +220,15 @@ export default function Navbar() {
                 items-center
                 rounded-full
                 border
-                px-5
+                px-7
                 py-3
-                text-[15px]
+                text-[16px]
                 font-semibold
                 transition-colors
                 hover:bg-black/[0.03]
-                2xl:px-6
+                2xl:px-8
+                2xl:py-3.5
+                2xl:text-[17px]
               "
             >
               Shop
@@ -230,10 +237,6 @@ export default function Navbar() {
 
           {/* =================================================
               TABLET + MOBILE MENU BUTTON
-              
-              Important:
-              xl:hidden means hamburger remains visible
-              until 1280px.
           ================================================== */}
 
           <button
@@ -243,8 +246,8 @@ export default function Navbar() {
             onClick={() => setOpen((value) => !value)}
             className="
               flex
-              h-11
-              w-11
+              h-10
+              w-10
               shrink-0
               items-center
               justify-center
@@ -351,7 +354,7 @@ export default function Navbar() {
               }}
               className="overflow-hidden xl:hidden"
             >
-              <div className="border-t border-ink/10 pt-4">
+              <div className="border-t border-ink/10 pt-3">
                 <motion.ul
                   initial="hidden"
                   animate="visible"
@@ -387,7 +390,7 @@ export default function Navbar() {
                           justify-between
                           rounded-xl
                           px-3
-                          py-3
+                          py-2.5
                           text-[16px]
                           font-semibold
                           transition-colors
@@ -412,7 +415,7 @@ export default function Navbar() {
                     MOBILE ACTION BUTTONS
                 ================================================== */}
 
-                <div className="mt-3 flex gap-2 border-t border-ink/10 pt-4">
+                <div className="mt-2 flex gap-2 border-t border-ink/10 pt-3">
                   <motion.a
                     href="https://iliberty.org.uk/donate-2/"
                     style={{
@@ -429,7 +432,7 @@ export default function Navbar() {
                       gap-2
                       rounded-full
                       px-4
-                      py-3
+                      py-2.5
                       text-[15px]
                       font-semibold
                       text-white
@@ -456,7 +459,7 @@ export default function Navbar() {
                       rounded-full
                       border
                       px-4
-                      py-3
+                      py-2.5
                       text-[15px]
                       font-semibold
                     "
