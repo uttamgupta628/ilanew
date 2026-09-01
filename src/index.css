@@ -97,6 +97,8 @@ button:focus-visible {
   will-change: transform;
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
+
+  background: #DC143C;   /* NEW — matches the hero section's bg color */
 }
 
 .hero-image-track img {
@@ -105,7 +107,7 @@ button:focus-visible {
 
   flex: 0 0 50%;
 
-  object-fit: cover;
+  object-fit: contain;        /* was: cover */
   object-position: center 25%;
 
   max-width: none;

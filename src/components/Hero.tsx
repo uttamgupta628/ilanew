@@ -254,7 +254,7 @@ export default function Hero() {
         min-h-screen
         flex-col
         overflow-hidden
-        bg-[#0e2a1f]
+        bg-[#DC143C]
         text-paper
       "
     >

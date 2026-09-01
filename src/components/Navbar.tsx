@@ -61,7 +61,7 @@ export default function Navbar() {
         className="
           mx-auto
           w-full
-          max-w-[1320px]
+          max-w-[90%]
           rounded-[28px]
           bg-paper
           px-4
