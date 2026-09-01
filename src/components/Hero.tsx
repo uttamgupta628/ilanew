@@ -3,13 +3,26 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import heroMain from '../assets/images/hero-main.jpg';
 import { stats } from '../data/content';
 
-const headlineLines = ['Standing against', 'executions and', 'oppression.'];
+const headlineLines = ['Standing Against Executions And', 'Oppression, Building Stronger', 'Communities In The UK'];
 
-// jagged "torn edge" mask for the image panel
-const tornEdge: CSSProperties = {
+// jagged "torn edge" mask for the desktop image panel (left edge)
+const tornEdgeDesktop: CSSProperties = {
   clipPath:
     'polygon(9% 0%, 100% 0%, 100% 100%, 7% 100%, 11% 93%, 4% 87%, 10% 80%, 3% 74%, 9% 67%, 2% 61%, 8% 54%, 1% 48%, 7% 41%, 0% 35%, 6% 28%, 2% 22%, 8% 15%, 3% 9%)',
 };
+
+// jagged "torn edge" mask for the mobile image band (bottom edge)
+const tornEdgeMobile: CSSProperties = {
+  clipPath:
+    'polygon(0% 0%, 100% 0%, 100% 91%, 93% 96%, 87% 90%, 80% 97%, 74% 91%, 67% 98%, 61% 92%, 54% 99%, 48% 93%, 41% 100%, 35% 94%, 28% 98%, 22% 92%, 15% 97%, 9% 91%, 0% 96%)',
+};
+
+const avatarUrls = [
+  'https://i.pravatar.cc/72?img=12',
+  'https://i.pravatar.cc/72?img=33',
+  'https://i.pravatar.cc/72?img=47',
+  'https://i.pravatar.cc/72?img=5',
+];
 
 function ArrowIcon({ className = '' }: { className?: string }) {
   return (
@@ -37,13 +50,31 @@ function StatValue({ value }: { value: string }) {
   const [display, setDisplay] = useState('0');
 
   useEffect(() => {
-    const controls = animate(motionVal, numeric, {
-      duration: 1.4,
-      delay: 1.2,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => setDisplay(Math.floor(v).toString()),
-    });
-    return () => controls.stop();
+    let cancelled = false;
+    let replayTimeout: ReturnType<typeof setTimeout>;
+
+    const runCount = () => {
+      motionVal.set(0);
+      animate(motionVal, numeric, {
+        duration: 1.6,
+        ease: [0.16, 1, 0.3, 1],
+        onUpdate: (v) => setDisplay(Math.floor(v).toString()),
+        onComplete: () => {
+          if (!cancelled) {
+            // pause on the final number for a few seconds, then replay the count-up
+            replayTimeout = setTimeout(runCount, 4000);
+          }
+        },
+      });
+    };
+
+    const startTimeout = setTimeout(runCount, 1200);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(startTimeout);
+      clearTimeout(replayTimeout);
+    };
   }, [numeric]);
 
   return (
@@ -62,10 +93,35 @@ export default function Hero() {
   const primaryStat = stats[0];
 
   return (
-    <section ref={sectionRef} className="relative bg-[#0e2a1f] text-paper overflow-hidden min-h-screen">
-      {/* image panel — torn/jagged edge, bleeds to the right and bottom of the viewport */}
-      <div className="absolute top-[104px] sm:top-[124px] bottom-0 right-0 w-[46%] sm:w-[44%] min-w-[320px]">
-        <motion.div style={{ y: imageY, ...tornEdge }} className="relative w-full h-[110%]">
+    <section
+      ref={sectionRef}
+      id="top"
+      className="relative bg-[#0e2a1f] text-paper overflow-hidden min-h-screen flex flex-col"
+    >
+      {/* mobile / tablet image band — full width, torn bottom edge */}
+      <motion.div
+        initial={{ opacity: 0, scale: 1.08 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+        style={tornEdgeMobile}
+        className="lg:hidden relative w-full h-[46vh] sm:h-[52vh] mt-[88px] shrink-0"
+      >
+        <img
+          src={heroMain}
+          alt="ILA volunteers and community members speaking at an event"
+          className="animate-ken-burns w-full h-full object-cover object-[center_25%]"
+        />
+      </motion.div>
+
+      {/* desktop image panel — 2/3 width, full viewport height, torn left edge */}
+      <div className="hidden lg:block absolute inset-y-0 right-0 w-2/3">
+        <motion.div
+          initial={{ opacity: 0, x: 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          style={{ y: imageY, ...tornEdgeDesktop }}
+          className="relative w-full h-[110%]"
+        >
           <img
             src={heroMain}
             alt="ILA volunteers and community members speaking at an event"
@@ -74,8 +130,8 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8 pt-16 sm:pt-20 pb-16">
-        <div className="max-w-[48%] sm:max-w-[46%]">
+      <div className="relative flex-1 max-w-[1280px] w-full mx-auto px-5 sm:px-8 pt-10 lg:pt-40 pb-16 flex flex-col justify-center">
+        <div className="max-w-full sm:max-w-[80%] lg:max-w-[58%]">
           <motion.span
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -85,7 +141,7 @@ export default function Hero() {
             UK-registered charity, No. 1160607
           </motion.span>
 
-          <h1 className="font-sans font-extrabold leading-[1.04] tracking-tight text-[32px] sm:text-[44px] lg:text-[56px] mb-6">
+          <h1 className="font-sans font-extrabold leading-[1.04] tracking-tight text-[32px] sm:text-[44px] lg:text-[52px] mb-6">
             {headlineLines.map((line, i) => (
               <span key={line} className="block overflow-hidden">
                 <motion.span
@@ -106,14 +162,16 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.6 }}
             className="text-[15.5px] sm:text-[17px] text-muted-dark mb-9"
           >
-            A volunteer-led charity building stronger, more resilient communities across the UK, while defending the
-            rights of the vulnerable worldwide.
+            We are a UK-based, volunteer-led charity. Our work is built around two connected areas, both supporting
+            our wider mission to protect dignity, strengthen communities, and contribute to a more informed and
+            compassionate UK society.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.72 }}
+            className="flex flex-wrap items-center gap-4"
           >
             <a
               href="https://iliberty.org.uk/donate-2/"
@@ -121,6 +179,16 @@ export default function Hero() {
             >
               Donate now
               <span className="flex items-center justify-center w-9 h-9 rounded-full bg-ink text-gold group-hover:rotate-45 transition-transform duration-300">
+                <ArrowIcon className="w-4 h-4" />
+              </span>
+            </a>
+
+            <a
+              href="#who-we-are"
+              className="group inline-flex items-center gap-4 pl-6 pr-2 py-2 bg-transparent border border-paper/40 text-paper rounded-full text-[14.5px] font-semibold hover:bg-paper/10 transition-colors"
+            >
+              Our Work
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-paper/15 text-paper group-hover:rotate-45 transition-transform duration-300">
                 <ArrowIcon className="w-4 h-4" />
               </span>
             </a>
@@ -132,12 +200,18 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 1 }}
-          className="flex flex-wrap items-center gap-6 sm:gap-8 mt-16 sm:mt-24"
+          className="flex flex-wrap sm:flex-nowrap items-center gap-6 sm:gap-8 mt-12 sm:mt-16 lg:mt-24 w-max max-w-full"
         >
           <div className="flex items-center gap-4">
             <div className="flex -space-x-3 shrink-0">
-              {['#C9A15A', '#7A2E22', '#4A5D52'].map((c, i) => (
-                <span key={i} className="w-9 h-9 rounded-full border-2 border-ink" style={{ backgroundColor: c }} />
+              {avatarUrls.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt=""
+                  className="w-9 h-9 rounded-full object-cover border-2 border-gold"
+                  style={{ zIndex: avatarUrls.length - i }}
+                />
               ))}
             </div>
             <div>
