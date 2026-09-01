@@ -254,7 +254,7 @@ export default function Hero() {
         min-h-screen
         flex-col
         overflow-hidden
-        bg-[#DC143C]
+        bg-[#78ADD0]
         text-paper
       "
     >
@@ -389,30 +389,32 @@ export default function Hero() {
       ====================================================== */}
 
       <div
-        className="
-          relative
-          mx-auto
-          flex
-          w-full
-          max-w-[1280px]
-          flex-1
-          flex-col
-          justify-center
-          px-5
-          pb-16
-          pt-10
-          sm:px-8
-          lg:pt-40
-        "
-      >
+  className="
+    relative
+    flex
+    w-full
+    flex-1
+    flex-col
+    justify-center
+    px-5
+    pb-16
+    pt-10
+    sm:px-8
+    lg:px-16
+    lg:pt-40
+    xl:px-20
+    2xl:px-24
+  "
+>
 
         <div
-          className="
-            max-w-full
-            sm:max-w-[80%]
-            lg:max-w-[58%]
-          "
-        >
+  className="
+    w-full
+    max-w-full
+    sm:max-w-[80%]
+    lg:max-w-[56%]
+  "
+>
 
           {/* =================================================
               CHARITY LABEL
@@ -527,7 +529,7 @@ export default function Hero() {
             className="
               mb-9
               text-[15.5px]
-              text-muted-dark
+              text-black
               sm:text-[17px]
             "
           >
@@ -578,7 +580,7 @@ export default function Hero() {
                 items-center
                 gap-4
                 rounded-full
-                bg-gold
+                bg-[#C8102E] 
                 py-2
                 pl-6
                 pr-2
@@ -623,7 +625,7 @@ export default function Hero() {
                 rounded-full
                 border
                 border-paper/40
-                bg-transparent
+                bg-[#C8102E] 
                 py-2
                 pl-6
                 pr-2
@@ -631,7 +633,7 @@ export default function Hero() {
                 font-semibold
                 text-paper
                 transition-colors
-                hover:bg-paper/10
+                hover:bg-gold-bright
               "
             >
               Our Work

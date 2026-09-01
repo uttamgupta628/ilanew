@@ -98,7 +98,7 @@ button:focus-visible {
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
 
-  background: #DC143C;   /* NEW — matches the hero section's bg color */
+  background: #78ADD0;   /* NEW — matches the hero section's bg color */
 }
 
 .hero-image-track img {
