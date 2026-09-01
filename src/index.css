@@ -89,46 +89,24 @@ button:focus-visible {
 ========================================================= */
 .hero-image-track {
   display: flex;
-
-  /* Four images now (two panels, duplicated once) */
   width: 400%;
   height: 100%;
-
-  /*
-    Slide the entire image track continuously.
-    Each image is 25% of the 400% track.
-    Moving -50% shifts past exactly the first
-    pair (panel-left, panel-right) landing on
-    the identical duplicate pair — seamless loop.
-  */
   animation: hero-slide-left 20s linear infinite;
-
   will-change: transform;
   backface-visibility: hidden;
-
   transform: translate3d(0, 0, 0);
-
   background: #78add0;
 }
 
 .hero-image-track img {
-  /*
-    Each image occupies exactly a quarter
-    of the 400% track.
-  */
   width: 25%;
   height: 100%;
-
   flex: 0 0 25%;
-
   object-fit: contain;
   object-position: center center;
-
   max-width: none;
-
   user-select: none;
   pointer-events: none;
-
   display: block;
 }
 

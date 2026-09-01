@@ -10,11 +10,11 @@ import {
   useEffect,
   useRef,
   useState,
-  type CSSProperties,
 } from 'react';
 
 import heroPanelLeft from '../assets/images/panel-left.png';
 import heroPanelRight from '../assets/images/panel-right.png';
+import heroLeftBg from '../assets/images/hero-left-bg.jpg';
 import { stats } from '../data/content';
 
 /* =========================================================
@@ -28,21 +28,124 @@ const headlineLines = [
 ];
 
 /* =========================================================
-   DESKTOP TORN EDGE
-========================================================= */
-
-const tornEdgeDesktop: CSSProperties = {
-  clipPath:
-    'polygon(9% 0%, 100% 0%, 100% 100%, 7% 100%, 11% 93%, 4% 87%, 10% 80%, 3% 74%, 9% 67%, 2% 61%, 8% 54%, 1% 48%, 7% 41%, 0% 35%, 6% 28%, 2% 22%, 8% 15%, 3% 9%)',
-};
-
-/* =========================================================
    MOBILE TORN EDGE
 ========================================================= */
 
-const tornEdgeMobile: CSSProperties = {
+const tornEdgeMobile = {
   clipPath:
-    'polygon(0% 0%, 100% 0%, 100% 91%, 93% 96%, 87% 90%, 80% 97%, 74% 91%, 67% 98%, 61% 92%, 54% 99%, 48% 93%, 41% 100%, 35% 94%, 28% 98%, 22% 92%, 15% 97%, 9% 91%, 0% 96%)',
+    'polygon(' +
+    '0% 0%, ' +
+    '100% 0%, ' +
+    '100% 90%, ' +
+    '97% 92%, ' +
+    '94% 91%, ' +
+    '91% 95%, ' +
+    '88% 93%, ' +
+    '85% 97%, ' +
+    '82% 94%, ' +
+    '79% 98%, ' +
+    '76% 95%, ' +
+    '73% 99%, ' +
+    '70% 96%, ' +
+    '67% 100%, ' +
+    '64% 96%, ' +
+    '61% 98%, ' +
+    '58% 95%, ' +
+    '55% 99%, ' +
+    '52% 96%, ' +
+    '49% 100%, ' +
+    '46% 96%, ' +
+    '43% 98%, ' +
+    '40% 94%, ' +
+    '37% 99%, ' +
+    '34% 95%, ' +
+    '31% 98%, ' +
+    '28% 94%, ' +
+    '25% 97%, ' +
+    '22% 93%, ' +
+    '19% 96%, ' +
+    '16% 92%, ' +
+    '13% 95%, ' +
+    '10% 91%, ' +
+    '7% 94%, ' +
+    '4% 91%, ' +
+    '0% 94%' +
+    ')',
+};
+
+/* =========================================================
+   DESKTOP HAND-TORN EDGE
+========================================================= */
+
+/*
+  IMPORTANT:
+
+  This is applied ONLY to the LEFT CONTENT PANEL.
+
+  The right-side image is NOT clipped.
+  It remains exactly rectangular and unchanged.
+
+  The many uneven points create a more natural,
+  hand-torn-paper appearance instead of a regular zig-zag.
+*/
+
+const tornEdgeDesktop: CSSProperties = {
+  clipPath:
+    'polygon(' +
+    '0 0,' +
+    '100% 0,' +
+    '98.8% 2%,' +
+    '99.6% 4%,' +
+    '97.9% 6%,' +
+    '99.2% 8%,' +
+    '98.1% 10%,' +
+    '99.5% 12%,' +
+    '97.6% 14%,' +
+    '98.9% 16%,' +
+    '97.4% 18%,' +
+    '99.1% 20%,' +
+    '97.2% 22%,' +
+    '98.7% 24%,' +
+    '96.9% 26%,' +
+    '98.8% 28%,' +
+    '97.1% 30%,' +
+    '99.2% 32%,' +
+    '96.7% 34%,' +
+    '98.5% 36%,' +
+    '96.8% 38%,' +
+    '98.9% 40%,' +
+    '96.5% 42%,' +
+    '98.4% 44%,' +
+    '96.6% 46%,' +
+    '99% 48%,' +
+    '96.4% 50%,' +
+    '98.6% 52%,' +
+    '96.8% 54%,' +
+    '99.1% 56%,' +
+    '96.5% 58%,' +
+    '98.7% 60%,' +
+    '96.6% 62%,' +
+    '99% 64%,' +
+    '96.3% 66%,' +
+    '98.5% 68%,' +
+    '96.7% 70%,' +
+    '99% 72%,' +
+    '96.4% 74%,' +
+    '98.8% 76%,' +
+    '96.5% 78%,' +
+    '99.1% 80%,' +
+    '96.6% 82%,' +
+    '98.7% 84%,' +
+    '96.5% 86%,' +
+    '99% 88%,' +
+    '96.7% 90%,' +
+    '98.9% 92%,' +
+    '96.5% 94%,' +
+    '98.3% 96%,' +
+    '96.8% 98%,' +
+    '100% 100%,' +
+    '0 100%' +
+    ')',
 };
 
 /* =========================================================
@@ -304,7 +407,9 @@ export default function Hero() {
           sm:h-[48vh]
         "
       >
+
         <div className="hero-image-track">
+
           <img
             src={heroPanelLeft}
             alt="ILA volunteers and community members speaking at an event, part one"
@@ -315,7 +420,6 @@ export default function Hero() {
             alt="ILA volunteers and community members speaking at an event, part two"
           />
 
-          {/* Duplicated pair — makes the loop seamless */}
           <img
             src={heroPanelLeft}
             alt=""
@@ -327,15 +431,25 @@ export default function Hero() {
             alt=""
             aria-hidden="true"
           />
+
         </div>
 
         <div className="hero-image-overlay" />
+
       </motion.div>
 
 
       {/* =====================================================
-          DESKTOP IMAGE
-          RIGHT SIDE / FULL HEIGHT
+          DESKTOP RIGHT IMAGE
+
+          IMPORTANT:
+          This is completely unchanged.
+
+          NO clip-path.
+          NO irregular edge.
+          NO mask.
+
+          The image stays rectangular.
       ====================================================== */}
 
       <div
@@ -345,27 +459,11 @@ export default function Hero() {
           right-0
           hidden
           h-full
-          w-[58%]
+          w-[68%]
           overflow-hidden
           lg:block
         "
       >
-        {/* =================================================
-            WHITE TORN-PAPER EDGE
-            Sits behind the image, offset slightly left/up/down
-            so a sliver of white peeks out along the jagged line
-        ================================================== */}
-
-        <div
-          style={tornEdgeDesktop}
-          className="
-            absolute
-            -inset-y-2
-            -left-3
-            right-0
-            bg-paper
-          "
-        />
 
         <motion.div
           initial={{
@@ -388,7 +486,6 @@ export default function Hero() {
           }}
           style={{
             y: imageY,
-            ...tornEdgeDesktop,
           }}
           className="
             absolute
@@ -398,7 +495,9 @@ export default function Hero() {
             overflow-hidden
           "
         >
+
           <div className="hero-image-track">
+
             <img
               src={heroPanelLeft}
               alt="ILA volunteers and community members speaking at an event, part one"
@@ -409,7 +508,6 @@ export default function Hero() {
               alt="ILA volunteers and community members speaking at an event, part two"
             />
 
-            {/* Duplicated pair — makes the loop seamless */}
             <img
               src={heroPanelLeft}
               alt=""
@@ -421,15 +519,22 @@ export default function Hero() {
               alt=""
               aria-hidden="true"
             />
+
           </div>
 
           <div className="hero-image-overlay" />
+
         </motion.div>
+
       </div>
 
 
       {/* =====================================================
           LEFT CONTENT AREA
+
+          ONLY THIS ELEMENT GETS THE TORN EDGE.
+
+          The right image underneath remains untouched.
       ====================================================== */}
 
       <div
@@ -445,15 +550,26 @@ export default function Hero() {
           pb-16
           pt-28
           sm:px-8
-          lg:w-[48%]
+          lg:w-[40%]
           lg:min-h-screen
           lg:px-10
           lg:pb-20
           lg:pt-32
-          xl:w-[46%]
           xl:px-14
           2xl:px-20
         "
+        style={{
+          backgroundImage: `url(${heroLeftBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+
+          /*
+            The torn edge exists ONLY on the
+            right side of this panel.
+          */
+          ...tornEdgeDesktop,
+        }}
       >
 
         {/* =================================================
@@ -485,6 +601,7 @@ export default function Hero() {
               2xl:text-[52px]
             "
           >
+
             {headlineLines.map(
               (line, index) => (
                 <span
@@ -494,6 +611,7 @@ export default function Hero() {
                     overflow-hidden
                   "
                 >
+
                   <motion.span
                     className="block"
                     initial={{
@@ -517,9 +635,11 @@ export default function Hero() {
                   >
                     {line}
                   </motion.span>
+
                 </span>
               )
             )}
+
           </h1>
 
 
@@ -630,6 +750,7 @@ export default function Hero() {
               >
                 <ArrowIcon className="h-4 w-4" />
               </span>
+
             </a>
 
 
@@ -677,6 +798,7 @@ export default function Hero() {
               >
                 <ArrowIcon className="h-4 w-4" />
               </span>
+
             </a>
 
           </motion.div>
@@ -717,13 +839,12 @@ export default function Hero() {
           "
         >
 
-          {/* =================================================
-              AVATARS + STAT
-          ================================================== */}
+          {/* AVATARS + STAT */}
 
           <div className="flex items-center gap-4">
 
             <div className="flex -space-x-3">
+
               {avatarUrls.map(
                 (src, index) => (
                   <img
@@ -746,13 +867,10 @@ export default function Hero() {
                   />
                 )
               )}
+
             </div>
 
             <div>
-
-              {/* =================================================
-                  HIGHLIGHTED 50K+
-              ================================================== */}
 
               <div
                 className="
@@ -784,12 +902,11 @@ export default function Hero() {
               </div>
 
             </div>
+
           </div>
 
 
-          {/* =================================================
-              DIVIDER
-          ================================================== */}
+          {/* DIVIDER */}
 
           <span
             className="
@@ -802,9 +919,7 @@ export default function Hero() {
           />
 
 
-          {/* =================================================
-              SEE OUR WORK
-          ================================================== */}
+          {/* SEE OUR WORK */}
 
           <a
             href="https://iliberty.org.uk/campaign/helping-survivors-rebuild-in-the-uk-2/"
@@ -824,6 +939,7 @@ export default function Hero() {
               hover:-translate-y-1
             "
           >
+
             <SmileIcon
               className="
                 h-8
@@ -845,11 +961,13 @@ export default function Hero() {
               <br />
               work
             </span>
+
           </a>
 
         </motion.div>
 
       </div>
+
     </section>
   );
 }
