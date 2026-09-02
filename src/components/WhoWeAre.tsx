@@ -1,56 +1,100 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-import campaignExecutions from '../assets/images/campaign-executions.jpg';
-import campaignSurvivors from '../assets/images/campaign-survivors.jpg';
+// Placeholder imports — swap these for your real filenames
+import testimonial1 from '../assets/images/testimonial-1.png';
+import testimonial2 from '../assets/images/testimonial-2.png';
+import testimonial3 from '../assets/images/testimonial-3.png';
+import testimonial4 from '../assets/images/testimonial-4.png';
+import testimonial5 from '../assets/images/testimonial-5.png';
+import testimonial6 from '../assets/images/testimonial-6.png';
 
 /* =========================================================
    DATA
 ========================================================= */
 
-const campaigns = [
+const testimonials = [
   {
     number: '01.',
-    image: campaignExecutions,
-    alt: 'ILA campaign against executions and oppression',
-    title: 'Standing Against Executions And Oppression',
-    body:
-      'We campaign internationally against the death penalty and the oppression that drives people from their homes. ' +
-      'Our advocacy work raises awareness of injustice worldwide and puts direct pressure on the systems that put ' +
-      'vulnerable people in harm\u2019s way, giving a voice to individuals facing persecution who would otherwise go unheard.',
-    highlight:
-      'Every case we take up is a step toward a world where dignity isn\u2019t conditional.',
-    ctaLabel: 'Browse this campaign',
-    ctaHref: '#',
+    image: testimonial1,
+    alt: 'Baroness Sandy Verma speaking at an ILA event',
+    title: 'Baroness Sandy Verma',
+    context: 'Conservative Peer',
+    quote:
+      'I think it\u2019s people like yourself sitting in this room today, the work you do, the way you raise issues, ' +
+      'the way you support people, particularly people who are going through such challenging times themselves. ' +
+      'I\u2019m always, always extremely grateful for organisations like the International Liberty Association, but ' +
+      'particularly so I\u2019m grateful to every individual sitting here and beyond, because you are the people that ' +
+      'actually enable us to do all of the work that we can do.',
   },
   {
     number: '02.',
-    image: campaignSurvivors,
-    alt: 'ILA volunteers supporting survivors rebuilding their lives in the UK',
-    title: 'Helping Survivors Rebuild In The UK',
-    body:
-      'We deliver practical support to refugees, survivors, and vulnerable diaspora communities rebuilding their ' +
-      'lives in the UK. That means more than 50 annual digital literacy sessions, one-to-one integration advice ' +
-      'clinics, youth leadership workshops engaging around 40 participants weekly, and community wellbeing seminars ' +
-      'that bring people back into connection with one another.',
-    highlight:
-      'ILA will direct your support to the area of greatest need and impact.',
-    ctaLabel: 'Browse all programmes',
-    ctaHref: 'https://iliberty.org.uk/campaign/helping-survivors-rebuild-in-the-uk-2/',
+    image: testimonial2,
+    alt: 'Robert Torricelli speaking at ILA Noruz celebration 2018',
+    title: 'Robert Torricelli',
+    context: 'Former US Senator (Democrat) \u2014 Speaking at ILA Noruz celebration 2018',
+    quote:
+      'To all of you, no matter what you did, you wrote a cheque, said a prayer, went to a meeting, wrote a ' +
+      'letter, let me just tell you the simple truth: you saved lives. There are thousands of people alive \u2014 ' +
+      'let me be clear: it\u2019s not that they might have been dead, they would be dead. They would have died. ' +
+      'No-one was coming to their rescue. And I know there\u2019ll be no plaques, I know the Press didn\u2019t stand ' +
+      'outside and talk about your great work, none of you were honoured, because the Press isn\u2019t there it ' +
+      'didn\u2019t happen, you just did the right thing.',
+  },
+  {
+    number: '03.',
+    image: testimonial3,
+    alt: 'Baroness O\u2019Oloan speaking at ILA Christmas Event 2024',
+    title: 'Baroness O\u2019Oloan',
+    context: 'Speaking at ILA Christmas Event 2024',
+    quote:
+      'It\u2019s a privilege to stand here among you, remarkable individuals who make the work of International ' +
+      'Liberty Association possible, the volunteers and the supporters. Your commitment, your compassion and ' +
+      'your work, your relentless dedication to justice, have built a beacon of hope for those living under ' +
+      'oppression. We must all stand together with the Iranian people and their fight for freedom. It is a ' +
+      'fight for justice, democracy and peace. Thank you.',
+  },
+  {
+    number: '04.',
+    image: testimonial4,
+    alt: 'Lord Steve McCabe speaking at an ILA event',
+    title: 'Lord Steve McCabe',
+    context: 'Labour Peer',
+    quote:
+      'I want to begin by thanking the International Liberty Association for putting on this wonderful event ' +
+      'and for all of their hard work over the years to help the various people who have fallen foul of events ' +
+      'in Iran, and the various people who\u2019ve suffered, or seen members of their family suffer at the hands ' +
+      'of this regime.',
+  },
+  {
+    number: '05.',
+    image: testimonial5,
+    alt: 'Dr Rowan Williams speaking at an ILA event',
+    title: 'Dr Rowan Williams',
+    context: 'April 2025 | 104th Archbishop of Canterbury',
+    quote:
+      'In the face of repression, injustice and cruelty, and very particularly the repression and cruelty that ' +
+      'occurs in Iran today, the ILA continues to raise its voice on behalf of the voiceless. It makes sure ' +
+      'that their sufferings are not forgotten or ignored in the wider world.',
+  },
+  {
+    number: '06.',
+    image: testimonial6,
+    alt: 'Lord Tony Clarke speaking at an ILA event',
+    title: 'Lord Tony Clarke',
+    context: 'Former Chair of Labour Party',
+    quote:
+      'ILA enjoys a reputation for doing such wonderful work for human rights and opposing those tyrants who ' +
+      'oppose basic human rights. I am sure that all of my colleagues would agree with me when I say: thank you ' +
+      'so much, your work is so valuable, and well done.',
   },
 ];
 
 /* =========================================================
-   TRUNCATED TEXT WITH "READ MORE" TOGGLE
+   TRUNCATED QUOTE WITH "READ MORE" TOGGLE
 ========================================================= */
 
-function ExpandableCopy({
-  body,
-  highlight,
-}: {
-  body: string;
-  highlight: string;
-}) {
+function ExpandableQuote({ quote }: { quote: string }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -58,6 +102,7 @@ function ExpandableCopy({
       <p
         className={`
           text-[16px]
+          italic
           leading-[1.7]
           text-[#33322B]
           transition-all
@@ -65,14 +110,8 @@ function ExpandableCopy({
           ${expanded ? '' : 'line-clamp-4'}
         `}
       >
-        {body}
+        &ldquo;{quote}&rdquo;
       </p>
-
-      {expanded && (
-        <p className="mt-3 text-[16px] font-semibold leading-[1.6] text-maroon">
-          {highlight}
-        </p>
-      )}
 
       <button
         type="button"
@@ -96,14 +135,14 @@ function ExpandableCopy({
 }
 
 /* =========================================================
-   SINGLE CAMPAIGN ROW
+   SINGLE TESTIMONIAL ROW
 ========================================================= */
 
-function CampaignRow({
-  campaign,
+function TestimonialRow({
+  testimonial,
   imageFromRight,
 }: {
-  campaign: (typeof campaigns)[number];
+  testimonial: (typeof testimonials)[number];
   imageFromRight: boolean;
 }) {
   const imageOrderClass = imageFromRight ? 'lg:order-2' : 'lg:order-1';
@@ -112,10 +151,15 @@ function CampaignRow({
   return (
     <div
       className="
+        mx-auto
         grid
+        w-full
+        max-w-[1200px]
         grid-cols-1
         items-center
         gap-10
+        px-5
+        sm:px-8
         lg:grid-cols-2
         lg:gap-16
       "
@@ -155,8 +199,8 @@ function CampaignRow({
         `}
       >
         <img
-          src={campaign.image}
-          alt={campaign.alt}
+          src={testimonial.image}
+          alt={testimonial.alt}
           className="h-full w-full object-cover"
         />
       </motion.div>
@@ -192,36 +236,16 @@ function CampaignRow({
           ${textOrderClass}
         `}
       >
-        <h3 className="mb-5 flex items-baseline gap-2 font-sans text-[28px] font-extrabold leading-tight text-ink sm:text-[34px]">
-          <span className="text-maroon">{campaign.number}</span>
-          {campaign.title}
+        <h3 className="mb-1 flex items-baseline gap-2 font-sans text-[28px] font-extrabold leading-tight text-ink sm:text-[34px]">
+          <span className="text-maroon">{testimonial.number}</span>
+          {testimonial.title}
         </h3>
 
-        <ExpandableCopy body={campaign.body} highlight={campaign.highlight} />
+        <p className="mb-4 text-[14.5px] text-muted-light">
+          {testimonial.context}
+        </p>
 
-        <a
-          href={campaign.ctaHref}
-          className="
-            mt-7
-            inline-block
-            w-fit
-            rounded-md
-            border
-            border-maroon/30
-            bg-[#FBF4EC]
-            px-6
-            py-3
-            text-[14.5px]
-            font-semibold
-            text-maroon
-            transition-colors
-            duration-300
-            hover:bg-maroon
-            hover:text-white
-          "
-        >
-          {campaign.ctaLabel}
-        </a>
+        <ExpandableQuote quote={testimonial.quote} />
       </motion.div>
     </div>
   );
@@ -231,32 +255,47 @@ function CampaignRow({
    SECTION
 ========================================================= */
 
-export default function CampaignHighlights() {
+export default function Testimonials() {
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-20 px-5 sm:px-8 sm:gap-28">
-        {/* HEADING — centered */}
-        <motion.h2
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="
-            text-center
-            font-serif
-            text-[32px]
-            font-semibold
-            tracking-tight
-            text-ink
-            sm:text-[40px]
-          "
-        >
-          Who We Are
-        </motion.h2>
+    <section className="relative">
+      {/* HEADING — sits above the stacked rows, scrolls normally */}
+      <motion.h2
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="
+          pt-0
+          pb-0
+          text-center
+          font-serif
+          text-[100px]
+          font-bold
+          tracking-tight
+          text-ink
+          sm:pt-5
+          -sm:pb-20
+          sm:text-[80px]
+        "
+      >
+        Who We Are
+      </motion.h2>
 
-        <CampaignRow campaign={campaigns[0]} imageFromRight={false} />
-        <CampaignRow campaign={campaigns[1]} imageFromRight={true} />
-      </div>
+      {/* STACKED ROWS — each row is sticky at the same offset, so the
+          next one scrolls up and physically covers the previous one
+          instead of the page just scrolling past both. */}
+      {testimonials.map((testimonial, index) => (
+        <div
+          key={testimonial.number}
+          className="sticky top-0 flex min-h-screen items-center bg-paper py-20 sm:py-28"
+          style={{ zIndex: index + 1 }}
+        >
+          <TestimonialRow
+            testimonial={testimonial}
+            imageFromRight={index % 2 === 1}
+          />
+        </div>
+      ))}
     </section>
   );
 }

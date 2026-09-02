@@ -577,17 +577,22 @@ export default function Hero() {
           w-full
           flex-col
           justify-center
-          px-5
+          pl-[calc(5vw+20px)]
+          pr-5
           pb-16
           pt-28
-          sm:px-8
+          sm:pl-[calc(5vw+30px)]
+          sm:pr-8
           lg:w-[40%]
           lg:min-h-screen
-          lg:px-10
+          lg:pl-[calc(5vw+36px)]
+          lg:pr-10
           lg:pb-20
           lg:pt-32
-          xl:px-14
-          2xl:px-20
+          xl:pl-[calc(5vw+36px)]
+          xl:pr-14
+          2xl:pl-[calc(5vw+36px)]
+          2xl:pr-20
         "
         style={{
           backgroundImage:
@@ -613,7 +618,7 @@ export default function Hero() {
             absolute
             -top-15
             -bottom-2
-            -right-[38px]
+            -right-[65px]
             z-20
             hidden
             w-8
