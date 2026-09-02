@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Reveal from './Reveal';
 
@@ -38,11 +38,14 @@ function CampaignCard({
   index,
 }: CampaignCardProps) {
   const imgWrapRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const [spot, setSpot] = useState({
     x: 50,
     y: 50,
   });
+
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
   /* =======================================================
      MOUSE SPOTLIGHT
@@ -69,6 +72,23 @@ function CampaignCard({
         100,
     });
   }
+
+  /* =======================================================
+     CONTENT OVERFLOW CHECK
+     Card is capped at 80% of the image height on lg+.
+     If the natural content is taller than that, clamp the
+     description and swap the CTA label to "Read more".
+  ======================================================= */
+
+  useLayoutEffect(() => {
+    const el = cardRef.current;
+
+    if (!el) return;
+
+    setIsOverflowing(el.scrollHeight > el.clientHeight + 1);
+  }, [description]);
+
+  const displayCta = isOverflowing ? 'Read more' : cta;
 
   /* =======================================================
      CARD POSITION
@@ -172,7 +192,7 @@ function CampaignCard({
               opacity-0
 
               transition-opacity
-              duration-500
+              duration-1500
 
               group-hover:opacity-100
             "
@@ -211,9 +231,12 @@ function CampaignCard({
 
         {/* ===================================================
             OVERLAPPING TEXT CARD
+            Capped to 80% of the image height on lg/xl so it
+            never runs past the image bounds.
         =================================================== */}
 
         <motion.div
+          ref={cardRef}
           initial={{
             opacity: 0,
             y: 30,
@@ -272,6 +295,14 @@ function CampaignCard({
             lg:top-1/2
             lg:-translate-y-1/2
 
+            lg:h-[488px]
+            lg:overflow-hidden
+            lg:flex
+            lg:flex-col
+            lg:justify-center
+
+            xl:h-[512px]
+
             ${cardPositionClass}
 
             /* MOBILE */
@@ -329,10 +360,12 @@ function CampaignCard({
 
           {/* =================================================
               DESCRIPTION
+              Clamped once we know the card overflows its
+              80%-of-image cap, so the CTA always stays visible.
           ================================================== */}
 
           <p
-            className="
+            className={`
               mb-6
 
               text-[14px]
@@ -342,7 +375,9 @@ function CampaignCard({
 
               sm:text-[15px]
               lg:text-[15.5px]
-            "
+
+              ${isOverflowing ? 'lg:line-clamp-5' : ''}
+            `}
           >
             {description}
           </p>
@@ -426,7 +461,7 @@ function CampaignCard({
                 group-hover:text-white
               "
             >
-              {cta}
+              {displayCta}
             </span>
 
 
@@ -566,14 +601,14 @@ export default function Pillars() {
 
               mb-6
 
-              h-[160px]
+              h-[220px]
               w-auto
 
               object-contain
 
-              sm:h-[210px]
+              sm:h-[280px]
 
-              lg:h-[250px]
+              lg:h-[320px]
             "
           />
 
@@ -649,7 +684,8 @@ export default function Pillars() {
               href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
               eyebrow="Raising awareness"
               title="Stopping executions. Defending the vulnerable."
-              description="We campaign to end executions in Iran and defend the rights of prisoners of conscience — organising demonstrations, letter-writing drives, and mass petitions."
+              description="We campaign to end executions in Iran and defend the rights of prisoners of conscience through powerful public action and relentless advocacy. From organising demonstrations, letter-writing drives, and mass petitions to gathering evidence from inside prisons, we bring global attention to their suffering.
+Through publications, satellite broadcasts, and social media, we expose the regime’s crimes and echo the voices of the silenced—especially women, children, and religious minorities facing brutal oppression. Every name we say, every voice we amplify, brings us closer to justice."
               cta="Read about this campaign"
               image={campaignExecutions}
               imageAlt="Vigil supporting victims of executions in Iran"
@@ -670,7 +706,13 @@ export default function Pillars() {
               href="https://iliberty.org.uk/campaign/helping-survivors-rebuild-in-the-uk-2/"
               eyebrow="Community support"
               title="Helping survivors rebuild in the UK"
-              description="We support refugees, survivors, migrants, and vulnerable families across the UK to rebuild their lives and feel connected to the communities around them."
+              description="We support refugees, survivors of human rights abuses, migrants, and vulnerable families across the UK to rebuild their lives, strengthen their independence, and feel more connected to the communities around them.
+
+Our programmes address some of the everyday barriers that can make rebuilding life in a new country difficult. Through regular digital skills workshops, we help older migrants gain the confidence to use smartphones, access online services, communicate with family and friends, and navigate an increasingly digital society. For many older people who may face language barriers or social isolation, these sessions also provide a welcoming space to build friendships, stay connected, and become more involved in their local community.
+
+We also work closely with young people and families. Our youth programmes engage hundreds of participants each year through weekly workshops, educational activities, community events, and opportunities to develop confidence, skills, and meaningful social connections. Where families are experiencing financial hardship, we also provide practical assistance, including grants to schools to help cover essential items such as school uniforms, helping ensure that children can participate fully in school life without additional financial pressure on their families.
+
+Alongside this, we provide one-to-one integration support, community meetings, online sessions, and practical guidance for people adjusting to life in the UK. Across more than 50 digital skills sessions each year, weekly youth activities, one-to-one support, and over 60 online community meetings, our aim is not simply to provide short-term help, but to reduce isolation, strengthen resilience, build confidence, and enable people to participate fully and independently in British society."
               cta="See how we help"
               image={campaignSurvivors}
               imageAlt="One-to-one integration support session"
