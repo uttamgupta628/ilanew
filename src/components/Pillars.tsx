@@ -1,211 +1,689 @@
 import { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import Reveal from './Reveal';
-import campaignExecutions from '../assets/images/campaign-executions.jpg';
-import campaignSurvivors from '../assets/images/campaign-survivors.jpg';
+
+import campaignExecutions from '../assets/images/camp.png';
+import campaignSurvivors from '../assets/images/camp1.png';
+import campaignSignImage from '../assets/images/campaign-sign.png';
+
+/* =========================================================
+   TYPES
+========================================================= */
 
 interface CampaignCardProps {
   href: string;
   eyebrow: string;
-  eyebrowColor: string;
   title: string;
   description: string;
   cta: string;
-  ctaColor: string;
   image: string;
   imageAlt: string;
-  imageOrder: 'first' | 'last';
-  descColor: string;
-  glowColor: string;
+  cardAlign: 'left' | 'right';
+  index: number;
 }
+
+/* =========================================================
+   CAMPAIGN CARD
+========================================================= */
 
 function CampaignCard({
   href,
   eyebrow,
-  eyebrowColor,
   title,
   description,
   cta,
-  ctaColor,
   image,
   imageAlt,
-  imageOrder,
-  descColor,
-  glowColor,
+  cardAlign,
+  index,
 }: CampaignCardProps) {
-  const isImageFirst = imageOrder === 'first';
   const imgWrapRef = useRef<HTMLDivElement>(null);
-  const [spot, setSpot] = useState({ x: 50, y: 50 });
 
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+  const [spot, setSpot] = useState({
+    x: 50,
+    y: 50,
+  });
+
+  /* =======================================================
+     MOUSE SPOTLIGHT
+  ======================================================= */
+
+  function handleMouseMove(
+    e: React.MouseEvent<HTMLDivElement>
+  ) {
     const el = imgWrapRef.current;
+
     if (!el) return;
+
     const rect = el.getBoundingClientRect();
+
     setSpot({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
+      x:
+        ((e.clientX - rect.left) /
+          rect.width) *
+        100,
+
+      y:
+        ((e.clientY - rect.top) /
+          rect.height) *
+        100,
     });
   }
+
+  /* =======================================================
+     CARD POSITION
+  ======================================================= */
+
+  const cardPositionClass =
+    cardAlign === 'right'
+      ? 'right-[-2%] lg:right-[-3%]'
+      : 'left-[-2%] lg:left-[-3%]';
 
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group grid grid-cols-1 md:grid-cols-2 items-stretch"
+      className="
+        group
+        relative
+        block
+      "
     >
+
+      {/* =====================================================
+          IMAGE + CARD WRAPPER
+      ===================================================== */}
+
       <div
-        ref={imgWrapRef}
-        onMouseMove={handleMouseMove}
-        className={[
-          'relative overflow-hidden',
-          'h-[220px] xs:h-[260px] sm:h-[320px] md:h-[420px] lg:h-[480px]',
-          isImageFirst ? 'order-1' : 'order-1 md:order-2',
-        ].join(' ')}
+        className="
+          relative
+          mx-auto
+          w-full
+          max-w-[1200px]
+
+          lg:min-h-[620px]
+          xl:min-h-[650px]
+        "
       >
-        {/* image: blurred/oversized entrance, sharpens; extra zoom + brighten on hover */}
-        <img
-          src={image}
-          alt={imageAlt}
-          loading="lazy"
-          className="w-full h-full object-cover scale-110 blur-[8px] opacity-0 animate-[cardImgIn_1.1s_ease-out_forwards] transition-[filter,transform] duration-[900ms] ease-out will-change-transform group-hover:scale-[1.12] group-hover:blur-0 group-hover:brightness-110"
-        />
 
-        {/* cursor-tracked spotlight */}
+        {/* ===================================================
+            BIG IMAGE
+        =================================================== */}
+
         <div
-          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            background: `radial-gradient(circle at ${spot.x}% ${spot.y}%, rgba(255,255,255,0.22), transparent 45%)`,
-          }}
-        />
+          ref={imgWrapRef}
+          onMouseMove={handleMouseMove}
+          className="
+            relative
+            overflow-hidden
+            rounded-[26px]
 
-        {/* diagonal light sweep */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -inset-y-full -left-1/2 w-1/3 rotate-12 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-[200%] group-hover:translate-x-[500%] transition-transform duration-[1200ms] ease-out" />
+            h-[390px]
+            sm:h-[480px]
+            md:h-[560px]
+
+            lg:h-[610px]
+            xl:h-[640px]
+
+            w-full
+
+            lg:w-[63%]
+          "
+        >
+
+          <img
+            src={image}
+            alt={imageAlt}
+            loading="lazy"
+            className="
+              h-full
+              w-full
+
+              object-cover
+
+              scale-[1.08]
+
+              opacity-0
+              blur-[6px]
+
+              animate-[cardImgIn_1s_ease-out_forwards]
+
+              transition-transform
+              duration-[900ms]
+              ease-out
+
+              will-change-transform
+
+              group-hover:scale-[1.04]
+            "
+          />
+
+          {/* =================================================
+              MOUSE SPOTLIGHT
+          ================================================= */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+
+              opacity-0
+
+              transition-opacity
+              duration-500
+
+              group-hover:opacity-100
+            "
+            style={{
+              background: `
+                radial-gradient(
+                  circle at ${spot.x}% ${spot.y}%,
+                  rgba(255,255,255,0.18),
+                  transparent 45%
+                )
+              `,
+            }}
+          />
+
+          {/* =================================================
+              IMAGE TINT
+          ================================================= */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+
+              bg-ink/0
+
+              transition-colors
+              duration-500
+
+              group-hover:bg-ink/10
+            "
+          />
+
         </div>
 
-        {/* base tint, deepens on hover */}
-        <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/10 transition-colors duration-500" />
 
-        {/* pulsing glow border */}
-        <div
-          className={`pointer-events-none absolute inset-0 ring-1 ring-inset ring-transparent group-hover:animate-[cardGlowPulse_1.8s_ease-in-out_infinite] transition-shadow duration-300 ${glowColor}`}
-        />
-      </div>
+        {/* ===================================================
+            OVERLAPPING TEXT CARD
+        =================================================== */}
 
-      <div
-        className={[
-          'flex flex-col justify-center',
-          'px-5 sm:px-8 py-10 sm:py-14 md:py-0',
-          'max-w-[1200px] md:max-w-none',
-          isImageFirst
-            ? 'order-2 md:pr-8 md:pl-10 lg:pl-14 md:mr-[max(0px,calc((100vw-1200px)/2))]'
-            : 'order-2 md:order-1 md:pl-8 md:pr-10 lg:pr-14 md:ml-[max(0px,calc((100vw-1200px)/2))]',
-        ].join(' ')}
-      >
-        <span
-          className={`text-[12px] sm:text-[13px] tracking-wide uppercase mb-2.5 sm:mb-3 opacity-0 -translate-x-3 animate-[cardTextIn_0.7s_ease-out_0.15s_forwards] ${eyebrowColor}`}
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: [0, -10, 0],
+          }}
+          viewport={{
+            once: true,
+            amount: 0.3,
+          }}
+          transition={{
+            opacity: {
+              duration: 0.8,
+              delay: 0.25,
+              ease: [
+                0.16,
+                1,
+                0.3,
+                1,
+              ],
+            },
+
+            y: {
+              duration: 3.8,
+              repeat: Infinity,
+              repeatType: 'loop',
+              ease: 'easeInOut',
+              delay:
+                1 +
+                index * 0.2,
+            },
+          }}
+          className={`
+            absolute
+
+            z-20
+
+            w-[88%]
+            max-w-[500px]
+
+            rounded-[24px]
+
+            bg-paper
+
+            p-6
+
+            shadow-[0_25px_70px_rgba(0,0,0,0.16)]
+
+            sm:p-8
+
+            lg:w-[50%]
+            lg:max-w-[540px]
+
+            lg:top-1/2
+            lg:-translate-y-1/2
+
+            ${cardPositionClass}
+
+            /* MOBILE */
+            top-auto
+            -bottom-10
+
+            lg:bottom-auto
+          `}
         >
-          {eyebrow}
-        </span>
 
-        <h3 className="font-serif font-medium text-[22px] xs:text-[25px] sm:text-[28px] lg:text-[32px] leading-[1.2] max-w-[20ch] mb-3 sm:mb-4 opacity-0 translate-y-4 animate-[cardTextIn_0.7s_ease-out_0.28s_forwards]">
-          {title}
-        </h3>
+          {/* =================================================
+              TITLE
+          ================================================== */}
 
-        <p
-          className={`text-[14.5px] sm:text-[15.5px] leading-relaxed max-w-[48ch] mb-5 sm:mb-6 opacity-0 translate-y-4 animate-[cardTextIn_0.7s_ease-out_0.4s_forwards] ${descColor}`}
-        >
-          {description}
-        </p>
+          <h3
+            className="
+              mb-1
 
-        <span
-          className={`inline-flex items-center gap-2 text-[14px] sm:text-[14.5px] font-medium border-b border-transparent group-hover:border-current transition-colors duration-300 w-fit opacity-0 translate-y-4 animate-[cardTextIn_0.7s_ease-out_0.52s_forwards] ${ctaColor}`}
-        >
-          {cta}
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 16 16"
-            fill="none"
-            className="transition-transform duration-300 ease-out group-hover:translate-x-1.5"
+              font-sans
+              text-[19px]
+              font-extrabold
+              leading-tight
+
+              text-ink
+
+              sm:text-[21px]
+              lg:text-[22px]
+            "
           >
-            <path
-              d="M3 8h10M9 4l4 4-4 4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            {title}
+          </h3>
+
+
+          {/* =================================================
+              EYEBROW
+          ================================================== */}
+
+          <p
+            className="
+              mb-5
+
+              text-[13px]
+              font-medium
+              uppercase
+              tracking-wide
+
+              text-maroon
+
+              sm:text-[13.5px]
+            "
+          >
+            {eyebrow}
+          </p>
+
+
+          {/* =================================================
+              DESCRIPTION
+          ================================================== */}
+
+          <p
+            className="
+              mb-6
+
+              text-[14px]
+              leading-[1.7]
+
+              text-muted-light
+
+              sm:text-[15px]
+              lg:text-[15.5px]
+            "
+          >
+            {description}
+          </p>
+
+
+          {/* =================================================
+              CTA BUTTON
+          ================================================= */}
+
+          <span
+            className="
+              campaign-button
+
+              relative
+              inline-flex
+
+              items-center
+              gap-3
+
+              overflow-hidden
+
+              rounded-full
+
+              border
+              border-[#C8102E]
+
+              bg-white
+
+              py-3
+              pl-5
+              pr-2
+
+              text-[14px]
+              font-semibold
+
+              text-ink
+
+              transition-colors
+              duration-500
+
+              sm:text-[14.5px]
+            "
+          >
+
+            {/* =================================================
+                BOTTOM → TOP HOVER FILL
+            ================================================= */}
+
+            <span
+              className="
+                campaign-button-fill
+
+                absolute
+                inset-x-0
+                bottom-0
+
+                h-0
+
+                bg-[#C8102E]
+
+                transition-all
+                duration-500
+                ease-out
+
+                group-hover:h-full
+              "
             />
-          </svg>
-        </span>
+
+            {/* =================================================
+                BUTTON TEXT
+            ================================================= */}
+
+            <span
+              className="
+                relative
+                z-10
+
+                transition-colors
+                duration-500
+
+                group-hover:text-white
+              "
+            >
+              {cta}
+            </span>
+
+
+            {/* =================================================
+                ARROW
+            ================================================= */}
+
+            <span
+              className="
+                relative
+                z-10
+
+                flex
+                h-8
+                w-8
+                shrink-0
+
+                items-center
+                justify-center
+
+                rounded-full
+
+                bg-[#C8102E]/10
+
+                text-[#C8102E]
+
+                transition-all
+                duration-500
+
+                group-hover:rotate-45
+                group-hover:bg-white/20
+                group-hover:text-white
+              "
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+
+          </span>
+
+        </motion.div>
+
       </div>
+
     </a>
   );
 }
 
+
+/* =========================================================
+   PILLARS
+========================================================= */
+
 export default function Pillars() {
   return (
-    <section id="campaigns">
+    <section
+      id="campaigns"
+      className="
+        overflow-hidden
+      "
+    >
+
+      {/* =====================================================
+          CARD IMAGE ANIMATION
+      ====================================================== */}
+
       <style>{`
+
         @keyframes cardImgIn {
-          from { opacity: 0; filter: blur(8px); transform: scale(1.18); }
-          to { opacity: 1; filter: blur(0px); transform: scale(1.1); }
+
+          from {
+            opacity: 0;
+            filter: blur(6px);
+            transform: scale(1.14);
+          }
+
+          to {
+            opacity: 1;
+            filter: blur(0px);
+            transform: scale(1.08);
+          }
+
         }
-        @keyframes cardTextIn {
-          from { opacity: 0; transform: translate(-12px, 0); }
-          to { opacity: 1; transform: translate(0, 0); }
-        }
-        @keyframes cardGlowPulse {
-          0%, 100% { box-shadow: inset 0 0 0px 0px currentColor; }
-          50% { box-shadow: inset 0 0 40px 4px currentColor; }
-        }
+
       `}</style>
 
+
+      {/* =====================================================
+          INTRO
+      ====================================================== */}
+
       <Reveal>
-        <div className="max-w-[1200px] mx-auto px-5 sm:px-8 pt-16 sm:pt-24 lg:pt-28 pb-8 sm:pb-12 lg:pb-14">
-          <h2 className="font-serif font-medium text-[26px] xs:text-[28px] sm:text-[34px] lg:text-[42px] leading-[1.15] tracking-tight max-w-[20ch] mb-4 sm:mb-5">
-            Two connected areas, one shared mission
-          </h2>
-          <p className="text-[15.5px] sm:text-[17px] leading-relaxed max-w-[62ch] text-muted-light">
-            Every programme we run protects dignity, strengthens communities, and contributes to a more informed and
-            compassionate UK society.
+
+        <div
+          className="
+            mx-auto
+            max-w-[1200px]
+
+            px-5
+
+            pb-8
+            pt-16
+
+            text-center
+
+            sm:px-8
+            sm:pb-12
+            sm:pt-24
+
+            lg:pb-14
+            lg:pt-28
+          "
+        >
+
+          {/* =================================================
+              SIGN / BIRD ARTWORK
+          ================================================== */}
+
+          <img
+            src={campaignSignImage}
+            alt=""
+            aria-hidden="true"
+            className="
+              mx-auto
+
+              mb-6
+
+              h-[160px]
+              w-auto
+
+              object-contain
+
+              sm:h-[210px]
+
+              lg:h-[250px]
+            "
+          />
+
+
+          {/* =================================================
+              INTRO TEXT
+          ================================================== */}
+
+          <p
+            className="
+              mx-auto
+
+              max-w-[62ch]
+
+              text-[15.5px]
+              leading-relaxed
+
+              text-muted-light
+
+              sm:text-[17px]
+            "
+          >
+            Every programme we run protects
+            dignity, strengthens communities,
+            and contributes to a more informed
+            and compassionate UK society.
           </p>
+
         </div>
+
       </Reveal>
 
-      <Reveal className="bg-paper">
-        <CampaignCard
-          href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
-          eyebrow="Raising awareness"
-          eyebrowColor="text-maroon"
-          title="Stopping executions. Defending the vulnerable."
-          description="We campaign to end executions in Iran and defend the rights of prisoners of conscience — organising demonstrations, letter-writing drives, and mass petitions, and gathering evidence from inside prisons."
-          cta="Read about this campaign"
-          ctaColor="text-maroon"
-          descColor="text-muted-light"
-          glowColor="text-maroon/60"
-          image={campaignExecutions}
-          imageAlt="Vigil supporting victims of executions in Iran"
-          imageOrder="last"
-        />
-      </Reveal>
 
-      <Reveal delay={0.08} className="bg-ink text-paper">
-        <CampaignCard
-          href="https://iliberty.org.uk/campaign/helping-survivors-rebuild-in-the-uk-2/"
-          eyebrow="Community support"
-          eyebrowColor="text-gold"
-          title="Helping survivors rebuild in the UK"
-          description="We support refugees, survivors, migrants, and vulnerable families across the UK to rebuild their lives, strengthen their independence, and feel connected to the communities around them."
-          cta="See how we help"
-          ctaColor="text-gold-bright"
-          descColor="text-muted-dark"
-          glowColor="text-gold-bright/60"
-          image={campaignSurvivors}
-          imageAlt="One-to-one integration support session"
-          imageOrder="first"
-        />
-      </Reveal>
+      {/* =====================================================
+          CAMPAIGN CARDS
+      ====================================================== */}
+
+      <div
+        className="
+          mx-auto
+
+          max-w-[1200px]
+
+          px-5
+
+          pb-32
+
+          sm:px-8
+          sm:pb-40
+
+          lg:pb-48
+        "
+      >
+
+        <div
+          className="
+            flex
+            flex-col
+
+            gap-24
+
+            sm:gap-32
+          "
+        >
+
+          {/* =================================================
+              CAMPAIGN 1
+          ================================================== */}
+
+          <Reveal>
+
+            <CampaignCard
+              href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
+              eyebrow="Raising awareness"
+              title="Stopping executions. Defending the vulnerable."
+              description="We campaign to end executions in Iran and defend the rights of prisoners of conscience — organising demonstrations, letter-writing drives, and mass petitions."
+              cta="Read about this campaign"
+              image={campaignExecutions}
+              imageAlt="Vigil supporting victims of executions in Iran"
+              cardAlign="right"
+              index={0}
+            />
+
+          </Reveal>
+
+
+          {/* =================================================
+              CAMPAIGN 2
+          ================================================== */}
+
+          <Reveal delay={0.08}>
+
+            <CampaignCard
+              href="https://iliberty.org.uk/campaign/helping-survivors-rebuild-in-the-uk-2/"
+              eyebrow="Community support"
+              title="Helping survivors rebuild in the UK"
+              description="We support refugees, survivors, migrants, and vulnerable families across the UK to rebuild their lives and feel connected to the communities around them."
+              cta="See how we help"
+              image={campaignSurvivors}
+              imageAlt="One-to-one integration support session"
+              cardAlign="right"
+              index={1}
+            />
+
+          </Reveal>
+
+        </div>
+
+      </div>
+
     </section>
   );
 }

@@ -99,38 +99,103 @@ function ExpandableQuote({ quote }: { quote: string }) {
 
   return (
     <div>
-      <p
-        className={`
-          text-[16px]
-          italic
-          leading-[1.7]
-          text-[#33322B]
-          transition-all
-          duration-300
-          ${expanded ? '' : 'line-clamp-4'}
-        `}
-      >
-        &ldquo;{quote}&rdquo;
-      </p>
+  {/* QUOTE */}
+  <p
+    className={`
+      text-[16px]
+      italic
+      leading-[1.7]
+      text-[#33322B]
+      transition-all
+      duration-300
+      ${expanded ? '' : 'line-clamp-4'}
+    `}
+  >
+    &ldquo;{quote}&rdquo;
+  </p>
 
-      <button
-        type="button"
-        onClick={() => setExpanded((prev) => !prev)}
-        className="
-          mt-3
-          text-[14px]
-          font-semibold
-          text-maroon
-          underline
-          underline-offset-4
-          decoration-maroon/40
-          transition-colors
-          hover:decoration-maroon
-        "
+  {/* READ MORE BUTTON */}
+  <button
+    type="button"
+    onClick={() => setExpanded((prev) => !prev)}
+    className="
+      group
+      relative
+      mt-4
+      inline-flex
+      items-center
+      gap-3
+      overflow-hidden
+      rounded-full
+      border
+      border-maroon
+      bg-white
+      py-2.5
+      pl-5
+      pr-2.5
+      text-[14px]
+      font-semibold
+      text-maroon
+      transition-all
+      duration-300
+      hover:text-white
+    "
+  >
+    {/* Background animation starts from bottom */}
+    <span
+      className="
+        absolute
+        inset-x-0
+        bottom-0
+        h-0
+        bg-[#C8102E]
+        transition-all
+        duration-500
+        ease-out
+        group-hover:h-full
+      "
+    />
+
+    {/* Button text */}
+    <span className="relative z-10">
+      {expanded ? 'Show less' : 'Read more'}
+    </span>
+
+    {/* Arrow */}
+    <span
+      className="
+        relative
+        z-10
+        flex
+        h-7
+        w-7
+        items-center
+        justify-center
+        rounded-full
+        bg-maroon/10
+        transition-all
+        duration-300
+        group-hover:rotate-45
+        group-hover:bg-white/20
+      "
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 16 16"
+        fill="none"
       >
-        {expanded ? 'Show less' : 'Read more'}
-      </button>
-    </div>
+        <path
+          d="M3 8h10M9 4l4 4-4 4"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  </button>
+</div>
   );
 }
 
