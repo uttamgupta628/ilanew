@@ -18,7 +18,6 @@ interface CampaignCardProps {
   cta: string;
   image: string;
   imageAlt: string;
-  cardAlign: 'left' | 'right';
   index: number;
 }
 
@@ -34,7 +33,6 @@ function CampaignCard({
   cta,
   image,
   imageAlt,
-  cardAlign,
   index,
 }: CampaignCardProps) {
   const imgWrapRef = useRef<HTMLDivElement>(null);
@@ -91,13 +89,16 @@ function CampaignCard({
   const displayCta = isOverflowing ? 'Read more' : cta;
 
   /* =======================================================
-     CARD POSITION
+     IMAGE / CARD SIDE — alternates automatically per card.
+     index 0: image left, card overlaps right.
+     index 1: image right, card overlaps left.
   ======================================================= */
 
-  const cardPositionClass =
-    cardAlign === 'right'
-      ? 'right-[-2%] lg:right-[-3%]'
-      : 'left-[-2%] lg:left-[-3%]';
+  const imageOnRight = index % 2 === 1;
+
+  const cardPositionClass = imageOnRight
+    ? 'left-[-2%] lg:left-[-3%]'
+    : 'right-[-2%] lg:right-[-3%]';
 
   return (
     <a
@@ -131,10 +132,26 @@ function CampaignCard({
             BIG IMAGE
         =================================================== */}
 
-        <div
+        <motion.div
           ref={imgWrapRef}
           onMouseMove={handleMouseMove}
-          className="
+          initial={{
+            opacity: 0,
+            x: imageOnRight ? 80 : -80,
+          }}
+          whileInView={{
+            opacity: 1,
+            x: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.3,
+          }}
+          transition={{
+            opacity: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+            x: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+          }}
+          className={`
             relative
             overflow-hidden
             rounded-[26px]
@@ -149,7 +166,9 @@ function CampaignCard({
             w-full
 
             lg:w-[63%]
-          "
+
+            ${imageOnRight ? 'lg:ml-auto' : ''}
+          `}
         >
 
           <img
@@ -226,7 +245,7 @@ function CampaignCard({
             "
           />
 
-        </div>
+        </motion.div>
 
 
         {/* ===================================================
@@ -240,10 +259,12 @@ function CampaignCard({
           initial={{
             opacity: 0,
             y: 30,
+            x: imageOnRight ? -80 : 80,
           }}
           whileInView={{
             opacity: 1,
             y: [0, -10, 0],
+            x: 0,
           }}
           viewport={{
             once: true,
@@ -252,13 +273,14 @@ function CampaignCard({
           transition={{
             opacity: {
               duration: 0.8,
-              delay: 0.25,
-              ease: [
-                0.16,
-                1,
-                0.3,
-                1,
-              ],
+              delay: 0.1,
+              ease: [0.16, 1, 0.3, 1],
+            },
+
+            x: {
+              duration: 0.8,
+              delay: 0.1,
+              ease: [0.16, 1, 0.3, 1],
             },
 
             y: {
@@ -689,7 +711,6 @@ Through publications, satellite broadcasts, and social media, we expose the regi
               cta="Read about this campaign"
               image={campaignExecutions}
               imageAlt="Vigil supporting victims of executions in Iran"
-              cardAlign="right"
               index={0}
             />
 
@@ -716,7 +737,6 @@ Alongside this, we provide one-to-one integration support, community meetings, o
               cta="See how we help"
               image={campaignSurvivors}
               imageAlt="One-to-one integration support session"
-              cardAlign="right"
               index={1}
             />
 
