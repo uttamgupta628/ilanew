@@ -103,7 +103,7 @@ function ExpandableQuote({ quote }: { quote: string }) {
   <p
     className={`
       text-[16px]
-      italic
+      lato
       leading-[1.7]
       text-[#33322B]
       transition-all
@@ -335,7 +335,9 @@ export default function Testimonials() {
           text-center
           font-serif
           text-[100px]
+          font-Arial
           font-bold
+          leading-[1.1]
           tracking-tight
           text-ink
           sm:pt-5

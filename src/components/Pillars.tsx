@@ -7,70 +7,121 @@ import campaignSurvivors from '../assets/images/camp1.png';
 import campaignSignImage from '../assets/images/campaign-sign.png';
 
 /* =========================================================
-   SCROLL PROGRESS HOOK
+   SCROLL PROGRESS
 ========================================================= */
 
-function useScrollProgress(ref: React.RefObject<HTMLElement | null>) {
+function useScrollProgress(
+  ref: React.RefObject<HTMLDivElement | null>
+) {
   const [progress, setProgress] = useState(0);
 
   const targetRef = useRef(0);
   const currentRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
+  const frameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const computeTarget = () => {
-      if (!ref.current) return;
+    const updateTarget = () => {
+      const el = ref.current;
 
-      const rect = ref.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
+      if (!el) return;
 
-      const start = windowHeight * 0.85;
-      const end = windowHeight * 0.35;
+      const rect = el.getBoundingClientRect();
 
-      const raw = (start - rect.top) / (start - end);
+      /*
+       * Find the center of the component
+       */
+      const componentCenter = rect.top + rect.height / 2;
 
-      targetRef.current = Math.max(0, Math.min(1, raw));
+      /*
+       * Find the center of the viewport
+       */
+      const viewportCenter = window.innerHeight / 2;
+
+      /*
+       * Distance between component center
+       * and viewport center
+       */
+      const distanceFromCenter = Math.abs(
+        componentCenter - viewportCenter
+      );
+
+      /*
+       * Controls how far the animation works
+       * from the viewport center.
+       */
+      const maxDistance = window.innerHeight * 0.75;
+
+      /*
+       * 0 = far from center
+       * 1 = exactly at center
+       */
+      const nextProgress = Math.max(
+        0,
+        Math.min(
+          1,
+          1 - distanceFromCenter / maxDistance
+        )
+      );
+
+      targetRef.current = nextProgress;
     };
 
-    const tick = () => {
-      const diff = targetRef.current - currentRef.current;
+    const animate = () => {
+      const diff =
+        targetRef.current - currentRef.current;
 
-      if (Math.abs(diff) < 0.0005) {
+      /*
+       * Smooth movement
+       */
+      currentRef.current += diff * 0.08;
+
+      if (Math.abs(diff) < 0.001) {
         currentRef.current = targetRef.current;
-      } else {
-        currentRef.current += diff * 0.12;
       }
 
       setProgress(currentRef.current);
 
-      rafRef.current = requestAnimationFrame(tick);
+      frameRef.current =
+        requestAnimationFrame(animate);
     };
 
-    computeTarget();
+    updateTarget();
 
-    rafRef.current = requestAnimationFrame(tick);
+    window.addEventListener(
+      'scroll',
+      updateTarget,
+      { passive: true }
+    );
 
-    window.addEventListener('scroll', computeTarget, {
-      passive: true,
-    });
+    window.addEventListener(
+      'resize',
+      updateTarget
+    );
 
-    window.addEventListener('resize', computeTarget);
+    frameRef.current =
+      requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener('scroll', computeTarget);
-      window.removeEventListener('resize', computeTarget);
+      window.removeEventListener(
+        'scroll',
+        updateTarget
+      );
 
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
+      window.removeEventListener(
+        'resize',
+        updateTarget
+      );
+
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(
+          frameRef.current
+        );
       }
     };
   }, [ref]);
 
   return progress;
 }
-
-const easeOutCubic = (t: number) =>
-  1 - Math.pow(1 - t, 3);
 
 /* =========================================================
    TYPES
@@ -101,9 +152,14 @@ function CampaignCard({
   imageAlt,
   index,
 }: CampaignCardProps) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const imgWrapRef = useRef<HTMLDivElement>(null);
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const wrapperRef =
+    useRef<HTMLDivElement>(null);
+
+  const imgWrapRef =
+    useRef<HTMLDivElement>(null);
+
+  const descriptionRef =
+    useRef<HTMLParagraphElement>(null);
 
   const [spot, setSpot] = useState({
     x: 50,
@@ -113,52 +169,16 @@ function CampaignCard({
   const [isOverflowing, setIsOverflowing] =
     useState(false);
 
-  const progress = useScrollProgress(wrapperRef);
-  const eased = easeOutCubic(progress);
+  const progress =
+    useScrollProgress(wrapperRef);
 
+  /*
+   * Odd cards have image on the right.
+   */
   const imageOnRight = index % 2 === 1;
 
-  const maxTranslate = 90;
-
   /* =======================================================
-     IMAGE ANIMATION
-  ======================================================= */
-
-  const imageTranslateX = imageOnRight
-    ? (1 - eased) * maxTranslate
-    : (1 - eased) * -maxTranslate;
-
-  /* =======================================================
-     TEXT CARD ANIMATION
-  ======================================================= */
-
-  const cardTranslateX = imageOnRight
-    ? (1 - eased) * -maxTranslate
-    : (1 - eased) * maxTranslate;
-
-  /* =======================================================
-     MOUSE FOLLOW LIGHT
-  ======================================================= */
-
-  function handleMouseMove(
-    e: React.MouseEvent<HTMLDivElement>
-  ) {
-    const el = imgWrapRef.current;
-
-    if (!el) return;
-
-    const rect = el.getBoundingClientRect();
-
-    setSpot({
-      x:
-        ((e.clientX - rect.left) / rect.width) * 100,
-      y:
-        ((e.clientY - rect.top) / rect.height) * 100,
-    });
-  }
-
-  /* =======================================================
-     CHECK DESCRIPTION OVERFLOW
+     DESCRIPTION OVERFLOW
   ======================================================= */
 
   useLayoutEffect(() => {
@@ -167,10 +187,6 @@ function CampaignCard({
 
       if (!el) return;
 
-      /*
-       * Compare the natural content height with the
-       * visible height after line-clamping.
-       */
       setIsOverflowing(
         el.scrollHeight > el.clientHeight + 1
       );
@@ -178,7 +194,10 @@ function CampaignCard({
 
     checkOverflow();
 
-    window.addEventListener('resize', checkOverflow);
+    window.addEventListener(
+      'resize',
+      checkOverflow
+    );
 
     return () => {
       window.removeEventListener(
@@ -192,524 +211,613 @@ function CampaignCard({
     ? 'Read more'
     : cta;
 
-  const cardPositionClass = imageOnRight
-    ? 'left-[-2%] lg:left-[-3%]'
-    : 'right-[-2%] lg:right-[-3%]';
+  /* =======================================================
+     CENTER-BASED ANIMATION
+  ======================================================= */
+
+  /*
+   * At the center:
+   *
+   * progress = 1
+   * translate = 0
+   *
+   * Away from center:
+   *
+   * progress = 0
+   * translate = 150px
+   *
+   * Therefore:
+   *
+   * FAR → CLOSE → FAR
+   */
+
+  const maxTranslate = 150;
+
+  const translateAmount =
+    (1 - progress) * maxTranslate;
+
+  /*
+   * Image and content move toward each other.
+   */
+
+  const imageTranslateX = imageOnRight
+    ? translateAmount
+    : -translateAmount;
+
+  const cardTranslateX = imageOnRight
+    ? -translateAmount
+    : translateAmount;
+
+  /* =======================================================
+     MOUSE FOLLOW
+  ======================================================= */
+
+  const handleMouseMove = (
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    const rect =
+      event.currentTarget.getBoundingClientRect();
+
+    const x =
+      ((event.clientX - rect.left) /
+        rect.width) *
+      100;
+
+    const y =
+      ((event.clientY - rect.top) /
+        rect.height) *
+      100;
+
+    setSpot({
+      x,
+      y,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setSpot({
+      x: 50,
+      y: 50,
+    });
+  };
 
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group relative block"
+    <div
+      ref={wrapperRef}
+      className="
+        relative
+        mx-auto
+        w-full
+        max-w-[1200px]
+
+        lg:min-h-[620px]
+        xl:min-h-[650px]
+      "
     >
+      {/* =================================================
+          IMAGE
+      ================================================= */}
+
       <div
-        ref={wrapperRef}
-        className="
+        ref={imgWrapRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className={`
+          group
           relative
-          mx-auto
+          overflow-hidden
+          rounded-[26px]
+
+          h-[390px]
+          sm:h-[480px]
+          md:h-[560px]
+          lg:h-[610px]
+          xl:h-[640px]
+
           w-full
-          max-w-[1200px]
-          lg:min-h-[620px]
-          xl:min-h-[650px]
-        "
+          lg:w-[63%]
+
+          ${imageOnRight ? 'lg:ml-auto' : ''}
+        `}
+        style={{
+          transform: `translateX(${imageTranslateX}px)`,
+          transition: 'none',
+          willChange: 'transform',
+        }}
+      >
+        <img
+          src={image}
+          alt={imageAlt}
+          loading="lazy"
+          className="
+            h-full
+            w-full
+            object-cover
+
+            scale-[1.08]
+
+            opacity-0
+            blur-[6px]
+
+            animate-[cardImgIn_1s_ease-out_forwards]
+
+            transition-transform
+            duration-[900ms]
+            ease-out
+
+            will-change-transform
+
+            group-hover:scale-[1.04]
+          "
+        />
+
+        {/* Mouse-follow highlight */}
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+
+            opacity-0
+            transition-opacity
+            duration-500
+
+            group-hover:opacity-100
+          "
+          style={{
+            background: `radial-gradient(
+              circle at ${spot.x}% ${spot.y}%,
+              rgba(255,255,255,0.20),
+              transparent 35%
+            )`,
+          }}
+        />
+
+        {/* Hover overlay */}
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+
+            bg-black/0
+
+            transition-colors
+            duration-500
+
+            group-hover:bg-black/10
+          "
+        />
+      </div>
+
+      {/* =================================================
+          CONTENT CARD
+      ================================================= */}
+
+      <div
+        className={`
+          absolute
+          z-20
+
+          w-[88%]
+          max-w-[500px]
+
+          rounded-[24px]
+          bg-paper
+
+          p-6
+
+          shadow-[0_25px_70px_rgba(0,0,0,0.16)]
+
+          sm:p-8
+
+          lg:w-[50%]
+          lg:max-w-[540px]
+
+          /*
+           * IMPORTANT:
+           * These keep the card vertically centered
+           * against the image.
+           */
+          lg:top-1/2
+          lg:-translate-y-1/2
+
+          lg:h-[488px]
+          lg:overflow-hidden
+
+          lg:flex
+          lg:flex-col
+          lg:justify-center
+
+          xl:h-[512px]
+
+          ${
+            imageOnRight
+              ? 'left-[-2%] lg:left-[-3%]'
+              : 'right-[-2%] lg:right-[-3%]'
+          }
+
+          top-auto
+          -bottom-10
+
+          lg:bottom-auto
+        `}
+        style={{
+          /*
+           * ONLY horizontal movement here.
+           *
+           * Vertical centering is handled by:
+           *
+           * lg:top-1/2
+           * lg:-translate-y-1/2
+           */
+          transform: `translateX(${cardTranslateX}px)`,
+          transition: 'none',
+          willChange: 'transform',
+        }}
       >
         {/* =================================================
-            BIG IMAGE
+            INNER CONTENT
         ================================================= */}
 
-        <div
-          ref={imgWrapRef}
-          onMouseMove={handleMouseMove}
-          style={{
-            transform: `translateX(${imageTranslateX}px)`,
-            opacity: eased,
-            transition: 'none',
+        <motion.div
+          animate={{
+            y: [0, -10, 0],
           }}
-          className={`
-            relative
-            overflow-hidden
-            rounded-[26px]
-
-            h-[390px]
-            sm:h-[480px]
-            md:h-[560px]
-            lg:h-[610px]
-            xl:h-[640px]
-
+          transition={{
+            duration: 3.8,
+            repeat: Infinity,
+            repeatType: 'loop',
+            ease: 'easeInOut',
+            delay: 1 + index * 0.2,
+          }}
+          className="
+            flex
+            min-h-0
             w-full
-            lg:w-[63%]
-
-            ${imageOnRight ? 'lg:ml-auto' : ''}
-          `}
+            flex-col
+          "
         >
-          <img
-            src={image}
-            alt={imageAlt}
-            loading="lazy"
+          {/* Eyebrow */}
+
+          <p
             className="
-              h-full
-              w-full
-              object-cover
-              scale-[1.08]
-              opacity-0
-              blur-[6px]
-              animate-[cardImgIn_1s_ease-out_forwards]
-              transition-transform
-              duration-[900ms]
-              ease-out
-              will-change-transform
-              group-hover:scale-[1.04]
-            "
-          />
+              mb-5
+              shrink-0
 
-          {/* Mouse light */}
-          <div
-            className="
-              pointer-events-none
-              absolute
-              inset-0
-              opacity-0
-              transition-opacity
-              duration-1500
-              group-hover:opacity-100
-            "
-            style={{
-              background: `
-                radial-gradient(
-                  circle at ${spot.x}% ${spot.y}%,
-                  rgba(255,255,255,0.18),
-                  transparent 45%
-                )
-              `,
-            }}
-          />
+              text-[13px]
+              font-medium
+              uppercase
+              tracking-wide
+              text-maroon
 
-          {/* Dark hover overlay */}
-          <div
-            className="
-              pointer-events-none
-              absolute
-              inset-0
-              bg-ink/0
-              transition-colors
-              duration-500
-              group-hover:bg-ink/10
-            "
-          />
-        </div>
-
-        {/* =================================================
-            OVERLAPPING TEXT CARD
-        ================================================= */}
-
-        <div
-          style={{
-            transform: `translateX(${cardTranslateX}px)`,
-            opacity: eased,
-            transition: 'none',
-          }}
-          className={`
-            absolute
-            z-20
-
-            w-[88%]
-            max-w-[500px]
-
-            rounded-[24px]
-            bg-paper
-            p-6
-
-            shadow-[0_25px_70px_rgba(0,0,0,0.16)]
-
-            sm:p-8
-
-            lg:w-[50%]
-            lg:max-w-[540px]
-
-            lg:top-1/2
-            lg:-translate-y-1/2
-
-            lg:h-[488px]
-
-            lg:overflow-hidden
-
-            lg:flex
-            lg:flex-col
-            lg:justify-center
-
-            xl:h-[512px]
-
-            ${cardPositionClass}
-
-            top-auto
-            -bottom-10
-
-            lg:bottom-auto
-          `}
-        >
-          {/* =================================================
-              FLOATING CONTENT
-          ================================================= */}
-
-          <motion.div
-            animate={{
-              y: [0, -10, 0],
-            }}
-            transition={{
-              duration: 3.8,
-              repeat: Infinity,
-              repeatType: 'loop',
-              ease: 'easeInOut',
-              delay: 1 + index * 0.2,
-            }}
-            className="
-              flex
-              min-h-0
-              w-full
-              flex-col
+              sm:text-[13.5px]
             "
           >
-            {/* =================================================
-                TITLE
-            ================================================= */}
+            {eyebrow}
+          </p>
 
-            <h3
-              className="
-                mb-1
-                shrink-0
-                font-sans
-                text-[19px]
-                font-extrabold
-                leading-tight
-                text-ink
+          {/* Heading */}
 
-                sm:text-[21px]
+          <h3
+            className="
+              mb-1
+              shrink-0
 
-                lg:text-[22px]
-              "
-            >
-              {title}
-            </h3>
+              font-sans
+              text-[19px]
+              font-extrabold
+              leading-tight
+              text-ink
 
-            {/* =================================================
-                EYEBROW
-            ================================================= */}
+              sm:text-[21px]
+              lg:text-[22px]
+            "
+          >
+            {title}
+          </h3>
 
-            <p
-              className="
-                mb-5
-                shrink-0
-                text-[13px]
-                font-medium
-                uppercase
-                tracking-wide
-                text-maroon
+          {/* Description */}
 
-                sm:text-[13.5px]
-              "
-            >
-              {eyebrow}
-            </p>
+          <p
+            ref={descriptionRef}
+            className="
+              mb-6
 
-            {/* =================================================
-                DESCRIPTION
+              text-[14px]
+              leading-[1.7]
+              text-muted-light
 
-                IMPORTANT:
-                The description is limited to 5 lines on
-                desktop so it cannot push the button out
-                of the fixed-height card.
-            ================================================= */}
+              sm:text-[15px]
 
-            <p
-              ref={descriptionRef}
-              className="
-                mb-6
+              lg:text-[15.5px]
 
-                text-[14px]
-                leading-[1.7]
-                text-muted-light
+              lg:line-clamp-5
+              lg:overflow-hidden
+            "
+          >
+            {description}
+          </p>
 
-                sm:text-[15px]
+          {/* CTA */}
 
-                lg:text-[15.5px]
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              group/cta
 
-                lg:line-clamp-5
-                lg:overflow-hidden
-              "
-            >
-              {description}
-            </p>
+              mt-auto
+              shrink-0
 
-            {/* =================================================
-                CTA BUTTON
+              inline-flex
+              w-fit
 
-                shrink-0 ensures this can never get pushed
-                outside the card.
-            ================================================= */}
+              items-center
+              gap-2
+
+              rounded-full
+
+              border
+              border-maroon
+
+              px-5
+              py-2.5
+
+              text-[13px]
+              font-semibold
+              text-maroon
+
+              transition-all
+              duration-300
+
+              hover:bg-maroon
+              hover:text-white
+            "
+          >
+            <span>
+              {displayCta}
+            </span>
 
             <span
               className="
-                campaign-button
-                relative
-                inline-flex
-                w-fit
-                shrink-0
-                items-center
-                gap-3
-                overflow-hidden
-                rounded-full
-                border
-                border-[#C8102E]
-                bg-white
-                py-3
-                pl-5
-                pr-2
+                inline-block
 
-                text-[14px]
-                font-semibold
-                text-ink
+                transition-transform
+                duration-300
 
-                transition-colors
-                duration-500
-
-                sm:text-[14.5px]
+                group-hover/cta:translate-x-1
               "
             >
-              {/* Red fill */}
-              <span
-                className="
-                  campaign-button-fill
-                  absolute
-                  inset-x-0
-                  bottom-0
-                  h-0
-                  bg-[#C8102E]
-                  transition-all
-                  duration-500
-                  ease-out
-                  group-hover:h-full
-                "
-              />
-
-              {/* Button text */}
-              <span
-                className="
-                  relative
-                  z-10
-                  transition-colors
-                  duration-500
-                  group-hover:text-white
-                "
-              >
-                {displayCta}
-              </span>
-
-              {/* Arrow */}
-              <span
-                className="
-                  relative
-                  z-10
-                  flex
-                  h-8
-                  w-8
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-full
-
-                  bg-[#C8102E]/10
-                  text-[#C8102E]
-
-                  transition-all
-                  duration-500
-
-                  group-hover:rotate-45
-                  group-hover:bg-white/20
-                  group-hover:text-white
-                "
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                >
-                  <path
-                    d="M3 8h10M9 4l4 4-4 4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
+              →
             </span>
-          </motion.div>
-        </div>
+          </a>
+        </motion.div>
       </div>
-    </a>
+    </div>
   );
 }
 
 /* =========================================================
-   PILLARS
+   MAIN PILLARS
 ========================================================= */
 
 export default function Pillars() {
   return (
     <section
-      id="campaigns"
-      className="overflow-hidden"
+      className="
+        relative
+        overflow-hidden
+
+        bg-paper
+
+        px-4
+        py-20
+
+        sm:px-6
+        sm:py-24
+
+        lg:px-8
+        lg:py-28
+      "
     >
-      {/* =====================================================
-          CARD IMAGE ANIMATION
-      ====================================================== */}
-
-      <style>{`
-        @keyframes cardImgIn {
-          from {
-            opacity: 0;
-            filter: blur(6px);
-            transform: scale(1.14);
-          }
-
-          to {
-            opacity: 1;
-            filter: blur(0px);
-            transform: scale(1.08);
-          }
-        }
-      `}</style>
-
-      {/* =====================================================
-          INTRO
-      ====================================================== */}
-
-      <Reveal>
-        <div
-          className="
-            mx-auto
-            max-w-[1200px]
-
-            px-5
-            pb-8
-            pt-16
-
-            text-center
-
-            sm:px-8
-            sm:pb-12
-            sm:pt-24
-
-            lg:pb-14
-            lg:pt-28
-          "
-        >
-          <img
-            src={campaignSignImage}
-            alt=""
-            aria-hidden="true"
-            className="
-              mx-auto
-              mb-6
-              -mt-30
-
-              h-[220px]
-              w-auto
-              object-contain
-
-              sm:h-[280px]
-
-              lg:h-[320px]
-            "
-          />
-
-          <p
-            className="
-              mx-auto
-              max-w-[62ch]
-
-              text-[15.5px]
-              leading-relaxed
-              text-muted-light
-
-              sm:text-[17px]
-            "
-          >
-            Every programme we run protects
-            dignity, strengthens communities,
-            and contributes to a more informed
-            and compassionate UK society.
-          </p>
-        </div>
-      </Reveal>
-
-      {/* =====================================================
-          CAMPAIGN CARDS
-      ====================================================== */}
-
       <div
         className="
           mx-auto
-          max-w-[1200px]
-
-          px-5
-          pb-32
-
-          sm:px-8
-          sm:pb-40
-
-          lg:pb-48
+          max-w-[1400px]
         "
       >
+        {/* =================================================
+            INTRO
+        ================================================= */}
+
+        <Reveal>
+          <div
+            className="
+              relative
+
+              mx-auto
+              mb-20
+
+              max-w-[850px]
+
+              text-center
+
+              lg:mb-28
+            "
+          >
+            {/* Campaign sign */}
+
+            <img
+              src={campaignSignImage}
+              alt=""
+              aria-hidden="true"
+              className="
+                pointer-events-none
+
+                absolute
+
+                left-1/2
+                top-0
+
+                w-[95px]
+
+                -translate-x-1/2
+                -translate-y-[55%]
+
+                opacity-90
+
+                sm:w-[115px]
+
+                lg:w-[135px]
+              "
+            />
+
+            {/* Eyebrow */}
+
+            <p
+              className="
+                relative
+
+                mb-4
+                pt-12
+
+                text-[13px]
+                font-semibold
+                uppercase
+                tracking-[0.18em]
+
+                text-maroon
+
+                sm:text-[14px]
+              "
+            >
+              Our Campaigns
+            </p>
+
+            {/* Heading */}
+
+            <h2
+              className="
+                font-sans
+
+                text-[32px]
+                font-extrabold
+
+                leading-[1.1]
+                tracking-[-0.03em]
+
+                text-ink
+
+                sm:text-[40px]
+
+                md:text-[48px]
+
+                lg:text-[56px]
+              "
+            >
+              Turning conviction
+              <br />
+              into action.
+            </h2>
+
+            {/* Description */}
+
+            <p
+              className="
+                mx-auto
+                mt-6
+
+                max-w-[700px]
+
+                text-[15px]
+                leading-[1.8]
+
+                text-muted-light
+
+                sm:text-[16px]
+              "
+            >
+              We work to protect human dignity,
+              defend vulnerable people, and create
+              meaningful change through campaigns
+              that turn awareness into action.
+            </p>
+          </div>
+        </Reveal>
+
+        {/* =================================================
+            CAMPAIGNS
+        ================================================= */}
+
         <div
           className="
             flex
             flex-col
+
             gap-24
 
             sm:gap-32
+
+            lg:gap-36
           "
         >
           {/* =================================================
-              CARD 1
+              CAMPAIGN 1
           ================================================= */}
 
           <CampaignCard
             href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
-            eyebrow="Raising awareness"
+            eyebrow="Human Rights Campaign"
             title="Stopping executions. Defending the vulnerable."
-            description="We campaign to end executions in Iran and defend the rights of prisoners of conscience through powerful public action and relentless advocacy. From organising demonstrations, letter-writing drives, and mass petitions to gathering evidence from inside prisons, we bring global attention to their suffering.
-Through publications, satellite broadcasts, and social media, we expose the regime's crimes and echo the voices of the silenced—especially women, children, and religious minorities facing brutal oppression. Every name we say, every voice we amplify, brings us closer to justice."
+            description="We campaign to oppose the death penalty and defend the dignity and rights of people facing execution. Through advocacy, public awareness, and direct action, we work toward a world where justice does not depend on taking a life."
             cta="Read about this campaign"
             image={campaignExecutions}
-            imageAlt="Vigil supporting victims of executions in Iran"
+            imageAlt="Campaign against executions"
             index={0}
           />
 
           {/* =================================================
-              CARD 2
+              CAMPAIGN 2
           ================================================= */}
 
           <CampaignCard
             href="https://iliberty.org.uk/campaign/helping-survivors-rebuild-in-the-uk-2/"
-            eyebrow="Community support"
+            eyebrow="Survivor Support"
             title="Helping survivors rebuild in the UK"
-            description="We support refugees, survivors of human rights abuses, migrants, and vulnerable families across the UK to rebuild their lives, strengthen their independence, and feel more connected to the communities around them.
-
-Our programmes address some of the everyday barriers that can make rebuilding life in a new country difficult. Through regular digital skills workshops, we help older migrants gain the confidence to use smartphones, access online services, communicate with family and friends, and navigate an increasingly digital society. For many older people who may face language barriers or social isolation, these sessions also provide a welcoming space to build friendships, stay connected, and become more involved in their local community.
-
-We also work closely with young people and families. Our youth programmes engage hundreds of participants each year through weekly workshops, educational activities, community events, and opportunities to develop confidence, skills, and meaningful social connections. Where families are experiencing financial hardship, we also provide practical assistance, including grants to schools to help cover essential items such as school uniforms, helping ensure that children can participate fully in school life without additional financial pressure on their families.
-
-Alongside this, we provide one-to-one integration support, community meetings, online sessions, and practical guidance for people adjusting to life in the UK. Across more than 50 digital skills sessions each year, weekly youth activities, one-to-one support, and over 60 online community meetings, our aim is not simply to provide short-term help, but to reduce isolation, strengthen resilience, build confidence, and enable people to participate fully and independently in British society."
+            description="Survivors of violence and persecution often face enormous challenges after reaching safety. Our work supports survivors as they rebuild their lives in the UK, helping them access practical support, regain confidence, and move toward a safer and more independent future."
             cta="See how we help"
             image={campaignSurvivors}
-            imageAlt="One-to-one integration support session"
+            imageAlt="Helping survivors rebuild their lives"
             index={1}
           />
         </div>
       </div>
+
+      {/* =====================================================
+          IMAGE ANIMATION
+      ===================================================== */}
+
+      <style>
+        {`
+          @keyframes cardImgIn {
+            from {
+              opacity: 0;
+              filter: blur(6px);
+              transform: scale(1.14);
+            }
+
+            to {
+              opacity: 1;
+              filter: blur(0px);
+              transform: scale(1.08);
+            }
+          }
+        `}
+      </style>
     </section>
   );
 }
