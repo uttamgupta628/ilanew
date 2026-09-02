@@ -973,9 +973,9 @@ export default function Hero() {
                 className="
                   font-serif
                   text-[26px]
-                  font-semibold
+                  font-bold
                   leading-none
-                  text-[#C8102E]
+                  text-black
                   sm:text-[30px]
                 "
               >
@@ -995,7 +995,7 @@ export default function Hero() {
                   max-w-[16ch]
                   text-[12px]
                   text-black
-                  sm:text-[13px]
+                  sm:text-[16px]
                 "
               >
                 {primaryStat.l}
