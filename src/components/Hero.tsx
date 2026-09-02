@@ -15,6 +15,7 @@ import {
 import heroPanelLeft from '../assets/images/panel-left.png';
 import heroPanelRight from '../assets/images/panel-right.png';
 import heroLeftBg from '../assets/images/hero-left-bg.jpg';
+import heroTornEdge from '../assets/images/torn-edge.webp';
 import { stats } from '../data/content';
 
 /* =========================================================
@@ -26,138 +27,6 @@ const headlineLines = [
   'Oppression, Building Stronger',
   'Communities In The UK',
 ];
-
-/* =========================================================
-   MOBILE TORN EDGE
-========================================================= */
-
-const tornEdgeMobile = {
-  clipPath:
-    'polygon(' +
-    '0% 0%, ' +
-    '100% 0%, ' +
-    '100% 90%, ' +
-    '97% 92%, ' +
-    '94% 91%, ' +
-    '91% 95%, ' +
-    '88% 93%, ' +
-    '85% 97%, ' +
-    '82% 94%, ' +
-    '79% 98%, ' +
-    '76% 95%, ' +
-    '73% 99%, ' +
-    '70% 96%, ' +
-    '67% 100%, ' +
-    '64% 96%, ' +
-    '61% 98%, ' +
-    '58% 95%, ' +
-    '55% 99%, ' +
-    '52% 96%, ' +
-    '49% 100%, ' +
-    '46% 96%, ' +
-    '43% 98%, ' +
-    '40% 94%, ' +
-    '37% 99%, ' +
-    '34% 95%, ' +
-    '31% 98%, ' +
-    '28% 94%, ' +
-    '25% 97%, ' +
-    '22% 93%, ' +
-    '19% 96%, ' +
-    '16% 92%, ' +
-    '13% 95%, ' +
-    '10% 91%, ' +
-    '7% 94%, ' +
-    '4% 91%, ' +
-    '0% 94%' +
-    ')',
-};
-
-/* =========================================================
-   DESKTOP HAND-TORN EDGE
-========================================================= */
-
-/*
-  IMPORTANT:
-
-  This is applied ONLY to the LEFT CONTENT PANEL.
-
-  The right-side image is NOT clipped.
-  It remains exactly rectangular and unchanged.
-
-  The many uneven points create a more natural,
-  hand-torn-paper appearance instead of a regular zig-zag.
-*/
-
-const tornEdgeDesktop = {
-  clipPath:
-    'polygon(' +
-    '0% 0%, ' +
-    '96.8% 0%, ' +
-
-    /* upper tear */
-    '97.5% 2%, ' +
-    '96.4% 4%, ' +
-    '98.4% 6%, ' +
-    '96.9% 8%, ' +
-    '98.8% 10%, ' +
-
-    /* upper-middle */
-    '97.2% 12%, ' +
-    '99.1% 14%, ' +
-    '96.7% 16%, ' +
-    '98.5% 18%, ' +
-    '96.3% 20%, ' +
-    '99.2% 22%, ' +
-    '97.0% 24%, ' +
-    '98.7% 26%, ' +
-    '96.1% 28%, ' +
-    '99.0% 30%, ' +
-
-    /* middle */
-    '97.1% 32%, ' +
-    '98.8% 34%, ' +
-    '96.0% 36%, ' +
-    '99.3% 38%, ' +
-    '96.5% 40%, ' +
-    '98.9% 42%, ' +
-    '96.2% 44%, ' +
-    '99.0% 46%, ' +
-    '96.0% 48%, ' +
-    '98.7% 50%, ' +
-    '96.3% 52%, ' +
-    '99.1% 54%, ' +
-    '96.1% 56%, ' +
-    '98.8% 58%, ' +
-
-    /* lower-middle */
-    '96.2% 60%, ' +
-    '99.0% 62%, ' +
-    '96.4% 64%, ' +
-    '98.9% 66%, ' +
-    '96.0% 68%, ' +
-    '99.2% 70%, ' +
-    '96.5% 72%, ' +
-    '98.7% 74%, ' +
-    '96.1% 76%, ' +
-    '99.0% 78%, ' +
-    '96.3% 80%, ' +
-    '98.8% 82%, ' +
-    '96.0% 84%, ' +
-    '99.1% 86%, ' +
-    '96.4% 88%, ' +
-
-    /* bottom tear */
-    '98.8% 90%, ' +
-    '96.2% 92%, ' +
-    '98.5% 94%, ' +
-    '96.5% 96%, ' +
-    '98% 98%, ' +
-    '96% 100%, ' +
-
-    '0% 100%' +
-    ')',
-};
 
 /* =========================================================
    AVATARS
@@ -376,6 +245,108 @@ export default function Hero() {
 
   const primaryStat = stats[0];
 
+  /* =======================================================
+     DESKTOP TORN EDGE SEAM (vertical, rotated -90deg)
+  ======================================================= */
+
+  const seamRef =
+    useRef<HTMLDivElement>(null);
+
+  const [seamHeight, setSeamHeight] =
+    useState(0);
+
+  useEffect(() => {
+    const el = seamRef.current;
+
+    if (!el) return;
+
+    const updateHeight = () => {
+      setSeamHeight(
+        el.parentElement?.clientHeight ||
+          el.clientHeight
+      );
+    };
+
+    updateHeight();
+
+    const observer =
+      new ResizeObserver(
+        updateHeight
+      );
+
+    observer.observe(el);
+
+    if (el.parentElement) {
+      observer.observe(
+        el.parentElement
+      );
+    }
+
+    window.addEventListener(
+      'resize',
+      updateHeight
+    );
+
+    return () => {
+      observer.disconnect();
+
+      window.removeEventListener(
+        'resize',
+        updateHeight
+      );
+    };
+  }, []);
+
+  /* =======================================================
+     MOBILE / TABLET TORN EDGE SEAM (horizontal, no rotation)
+
+     Same mask technique as desktop, but since the mobile
+     layout stacks the image ON TOP of the content instead
+     of side-by-side, the tear runs horizontally along the
+     bottom of the image instead of vertically down a seam.
+     torn-edge.webp is already horizontal natively, so no
+     rotation is needed here — we just stretch it across
+     the panel's measured WIDTH instead of its height.
+  ======================================================= */
+
+  const mobileWrapRef =
+    useRef<HTMLDivElement>(null);
+
+  const [mobileSeamWidth, setMobileSeamWidth] =
+    useState(0);
+
+  useEffect(() => {
+    const el = mobileWrapRef.current;
+
+    if (!el) return;
+
+    const updateWidth = () =>
+      setMobileSeamWidth(el.clientWidth);
+
+    updateWidth();
+
+    const observer =
+      new ResizeObserver(
+        updateWidth
+      );
+
+    observer.observe(el);
+
+    window.addEventListener(
+      'resize',
+      updateWidth
+    );
+
+    return () => {
+      observer.disconnect();
+
+      window.removeEventListener(
+        'resize',
+        updateWidth
+      );
+    };
+  }, []);
+
   return (
     <section
       ref={sectionRef}
@@ -393,74 +364,127 @@ export default function Hero() {
 
       {/* =====================================================
           MOBILE / TABLET IMAGE
+
+          Wrapped in a relative container so the torn-edge
+          seam below can sit OUTSIDE the image's own
+          overflow-hidden clipping and overlap the boundary
+          cleanly, the same way the desktop version does.
       ====================================================== */}
 
-      <motion.div
-        initial={{
-          opacity: 0,
-        }}
-        animate={{
-          opacity: 1,
-        }}
-        transition={{
-          duration: 1,
-          ease: 'easeOut',
-        }}
-        style={tornEdgeMobile}
+      <div
+        ref={mobileWrapRef}
         className="
           relative
-          mt-[88px]
-          h-[42vh]
-          w-full
-          shrink-0
-          overflow-hidden
           lg:hidden
-          sm:h-[48vh]
         "
       >
 
-        <div className="hero-image-track">
+        <motion.div
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          transition={{
+            duration: 1,
+            ease: 'easeOut',
+          }}
+          className="
+            relative
+            mt-[88px]
+            h-[42vh]
+            w-full
+            shrink-0
+            overflow-hidden
+            sm:h-[48vh]
+          "
+        >
 
-          <img
-            src={heroPanelLeft}
-            alt="ILA volunteers and community members speaking at an event, part one"
-          />
+          <div className="hero-image-track">
 
-          <img
-            src={heroPanelRight}
-            alt="ILA volunteers and community members speaking at an event, part two"
-          />
+            <img
+              src={heroPanelLeft}
+              alt="ILA volunteers and community members speaking at an event, part one"
+            />
 
-          <img
-            src={heroPanelLeft}
-            alt=""
-            aria-hidden="true"
-          />
+            <img
+              src={heroPanelRight}
+              alt="ILA volunteers and community members speaking at an event, part two"
+            />
 
-          <img
-            src={heroPanelRight}
-            alt=""
-            aria-hidden="true"
-          />
+            <img
+              src={heroPanelLeft}
+              alt=""
+              aria-hidden="true"
+            />
+
+            <img
+              src={heroPanelRight}
+              alt=""
+              aria-hidden="true"
+            />
+
+          </div>
+
+          <div className="hero-image-overlay" />
+
+        </motion.div>
+
+        {/* =================================================
+            MOBILE TORN EDGE — horizontal, sits right on
+            the boundary between the image and the blue
+            content below it.
+        ================================================== */}
+
+        <div
+          className="
+            pointer-events-none
+            absolute
+            inset-x-0
+            -bottom-2
+            z-20
+            h-8
+            overflow-hidden
+            sm:h-10
+          "
+        >
+
+          {mobileSeamWidth > 0 && (
+            <div
+              className="
+                absolute
+                left-1/2
+                top-1/2
+                h-8
+                sm:h-10
+              "
+              style={{
+                width: `${mobileSeamWidth + 8}px`,
+                transform:
+                  'translate(-50%, -50%) rotate(180deg)',
+                backgroundColor: '#78ADD0',
+                boxShadow:
+                  '0 -6px 20px rgba(0, 0, 0, 0.15)',
+                WebkitMaskImage: `url(${heroTornEdge})`,
+                maskImage: `url(${heroTornEdge})`,
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+                maskPosition: 'center',
+                WebkitMaskSize: '100% 100%',
+                maskSize: '100% 100%',
+              }}
+            />
+          )}
 
         </div>
 
-        <div className="hero-image-overlay" />
-
-      </motion.div>
+      </div>
 
 
       {/* =====================================================
           DESKTOP RIGHT IMAGE
-
-          IMPORTANT:
-          This is completely unchanged.
-
-          NO clip-path.
-          NO irregular edge.
-          NO mask.
-
-          The image stays rectangular.
       ====================================================== */}
 
       <div
@@ -542,10 +566,6 @@ export default function Hero() {
 
       {/* =====================================================
           LEFT CONTENT AREA
-
-          ONLY THIS ELEMENT GETS THE TORN EDGE.
-
-          The right image underneath remains untouched.
       ====================================================== */}
 
       <div
@@ -570,18 +590,77 @@ export default function Hero() {
           2xl:px-20
         "
         style={{
-          backgroundImage: `url(${heroLeftBg})`,
+          backgroundImage:
+            `url(${heroLeftBg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-
-          /*
-            The torn edge exists ONLY on the
-            right side of this panel.
-          */
-          ...tornEdgeDesktop,
         }}
       >
+
+        {/* =================================================
+            DESKTOP TORN EDGE
+
+            -top-2 / -bottom-2 (not -top-15, which is an
+            invalid Tailwind class and generated no CSS —
+            that's what let the top gap survive).
+        ================================================== */}
+
+        <div
+          ref={seamRef}
+          className="
+            pointer-events-none
+            absolute
+            -top-15
+            -bottom-2
+            -right-[38px]
+            z-20
+            hidden
+            w-8
+            overflow-hidden
+            lg:block
+            lg:w-10
+            lg:-right-[38px]
+            xl:w-14
+            xl:-right-[53px]
+            2xl:w-20
+            2xl:-right-[75px]
+          "
+        >
+
+          {seamHeight > 0 && (
+            <div
+              className="
+                absolute
+                left-1/2
+                top-1/2
+                h-8
+                lg:h-10
+                xl:h-14
+                2xl:h-20
+              "
+              style={{
+                width: `${seamHeight + 8}px`,
+                transform:
+                  'translate(-50%, -50%) rotate(-90deg)',
+                backgroundImage: `url(${heroLeftBg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                boxShadow: '0 0 28px rgba(0, 0, 0, 0.18)',
+                WebkitMaskImage: `url(${heroTornEdge})`,
+                maskImage: `url(${heroTornEdge})`,
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+                maskPosition: 'center',
+                WebkitMaskSize: '100% 100%',
+                maskSize: '100% 100%',
+              }}
+            />
+          )}
+
+        </div>
 
         {/* =================================================
             CONTENT
@@ -738,10 +817,11 @@ export default function Hero() {
                 text-white
                 transition-all
                 duration-300
-                hover:bg-[#a80d25]
                 hover:-translate-y-0.5
+                hover:bg-[#a80d25]
               "
             >
+
               Donate now
 
               <span
@@ -759,7 +839,9 @@ export default function Hero() {
                   group-hover:rotate-45
                 "
               >
-                <ArrowIcon className="h-4 w-4" />
+                <ArrowIcon
+                  className="h-4 w-4"
+                />
               </span>
 
             </a>
@@ -786,10 +868,11 @@ export default function Hero() {
                 text-white
                 transition-all
                 duration-300
-                hover:bg-[#a80d25]
                 hover:-translate-y-0.5
+                hover:bg-[#a80d25]
               "
             >
+
               Our Work
 
               <span
@@ -807,7 +890,9 @@ export default function Hero() {
                   group-hover:rotate-45
                 "
               >
-                <ArrowIcon className="h-4 w-4" />
+                <ArrowIcon
+                  className="h-4 w-4"
+                />
               </span>
 
             </a>
@@ -881,6 +966,7 @@ export default function Hero() {
 
             </div>
 
+
             <div>
 
               <div
@@ -893,12 +979,15 @@ export default function Hero() {
                   sm:text-[30px]
                 "
               >
+
                 <StatValue
                   value={
                     primaryStat.n
                   }
                 />
+
               </div>
+
 
               <div
                 className="
