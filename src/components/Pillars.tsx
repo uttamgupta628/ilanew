@@ -544,57 +544,82 @@ function CampaignCard({
           {/* CTA */}
 
           <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              group/cta
+           href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="
+    group/cta
 
-              mt-auto
-              shrink-0
+    relative
+    overflow-hidden
 
-              inline-flex
-              w-fit
+    mt-auto
+    shrink-0
 
-              items-center
-              gap-2
+    inline-flex
+    w-fit
 
-              rounded-full
+    items-center
+    gap-2
 
-              border
-              border-maroon
+    rounded-full
 
-              px-5
-              py-2.5
+    border
+    border-maroon
 
-              text-[13px]
-              font-semibold
-              text-maroon
+    px-5
+    py-2.5
 
-              transition-all
-              duration-300
+    text-[13px]
+    font-semibold
+    text-maroon
 
-              hover:bg-maroon
-              hover:text-white
-            "
-          >
-            <span>
-              {displayCta}
-            </span>
+    transition-colors
+    duration-1500
 
-            <span
-              className="
-                inline-block
+    hover:text-white
+  "
+>
+  {/* Bottom-up fill background */}
+  <span
+    aria-hidden="true"
+    className="
+      pointer-events-none
+      absolute
+      inset-0
 
-                transition-transform
-                duration-300
+      origin-bottom
+      scale-y-0
 
-                group-hover/cta:translate-x-1
-              "
-            >
-              →
-            </span>
-          </a>
+      transition-transform
+      duration-500
+      ease-out
+
+      group-hover/cta:scale-y-100
+    "
+    style={{ backgroundColor: '#C8102E' }}
+  />
+
+  <span className="relative z-10">
+    {displayCta}
+  </span>
+
+  <span
+    className="
+      relative
+      z-10
+
+      inline-block
+
+      transition-transform
+      duration-300
+
+      group-hover/cta:translate-x-1
+    "
+  >
+    →
+  </span>
+</a>
         </motion.div>
       </div>
     </div>

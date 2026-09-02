@@ -152,8 +152,8 @@ function App() {
         <Hero />
         <WhoWeAre />
         <Pillars />
-        <Gallery />
         <Mission />
+        <Gallery />
         <HowToHelp />
         <Shop />
         <Newsletter />

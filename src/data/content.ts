@@ -46,29 +46,29 @@ export const stats: StatItem[] = [
 
 export const missionItems: MissionItem[] = [
   {
-    title: 'Resilience, citizenship, prevention',
-    body: 'Youth programmes focused on resilience-building, civic responsibility, and prevention of radicalisation.',
+    title: 'Resilience, Citizenship, Prevention',
+    body: 'Targeted youth programmes focusing on resilience-building, civic responsibility, and prevention of Islamic radicalisation.',
     icon: 'shield',
   },
   {
-    title: 'Digital empowerment & integration',
-    body: 'Weekly digital skills workshops that help participants gain confidence and navigate daily life with independence.',
-    icon: 'signal',
-  },
-  {
-    title: 'Massacre survivor support',
-    body: 'Support for survivors of the 1988 massacre, providing witness coordination, testimony, and case documentation.',
-    icon: 'candle',
-  },
-  {
-    title: 'Justice & awareness',
-    body: 'International advocacy campaigns to stop executions, lobby policymakers, and raise public awareness.',
+    title: 'Justice & Awareness',
+    body: 'International advocacy campaigns to stop executions, lobby policymakers, and raise public awareness of Human Rights abuses.',
     icon: 'scale',
   },
   {
-    title: 'Equality & rights advocacy',
-    body: 'Outreach that promotes the rights of women, children, and minority communities, challenging discrimination.',
+    title: 'Digital Empowerment & Integration',
+    body: 'Weekly digital skills workshops and community support sessions that help over 50 participants gain confidence, access services, and navigate daily life with independence and dignity.',
+    icon: 'signal',
+  },
+  {
+    title: 'Equality & Rights Advocacy',
+    body: 'Campaigning and educational outreach to promote the rights of women, children, and minority communities—challenging discrimination, raising awareness, and fostering a more just and inclusive society.',
     icon: 'people',
+  },
+  {
+    title: 'Massacre Survivor Support',
+    body: 'Support for survivors of the 1988 massacre, providing witness coordination, testimony facilitation, and case documentation.',
+    icon: 'candle',
   },
 ];
 
