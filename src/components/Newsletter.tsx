@@ -126,14 +126,6 @@ export default function Newsletter() {
 
         <div className="relative">
           <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 1 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="border-t-2 border-dashed border-ink/25"
-          />
-
-          <motion.div
             initial={{ opacity: 0, y: -16, scale: 0.85 }}
             whileInView={{
               opacity: 1,
@@ -152,7 +144,7 @@ export default function Newsletter() {
                 delay: 0.7,
               },
             }}
-            className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2"
+            className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-[35%]"
           >
             <img
               src={dove}
