@@ -123,7 +123,7 @@ function ShopTile({
           style={{ transform: 'translateZ(36px)' }}
         >
           <div>
-            <h4 className="mb-1.5 font-serif text-[19px] font-bold leading-snug text-ink">
+            <h4 className="mb-1.5 font-Arial text-[19px] font-bold leading-snug text-ink">
               {item.title}
             </h4>
 
@@ -202,9 +202,9 @@ export default function Shop() {
               className="
                 mb-4
                 max-w-[18ch]
-                font-serif
-                text-[32px]
-                font-medium
+                font-Lato
+                text-[36px]
+                font-bold
                 leading-[1.1]
                 tracking-tight
                 text-ink
