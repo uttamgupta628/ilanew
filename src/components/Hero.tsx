@@ -574,24 +574,25 @@ export default function Hero() {
           z-10
           flex
           min-h-screen
+          right-[16px]
           w-full
           flex-col
           justify-center
-          pl-[calc(5vw+20px)]
+          pl-[calc(5vw+10px)]
           pr-5
           pb-16
           pt-28
-          sm:pl-[calc(5vw+30px)]
+          sm:pl-[calc(5vw+16px)]
           sm:pr-8
           lg:w-[40%]
           lg:min-h-screen
-          lg:pl-[calc(5vw+36px)]
+          lg:pl-[calc(5vw+20px)]
           lg:pr-10
           lg:pb-20
           lg:pt-32
-          xl:pl-[calc(5vw+36px)]
+          xl:pl-[calc(5vw+34px)]
           xl:pr-14
-          2xl:pl-[calc(5vw+36px)]
+          2xl:pl-[calc(5vw+34px)]
           2xl:pr-20
         "
         style={{

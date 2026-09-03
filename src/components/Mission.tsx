@@ -54,6 +54,19 @@ export default function Mission() {
         .flip-back {
           transform: rotate3d(1, 1, 0, 180deg);
         }
+
+        .cta-tilt-wrap {
+          perspective: 1000px;
+        }
+        .cta-tilt {
+          transform: rotateX(0deg) rotateY(0deg) translateZ(0px);
+          transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), box-shadow 0.5s ease;
+          transform-style: preserve-3d;
+        }
+        .cta-tilt-wrap:hover .cta-tilt {
+          transform: rotateX(6deg) rotateY(-8deg) translateZ(20px);
+          box-shadow: 0 35px 60px -15px rgba(200,16,46,0.45);
+        }
       `}</style>
 
       <div className="max-w-[1200px] mx-auto px-5 sm:px-8">
@@ -159,87 +172,90 @@ export default function Mission() {
           })}
 
           {/* Highlight box: Join us and make a difference */}
-          <div
-            className="
-              w-72 h-64 sm:w-80 sm:h-72
-              rounded-[32px]
-              shadow-xl
-              flex flex-col items-start justify-center
-              gap-6
-              px-8
-            "
-            style={{ backgroundColor: "#C8102E" }}
-          >
-            <p className="text-xl sm:text-2xl font-semibold text-white leading-snug">
-              Join us and make a difference.
-            </p>
+          <div className="cta-tilt-wrap w-72 sm:w-80">
+            <div
+              className="
+                cta-tilt
+                w-72 h-64 sm:w-80 sm:h-72
+                rounded-[32px]
+                shadow-xl
+                flex flex-col items-start justify-center
+                gap-6
+                px-8
+              "
+              style={{ backgroundColor: "#C8102E" }}
+            >
+              <p className="text-xl sm:text-2xl font-semibold text-white leading-snug">
+                Join us and make a difference.
+              </p>
 
-            <div className="flex flex-wrap gap-3">
-              <a
-                href="https://iliberty.org.uk/donate-2/"
-                className="
-                  group
-                  relative
-                  overflow-hidden
-
-                  inline-flex items-center gap-1.5
-
-                  px-5 py-2.5
-
-                  rounded-full
-                  border border-white
-
-                  text-[13.5px] font-semibold
-                "
-              >
-                <span
-                  aria-hidden="true"
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="https://iliberty.org.uk/donate-2/"
                   className="
-                    pointer-events-none
-                    absolute inset-0
-                    origin-bottom scale-y-0
-                    transition-transform duration-500 ease-out
-                    group-hover:scale-y-100
+                    group
+                    relative
+                    overflow-hidden
+
+                    inline-flex items-center gap-1.5
+
+                    px-5 py-2.5
+
+                    rounded-full
+                    border-2 border-white
+
+                    text-[13.5px] font-semibold
                   "
-                  style={{ backgroundColor: "#ffffff" }}
-                />
-                <span className="relative z-10 text-white transition-colors duration-500 group-hover:text-[#C8102E]">
-                  Donate ▸
-                </span>
-              </a>
+                >
+                  <span
+                    aria-hidden="true"
+                    className="
+                      pointer-events-none
+                      absolute inset-0
+                      origin-bottom scale-y-0
+                      transition-transform duration-500 ease-out
+                      group-hover:scale-y-100
+                    "
+                    style={{ backgroundColor: "#ffffff" }}
+                  />
+                  <span className="relative z-10 text-white transition-colors duration-500 group-hover:text-[#C8102E]">
+                    Donate ▸
+                  </span>
+                </a>
 
-              <a
-                href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
-                className="
-                  group
-                  relative
-                  overflow-hidden
-
-                  inline-flex items-center gap-1.5
-
-                  px-5 py-2.5
-
-                  rounded-full
-                  border border-white
-
-                  text-[13.5px] font-semibold
-                "
-              >
-                <span
-                  aria-hidden="true"
+                <a
+                  href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
                   className="
-                    pointer-events-none
-                    absolute inset-0
-                    origin-bottom scale-y-0
-                    transition-transform duration-500 ease-out
-                    group-hover:scale-y-100
+                    group
+                    relative
+                    overflow-hidden
+
+                    inline-flex items-center gap-1.5
+
+                    px-5 py-2.5
+
+                    rounded-full
+                    border-2 border-white
+
+                    text-[13.5px] font-semibold
                   "
-                  style={{ backgroundColor: "#ffffff" }}
-                />
-                <span className="relative z-10 text-white transition-colors duration-500 group-hover:text-[#4C7FAE]">
-                  Stop Executions in Iran ▸
-                </span>
-              </a>
+                >
+                  <span
+                    aria-hidden="true"
+                    className="
+                      pointer-events-none
+                      absolute inset-0
+                      origin-bottom scale-y-0
+                      transition-transform duration-500 ease-out
+                      group-hover:scale-y-100
+                    "
+                    style={{ backgroundColor: "#ffffff" }}
+                  />
+                  <span className="relative z-10 text-white transition-colors duration-500 group-hover:text-[#4C7FAE]">
+                    Stop Executions in Iran ▸
+                  </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
