@@ -8,6 +8,7 @@ import testimonial3 from '../assets/images/testimonial-3.png';
 import testimonial4 from '../assets/images/testimonial-4.png';
 import testimonial5 from '../assets/images/testimonial-5.png';
 import testimonial6 from '../assets/images/testimonial-6.png';
+import who from '../assets/images/who.png';
 
 /* =========================================================
    DATA
@@ -99,103 +100,103 @@ function ExpandableQuote({ quote }: { quote: string }) {
 
   return (
     <div>
-  {/* QUOTE */}
-  <p
-    className={`
-      text-[16px]
-      lato
-      leading-[1.7]
-      text-[#33322B]
-      transition-all
-      duration-300
-      ${expanded ? '' : 'line-clamp-4'}
-    `}
-  >
-    &ldquo;{quote}&rdquo;
-  </p>
-
-  {/* READ MORE BUTTON */}
-  <button
-    type="button"
-    onClick={() => setExpanded((prev) => !prev)}
-    className="
-      group
-      relative
-      mt-4
-      inline-flex
-      items-center
-      gap-3
-      overflow-hidden
-      rounded-full
-      border
-      border-maroon
-      bg-white
-      py-2.5
-      pl-5
-      pr-2.5
-      text-[14px]
-      font-semibold
-      text-maroon
-      transition-all
-      duration-300
-      hover:text-white
-    "
-  >
-    {/* Background animation starts from bottom */}
-    <span
-      className="
-        absolute
-        inset-x-0
-        bottom-0
-        h-0
-        bg-[#C8102E]
-        transition-all
-        duration-500
-        ease-out
-        group-hover:h-full
-      "
-    />
-
-    {/* Button text */}
-    <span className="relative z-10">
-      {expanded ? 'Show less' : 'Read more'}
-    </span>
-
-    {/* Arrow */}
-    <span
-      className="
-        relative
-        z-10
-        flex
-        h-7
-        w-7
-        items-center
-        justify-center
-        rounded-full
-        bg-maroon/10
-        transition-all
-        duration-300
-        group-hover:rotate-45
-        group-hover:bg-white/20
-      "
-    >
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 16 16"
-        fill="none"
+      {/* QUOTE */}
+      <p
+        className={`
+          text-[16px]
+          lato
+          leading-[1.7]
+          text-[#33322B]
+          transition-all
+          duration-300
+          ${expanded ? '' : 'line-clamp-4'}
+        `}
       >
-        <path
-          d="M3 8h10M9 4l4 4-4 4"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        &ldquo;{quote}&rdquo;
+      </p>
+
+      {/* READ MORE BUTTON */}
+      <button
+        type="button"
+        onClick={() => setExpanded((prev) => !prev)}
+        className="
+          group
+          relative
+          mt-4
+          inline-flex
+          items-center
+          gap-3
+          overflow-hidden
+          rounded-full
+          border
+          border-maroon
+          bg-white
+          py-2.5
+          pl-5
+          pr-2.5
+          text-[14px]
+          font-semibold
+          text-maroon
+          transition-all
+          duration-300
+          hover:text-white
+        "
+      >
+        {/* Background animation starts from bottom */}
+        <span
+          className="
+            absolute
+            inset-x-0
+            bottom-0
+            h-0
+            bg-[#C8102E]
+            transition-all
+            duration-500
+            ease-out
+            group-hover:h-full
+          "
         />
-      </svg>
-    </span>
-  </button>
-</div>
+
+        {/* Button text */}
+        <span className="relative z-10">
+          {expanded ? 'Show less' : 'Read more'}
+        </span>
+
+        {/* Arrow */}
+        <span
+          className="
+            relative
+            z-10
+            flex
+            h-7
+            w-7
+            items-center
+            justify-center
+            rounded-full
+            bg-maroon/10
+            transition-all
+            duration-300
+            group-hover:rotate-45
+            group-hover:bg-white/20
+          "
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <path
+              d="M3 8h10M9 4l4 4-4 4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
   );
 }
 
@@ -322,48 +323,85 @@ function TestimonialRow({
 
 export default function Testimonials() {
   return (
-    <section className="relative">
-      {/* HEADING — sits above the stacked rows, scrolls normally */}
-      <motion.h2
-        initial={{ opacity: 0, y: 16 }}
+    <section className="relative bg-paper">
+
+      {/* =================================================
+          WHO WE ARE IMAGE
+      ================================================= */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.5 }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{
+          duration: 0.8,
+          ease: [0.16, 1, 0.3, 1],
+        }}
         className="
-          pt-0
-          pb-0
-          text-center
-          font-Arial
-          text-[100px]
-          font-Arial
-          font-bold
-          leading-[1.1]
-          tracking-tight
-          text-ink
-          sm:pt-15
-          -sm:pb-2
-          sm:-mb-[15px]
-          sm:text-[80px]
+          relative
+          z-[100]
+          mx-auto
+          flex
+          w-full
+          -mb-36
+          justify-center
+          bg-paper
+          px-5
+          pt-16
+          pb-12
+          sm:pt-20
+          sm:pb-16
+          lg:pt-24
+          lg:pb-20
         "
       >
-        Who We Are
-      </motion.h2>
+        <img
+          src={who}
+          alt="Who We Are"
+          className="
+            block
+            h-auto
+            w-auto
+            max-w-[260px]
+            sm:max-w-[320px]
+            lg:max-w-[380px]
+            object-contain
+            opacity-100
+            visible
+          "
+        />
+      </motion.div>
 
-      {/* STACKED ROWS — each row is sticky at the same offset, so the
-          next one scrolls up and physically covers the previous one
-          instead of the page just scrolling past both. */}
-      {testimonials.map((testimonial, index) => (
-        <div
-          key={testimonial.number}
-          className="sticky top-0 flex min-h-screen items-center bg-paper py-20 sm:py-28"
-          style={{ zIndex: index + 1 }}
-        >
-          <TestimonialRow
-            testimonial={testimonial}
-            imageFromRight={index % 2 === 1}
-          />
-        </div>
-      ))}
+      {/* =================================================
+          TESTIMONIAL STACK
+      ================================================= */}
+      <div className="relative">
+
+        {testimonials.map((testimonial, index) => (
+          <div
+            key={testimonial.number}
+            className="
+              sticky
+              top-0
+              z-10
+              flex
+              min-h-screen
+              items-center
+              bg-paper
+              py-20
+              sm:py-28
+            "
+            style={{
+              zIndex: index + 1,
+            }}
+          >
+            <TestimonialRow
+              testimonial={testimonial}
+              imageFromRight={index % 2 === 1}
+            />
+          </div>
+        ))}
+
+      </div>
     </section>
   );
 }
