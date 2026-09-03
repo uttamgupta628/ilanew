@@ -142,4 +142,11 @@ export const shopItems: ShopItem[] = [
     img: shopRug2,
     href: 'https://international-liberty-association.myshopify.com/products/isfahan-persian-rug',
   },
+  {
+    title: 'Isfahan Persian Rug',
+    desc: '165cm × 110cm — handmade in Isfahan Province, Iran',
+    price: '£1,200.00',
+    img: shopRug2,
+    href: 'https://international-liberty-association.myshopify.com/products/isfahan-persian-rug',
+  },
 ];
