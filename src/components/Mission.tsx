@@ -24,7 +24,10 @@ export default function Mission() {
   }, []);
 
   return (
-    <section className="py-20 sm:py-28 overflow-hidden">
+    <section
+      className="py-20 sm:py-28 overflow-hidden"
+      style={{ fontFamily: "'Lato', sans-serif" }}
+    >
       <style>{`
         @keyframes cardIn {
           from { opacity: 0; transform: translateY(22px); }
@@ -33,10 +36,6 @@ export default function Mission() {
         @keyframes headingWordIn {
           from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
           to { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-        @keyframes sheenSweep {
-          from { transform: translateX(-130%) skewX(-15deg); }
-          to { transform: translateX(230%) skewX(-15deg); }
         }
 
         .flip-card {
@@ -61,7 +60,7 @@ export default function Mission() {
         {/* Centered heading block */}
         <div className="text-center mb-16">
           <Reveal>
-            <h2 className="font-serif font-extrabold text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.1] tracking-tight text-ink">
+            <h2 className="font-extrabold text-[32px] sm:text-[44px] lg:text-[52px] leading-[1.1] tracking-tight text-ink">
               {"Our Mission".split(" ").map((word, i) => (
                 <span
                   key={i}
@@ -128,13 +127,9 @@ export default function Mission() {
                     "
                   >
                     <span
-                      aria-hidden="true"
-                      className="font-serif text-3xl font-bold mb-4"
+                      className="mb-4 w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"
                       style={{ color: "#C8102E" }}
                     >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="mb-3" style={{ color: "#C8102E" }}>
                       <Icon />
                     </span>
                     <p className="text-sm font-medium text-ink leading-snug">
@@ -162,80 +157,92 @@ export default function Mission() {
               </div>
             );
           })}
+
+          {/* Highlight box: Join us and make a difference */}
+          <div
+            className="
+              w-72 h-64 sm:w-80 sm:h-72
+              rounded-[32px]
+              shadow-xl
+              flex flex-col items-start justify-center
+              gap-6
+              px-8
+            "
+            style={{ backgroundColor: "#C8102E" }}
+          >
+            <p className="text-xl sm:text-2xl font-semibold text-white leading-snug">
+              Join us and make a difference.
+            </p>
+
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="https://iliberty.org.uk/donate-2/"
+                className="
+                  group
+                  relative
+                  overflow-hidden
+
+                  inline-flex items-center gap-1.5
+
+                  px-5 py-2.5
+
+                  rounded-full
+                  border border-white
+
+                  text-[13.5px] font-semibold
+                "
+              >
+                <span
+                  aria-hidden="true"
+                  className="
+                    pointer-events-none
+                    absolute inset-0
+                    origin-bottom scale-y-0
+                    transition-transform duration-500 ease-out
+                    group-hover:scale-y-100
+                  "
+                  style={{ backgroundColor: "#ffffff" }}
+                />
+                <span className="relative z-10 text-white transition-colors duration-500 group-hover:text-[#C8102E]">
+                  Donate ▸
+                </span>
+              </a>
+
+              <a
+                href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
+                className="
+                  group
+                  relative
+                  overflow-hidden
+
+                  inline-flex items-center gap-1.5
+
+                  px-5 py-2.5
+
+                  rounded-full
+                  border border-white
+
+                  text-[13.5px] font-semibold
+                "
+              >
+                <span
+                  aria-hidden="true"
+                  className="
+                    pointer-events-none
+                    absolute inset-0
+                    origin-bottom scale-y-0
+                    transition-transform duration-500 ease-out
+                    group-hover:scale-y-100
+                  "
+                  style={{ backgroundColor: "#ffffff" }}
+                />
+                <span className="relative z-10 text-white transition-colors duration-500 group-hover:text-[#4C7FAE]">
+                  Stop Executions in Iran ▸
+                </span>
+              </a>
+            </div>
+          </div>
         </div>
-
-        <Reveal delay={0.2}>
-  <div className="flex flex-wrap items-center justify-between gap-6 mt-16">
-    <p className="font-serif text-xl text-ink">Join us and make a difference.</p>
-    <div className="flex flex-wrap gap-3.5">
-      <a
-        href="https://iliberty.org.uk/donate-2/"
-        className="
-          group
-          relative
-          overflow-hidden
-
-          inline-flex items-center
-          px-6 py-3
-
-          rounded-sm
-          border
-
-          text-[14.5px] font-medium
-        "
-        style={{ borderColor: '#C8102E' }}
-      >
-        <span
-          aria-hidden="true"
-          className="
-            pointer-events-none
-            absolute inset-0
-            origin-bottom scale-y-0
-            transition-transform duration-500 ease-out
-            group-hover:scale-y-100
-          "
-          style={{ backgroundColor: '#C8102E' }}
-        />
-        <span className="relative z-10 text-[#C8102E] transition-colors duration-1500 group-hover:text-white">
-          Donate
-        </span>
-      </a>
-
-      <a
-        href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
-        className="
-          group
-          relative
-          overflow-hidden
-
-          inline-flex items-center
-          px-6 py-3
-
-          rounded-sm
-          border
-
-          text-[14.5px] font-medium
-        "
-        style={{ borderColor: '#C8102E' }}
-      >
-        <span
-          aria-hidden="true"
-          className="
-            pointer-events-none
-            absolute inset-0
-            origin-bottom scale-y-0
-            transition-transform duration-500 ease-out
-            group-hover:scale-y-100
-          "
-          style={{ backgroundColor: '#C8102E' }}
-        />
-        <span className="relative z-10 text-[#C8102E] transition-colors duration-1500 group-hover:text-white">
-          Stop executions in Iran
-        </span>
-      </a>
-    </div>
-  </div>
-</Reveal>
       </div>
     </section>
   );
