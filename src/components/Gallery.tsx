@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 import Reveal from './Reveal';
 import { helpCards } from '../data/content';
@@ -30,9 +29,9 @@ function HelpTile({
         absolute
         top-1/2
         left-1/2
-        w-[330px]
-        sm:w-[350px]
-        lg:w-[370px]
+        w-[400px]
+        sm:w-[430px]
+        lg:w-[460px]
         bg-white
         rounded-[28px]
         overflow-hidden
@@ -66,11 +65,11 @@ function HelpTile({
       </div>
 
       {/* Content */}
-      <div className="px-7 py-7 sm:px-8 sm:py-8 flex flex-col">
+      <div className="px-8 py-8 sm:px-9 sm:py-9 flex flex-col">
         <h4
           className="
-            text-[20px]
-            sm:text-[21px]
+            text-[22px]
+            sm:text-[23px]
             font-bold
             text-ink
             mb-3
@@ -82,8 +81,8 @@ function HelpTile({
 
         <p
           className="
-            text-[14px]
-            sm:text-[14.5px]
+            text-[15px]
+            sm:text-[15.5px]
             text-gray-600
             leading-[1.75]
             mb-6
@@ -97,7 +96,7 @@ function HelpTile({
             inline-flex
             items-center
             gap-2
-            text-[14px]
+            text-[15px]
             font-bold
             mt-auto
           "
@@ -126,7 +125,7 @@ function HelpTile({
    CAROUSEL SETTINGS
 ========================================================= */
 
-const SPACING = 350;
+const SPACING = 470;
 
 // How far cards move backward in 3D space
 const Z_DEPTH = 210;
@@ -408,7 +407,7 @@ export default function Gallery() {
     >
       <div
         className="
-          max-w-[1200px]
+          max-w-[90%]
           mx-auto
           px-5
           sm:px-8
@@ -482,9 +481,9 @@ export default function Gallery() {
           <div
             className="
               relative
-              h-[520px]
-              sm:h-[560px]
-              lg:h-[590px]
+              h-[600px]
+              sm:h-[650px]
+              lg:h-[700px]
               flex
               items-center
               justify-center

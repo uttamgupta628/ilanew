@@ -320,91 +320,115 @@ export default function Navbar() {
           <div className="hidden shrink-0 items-center gap-2.5 xl:flex">
             {/* Donate */}
 
-            <motion.a
+            <a
               href="https://iliberty.org.uk/donate-2/"
-              style={{ backgroundColor: RED }}
-              whileHover={{
-                scale: 1.04,
-                y: -2,
-                boxShadow: "0 10px 24px rgba(200,16,46,0.35)",
-              }}
-              whileTap={{
-                scale: 0.97,
-                y: 0,
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 20,
-              }}
               className="
+                group
+                relative
                 inline-flex
                 items-center
-                gap-2
+                gap-3
+                overflow-hidden
                 rounded-full
-                px-6
-                py-3
+                border
+                border-maroon
+                bg-white
+                py-2.5
+                pl-6
+                pr-2.5
                 text-[16px]
                 font-semibold
-                text-white
-                2xl:px-7
-                2xl:py-3.5
+                text-maroon
+                transition-all
+                duration-300
+                hover:text-white
+                2xl:py-3
+                2xl:pl-7
                 2xl:text-[17px]
               "
             >
-              Donate
-              <motion.span
-                className="flex items-center"
-                whileHover={{ rotate: 45 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 15,
-                }}
+              {/* Background animation starts from bottom */}
+              <span
+                className="
+                  absolute
+                  inset-x-0
+                  bottom-0
+                  h-0
+                  bg-[#C8102E]
+                  transition-all
+                  duration-500
+                  ease-out
+                  group-hover:h-full
+                "
+              />
+
+              <span className="relative z-10">Donate</span>
+
+              <span
+                className="
+                  relative
+                  z-10
+                  flex
+                  h-9
+                  w-9
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-maroon/10
+                  transition-all
+                  duration-300
+                  group-hover:rotate-45
+                  group-hover:bg-white/20
+                "
               >
                 <ArrowIcon className="h-[18px] w-[18px]" />
-              </motion.span>
-            </motion.a>
+              </span>
+            </a>
 
             {/* Shop */}
 
-            <motion.a
+            <a
               href="/shop"
-              style={{
-                color: RED,
-                borderColor: RED,
-              }}
-              whileHover={{
-                scale: 1.04,
-                y: -2,
-                backgroundColor: RED,
-                color: "#FFFFFF",
-              }}
-              whileTap={{
-                scale: 0.97,
-                y: 0,
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 20,
-              }}
               className="
+                group
+                relative
                 inline-flex
                 items-center
+                overflow-hidden
                 rounded-full
                 border
+                border-maroon
+                bg-white
                 px-7
-                py-3
+                py-2.5
                 text-[16px]
                 font-semibold
+                text-maroon
+                transition-all
+                duration-300
+                hover:text-white
                 2xl:px-8
-                2xl:py-3.5
+                2xl:py-3
                 2xl:text-[17px]
               "
             >
-              Shop
-            </motion.a>
+              {/* Background animation starts from bottom */}
+              <span
+                className="
+                  absolute
+                  inset-x-0
+                  bottom-0
+                  h-0
+                  bg-[#C8102E]
+                  transition-all
+                  duration-500
+                  ease-out
+                  group-hover:h-full
+                "
+              />
+
+              <span className="relative z-10">Shop</span>
+            </a>
           </div>
 
           {/* =================================================
@@ -674,65 +698,91 @@ export default function Navbar() {
                 ================================================== */}
 
                 <div className="mt-2 flex gap-2 border-t border-ink/10 pt-3">
-                  <motion.a
+                  <a
                     href="https://iliberty.org.uk/donate-2/"
-                    style={{
-                      backgroundColor: RED,
-                    }}
-                    whileHover={{
-                      scale: 1.02,
-                      boxShadow: "0 8px 20px rgba(200,16,46,0.3)",
-                    }}
-                    whileTap={{
-                      scale: 0.97,
-                    }}
                     className="
+                      group
+                      relative
                       flex
                       flex-1
                       items-center
                       justify-center
                       gap-2
+                      overflow-hidden
                       rounded-full
+                      border
+                      border-maroon
+                      bg-white
                       px-4
                       py-2.5
                       text-[15px]
                       font-semibold
-                      text-white
+                      text-maroon
+                      transition-all
+                      duration-300
+                      hover:text-white
                     "
                   >
-                    Donate
-                    <ArrowIcon className="h-3.5 w-3.5" />
-                  </motion.a>
+                    {/* Background animation starts from bottom */}
+                    <span
+                      className="
+                        absolute
+                        inset-x-0
+                        bottom-0
+                        h-0
+                        bg-[#C8102E]
+                        transition-all
+                        duration-500
+                        ease-out
+                        group-hover:h-full
+                      "
+                    />
 
-                  <motion.a
+                    <span className="relative z-10">Donate</span>
+                    <ArrowIcon className="relative z-10 h-3.5 w-3.5" />
+                  </a>
+
+                  <a
                     href="/shop"
-                    style={{
-                      color: RED,
-                      borderColor: RED,
-                    }}
-                    whileHover={{
-                      scale: 1.02,
-                      backgroundColor: RED,
-                      color: "#FFFFFF",
-                    }}
-                    whileTap={{
-                      scale: 0.97,
-                    }}
                     className="
+                      group
+                      relative
                       flex
                       flex-1
                       items-center
                       justify-center
+                      overflow-hidden
                       rounded-full
                       border
+                      border-maroon
+                      bg-white
                       px-4
                       py-2.5
                       text-[15px]
                       font-semibold
+                      text-maroon
+                      transition-all
+                      duration-300
+                      hover:text-white
                     "
                   >
-                    Shop
-                  </motion.a>
+                    {/* Background animation starts from bottom */}
+                    <span
+                      className="
+                        absolute
+                        inset-x-0
+                        bottom-0
+                        h-0
+                        bg-[#C8102E]
+                        transition-all
+                        duration-500
+                        ease-out
+                        group-hover:h-full
+                      "
+                    />
+
+                    <span className="relative z-10">Shop</span>
+                  </a>
                 </div>
               </div>
             </motion.div>

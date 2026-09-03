@@ -6,7 +6,7 @@ import WhoWeAre from './components/WhoWeAre';
 import Pillars from './components/Pillars';
 import Gallery from './components/Gallery';
 import Mission from './components/Mission';
-import HowToHelp from './components/HowToHelp';
+// import HowToHelp from './components/HowToHelp';
 import Shop from './components/Shop';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
@@ -154,7 +154,7 @@ function App() {
         <Pillars />
         <Mission />
         <Gallery />
-        <HowToHelp />
+        {/* <HowToHelp /> */}
         <Shop />
         <Newsletter />
       </main>

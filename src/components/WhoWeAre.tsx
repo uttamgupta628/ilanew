@@ -301,7 +301,7 @@ function TestimonialRow({
           ${textOrderClass}
         `}
       >
-        <h3 className="mb-1 flex items-baseline gap-2 font-sans text-[28px] font-extrabold leading-tight text-ink sm:text-[34px]">
+        <h3 className="mb-1 flex items-baseline gap-2 font-Lato text-[28px] font-extrabold leading-tight text-ink sm:text-[34px]">
           <span className="text-maroon">{testimonial.number}</span>
           {testimonial.title}
         </h3>
@@ -333,15 +333,16 @@ export default function Testimonials() {
           pt-0
           pb-0
           text-center
-          font-serif
+          font-Arial
           text-[100px]
           font-Arial
           font-bold
           leading-[1.1]
           tracking-tight
           text-ink
-          sm:pt-5
-          -sm:pb-20
+          sm:pt-15
+          -sm:pb-2
+          sm:-mb-[15px]
           sm:text-[80px]
         "
       >

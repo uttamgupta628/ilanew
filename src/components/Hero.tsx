@@ -807,101 +807,68 @@ export default function Hero() {
             {/* DONATE */}
 
             <a
-              href="https://iliberty.org.uk/donate-2/"
-              className="
-                group
-                inline-flex
-                items-center
-                gap-4
-                rounded-full
-                bg-[#C8102E]
-                py-2
-                pl-6
-                pr-2
-                text-[14.5px]
-                font-semibold
-                text-white
-                transition-all
-                duration-300
-                hover:-translate-y-0.5
-                hover:bg-[#a80d25]
-              "
-            >
 
-              Donate now
+  href="https://iliberty.org.uk/donate-2/"
+  className="
+    group
+    relative
+    inline-flex
+    items-center
+    gap-3
+    overflow-hidden
+    rounded-full
+    border
+    border-maroon
+    bg-white
+    py-2.5
+    pl-6
+    pr-2.5
+    text-[14.5px]
+    font-semibold
+    text-maroon
+    transition-all
+    duration-300
+    hover:text-white
+  "
+>
+  <span className="absolute inset-x-0 bottom-0 h-0 bg-[#C8102E] transition-all duration-500 ease-out group-hover:h-full" />
+  <span className="relative z-10">Donate now</span>
+  <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full bg-maroon/10 transition-all duration-300 group-hover:rotate-45 group-hover:bg-white/20">
+    <ArrowIcon className="h-4 w-4" />
+  </span>
+</a>
 
-              <span
-                className="
-                  flex
-                  h-9
-                  w-9
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-ink
-                  text-gold
-                  transition-transform
-                  duration-300
-                  group-hover:rotate-45
-                "
-              >
-                <ArrowIcon
-                  className="h-4 w-4"
-                />
-              </span>
-
-            </a>
-
-
-            {/* OUR WORK */}
-
-            <a
-              href="#who-we-are"
-              className="
-                group
-                inline-flex
-                items-center
-                gap-4
-                rounded-full
-                border
-                border-white/40
-                bg-[#C8102E]
-                py-2
-                pl-6
-                pr-2
-                text-[14.5px]
-                font-semibold
-                text-white
-                transition-all
-                duration-300
-                hover:-translate-y-0.5
-                hover:bg-[#a80d25]
-              "
-            >
-
-              Our Work
-
-              <span
-                className="
-                  flex
-                  h-9
-                  w-9
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-white/15
-                  text-white
-                  transition-transform
-                  duration-300
-                  group-hover:rotate-45
-                "
-              >
-                <ArrowIcon
-                  className="h-4 w-4"
-                />
-              </span>
-
-            </a>
+{/* OUR WORK */}
+<a
+  href="#who-we-are"
+  className="
+    group
+    relative
+    inline-flex
+    items-center
+    gap-3
+    overflow-hidden
+    rounded-full
+    border
+    border-maroon
+    bg-white
+    py-2.5
+    pl-6
+    pr-2.5
+    text-[14.5px]
+    font-semibold
+    text-maroon
+    transition-all
+    duration-300
+    hover:text-white
+  "
+>
+  <span className="absolute inset-x-0 bottom-0 h-0 bg-[#C8102E] transition-all duration-500 ease-out group-hover:h-full" />
+  <span className="relative z-10">Our Work</span>
+  <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full bg-maroon/10 transition-all duration-300 group-hover:rotate-45 group-hover:bg-white/20">
+    <ArrowIcon className="h-4 w-4" />
+  </span>
+</a>
 
           </motion.div>
 
