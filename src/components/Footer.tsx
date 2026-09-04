@@ -1,7 +1,7 @@
 import logo from "../assets/images/logo.png";
 import tornEdge from "../assets/images/torn-edge.webp";
 
-const RED = "#C8102E";
+// const RED = "#C8102E";
 
 function PhoneIcon({ className = "" }: { className?: string }) {
   return (
