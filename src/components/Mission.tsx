@@ -252,24 +252,22 @@ export default function Mission() {
                     {/* ICON */}
 
                     <span
-                      className="
-                        mb-5
-                        w-16
-                        h-16
-                        sm:w-20
-                        sm:h-20
-                        flex
-                        items-center
-                        justify-center
-                        [&>svg]:w-full
-                        [&>svg]:h-full
-                      "
-                      style={{
-                        color: "#C8102E",
-                      }}
-                    >
-                      <Icon />
-                    </span>
+  className="
+    mb-5
+    w-16
+    h-16
+    sm:w-20
+    sm:h-20
+    flex
+    items-center
+    justify-center
+    text-[#C8102E]
+    [&>svg]:w-full
+    [&>svg]:h-full
+  "
+>
+  <Icon />
+</span>
 
                     {/* TITLE */}
 
