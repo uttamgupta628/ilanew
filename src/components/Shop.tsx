@@ -1,466 +1,418 @@
-import { useEffect, useRef, useState } from "react";
-import Reveal from "./Reveal";
-import { missionItems } from "../data/content";
-import { iconMap } from "./Icons";
+import { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import Reveal from './Reveal';
+import { shopItems } from '../data/content';
 
-export default function Mission() {
-  const [inView, setInView] = useState(false);
-  const listRef = useRef<HTMLDivElement>(null);
+/* =========================================================
+   ARROW ICON
+========================================================= */
 
-  useEffect(() => {
-    const el = listRef.current;
+function ArrowIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M7 17L17 7" />
+      <path d="M17 7H9" />
+      <path d="M17 7V15" />
+    </svg>
+  );
+}
+
+/* =========================================================
+   SINGLE SHOP TILE — 3D tilt on hover + 3D entrance
+========================================================= */
+
+function ShopTile({
+  item,
+  index,
+}: {
+  item: (typeof shopItems)[number];
+  index: number;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+  const [hovering, setHovering] = useState(false);
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const el = cardRef.current;
     if (!el) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
+    const rect = el.getBoundingClientRect();
 
-    observer.observe(el);
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
 
-    return () => observer.disconnect();
-  }, []);
+    // Tilt toward the cursor — subtle, not gimmicky
+    const ry = (px - 0.5) * 12;
+    const rx = (0.5 - py) * 12;
+
+    setTilt({ rx, ry });
+  }
+
+  function handleMouseLeave() {
+    setHovering(false);
+    setTilt({ rx: 0, ry: 0 });
+  }
 
   return (
-    <section
-      className="py-20 sm:py-28 overflow-hidden"
-      style={{ fontFamily: "'Lato', sans-serif" }}
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: 60,
+        rotateX: -12,
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+        rotateX: 0,
+      }}
+      viewport={{
+        once: true,
+        amount: 0.3,
+      }}
+      transition={{
+        duration: 0.75,
+        delay: index * 0.1,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      style={{
+        perspective: 1200,
+      }}
     >
-      <style>{`
-        @keyframes cardIn {
-          from {
-            opacity: 0;
-            transform: translateY(22px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes headingWordIn {
-          from {
-            opacity: 0;
-            transform: translateY(14px);
-            filter: blur(4px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0);
-          }
-        }
-
-        .flip-card {
-          perspective: 1200px;
-        }
-
-        .flip-card-inner {
-          transform-style: preserve-3d;
-          transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .flip-card:hover .flip-card-inner {
-          transform: rotate3d(1, 1, 0, 180deg);
-        }
-
-        .flip-face {
-          backface-visibility: hidden;
-        }
-
-        .flip-back {
-          transform: rotate3d(1, 1, 0, 180deg);
-        }
-
-        .cta-tilt-wrap {
-          perspective: 1000px;
-        }
-
-        .cta-tilt {
-          transform: rotateX(0deg) rotateY(0deg) translateZ(0px);
+      <div
+        ref={cardRef}
+        onMouseEnter={() => setHovering(true)}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="group relative"
+        style={{
+          transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) scale(${
+            hovering ? 1.015 : 1
+          })`,
           transition:
-            transform 0.5s cubic-bezier(0.16,1,0.3,1),
-            box-shadow 0.5s ease;
-          transform-style: preserve-3d;
-        }
+            'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        {/* =====================================================
+            IMAGE
+        ====================================================== */}
 
-        .cta-tilt-wrap:hover .cta-tilt {
-          transform: rotateX(6deg) rotateY(-8deg) translateZ(20px);
-          box-shadow: 0 35px 60px -15px rgba(200,16,46,0.45);
-        }
-      `}</style>
+        <a
+          href={item.href}
+          className="
+            relative
+            block
+            overflow-hidden
+            rounded-2xl
+            mb-5
+            shadow-[0_10px_30px_rgba(0,0,0,0.08)]
+            group-hover:shadow-[0_24px_50px_rgba(0,0,0,0.18)]
+            transition-shadow
+            duration-500
+          "
+          style={{
+            transform: 'translateZ(24px)',
+          }}
+        >
+          <img
+            src={item.img}
+            alt={item.title}
+            className="
+              h-[280px]
+              w-full
+              object-cover
+              transition-transform
+              duration-700
+              ease-out
+              group-hover:scale-110
+            "
+          />
+        </a>
 
-      <div className="max-w-[1200px] mx-auto px-5 sm:px-8">
+        {/* =====================================================
+            CONTENT
+        ====================================================== */}
 
-        {/* =========================================================
-            HEADING
-        ========================================================= */}
-
-        <div className="text-center mb-16">
-
-          <Reveal>
-            <h2
+        <div
+          className="
+            flex
+            items-start
+            justify-between
+            gap-4
+          "
+          style={{
+            transform: 'translateZ(36px)',
+          }}
+        >
+          <div>
+            <h4
               className="
-                font-extrabold
-                text-[38px]
-                sm:text-[48px]
-                lg:text-[56px]
-                leading-[1.1]
-                tracking-tight
+                mb-1.5
+                font-Arial
+                text-[19px]
+                font-bold
+                leading-snug
                 text-ink
               "
             >
-              {"Our Mission".split(" ").map((word, i) => (
-                <span
-                  key={i}
-                  className="inline-block opacity-0 mr-[0.28em]"
-                  style={{
-                    animation: `headingWordIn 0.6s cubic-bezier(0.16,1,0.3,1) ${
-                      i * 0.04
-                    }s forwards`,
-                  }}
-                >
-                  {word}
-                </span>
-              ))}
-            </h2>
-          </Reveal>
+              {item.title}
+            </h4>
 
-          {/* Underline */}
-
-          <Reveal delay={0.1}>
-            <div className="flex justify-center items-center gap-1 my-5">
-              <span
-                className="w-10 h-[3px] rounded-full"
-                style={{
-                  backgroundColor: "#1E4FD8",
-                }}
-              />
-
-              <span
-                className="w-10 h-[3px] rounded-full"
-                style={{
-                  backgroundColor: "#C8102E",
-                }}
-              />
-            </div>
-          </Reveal>
-
-          {/* Description */}
-
-          <Reveal delay={0.15}>
             <p
               className="
-                text-[18px]
-                sm:text-[19px]
+                text-[13.5px]
                 leading-relaxed
-                text-gray-600
-                max-w-[56ch]
-                mx-auto
+                text-muted-light
               "
             >
-              ILA defends human rights and supports victims of Human Rights
-              abuses to rebuild their lives
+              {item.desc}
             </p>
-          </Reveal>
-        </div>
 
-        {/* =========================================================
-            MISSION CARDS
-        ========================================================= */}
-
-        <div
-          ref={listRef}
-          className="flex flex-wrap justify-center gap-8 md:gap-10"
-        >
-          {missionItems.map((m, i) => {
-            const Icon = iconMap[m.icon];
-
-            return (
-              <div
-                key={m.title}
-                className="flip-card opacity-0"
-                style={{
-                  animation: inView
-                    ? `cardIn 0.7s cubic-bezier(0.16,1,0.3,1) ${
-                        i * 0.09
-                      }s forwards`
-                    : "none",
-                }}
-              >
-                <div
-                  className="
-                    flip-card-inner
-                    relative
-                    w-72
-                    h-64
-                    sm:w-80
-                    sm:h-72
-                    rounded-[32px]
-                  "
-                >
-
-                  {/* =====================================================
-                      FRONT OF CARD
-                  ===================================================== */}
-
-                  <div
-                    className="
-                      flip-face
-                      absolute
-                      inset-0
-                      bg-white
-                      border
-                      border-black/5
-                      rounded-[32px]
-                      shadow-xl
-                      flex
-                      flex-col
-                      items-center
-                      justify-center
-                      text-center
-                      px-6
-                    "
-                  >
-
-                    {/* ICON */}
-
-                    <span
-                      className="
-                        mb-5
-                        w-16
-                        h-16
-                        sm:w-20
-                        sm:h-20
-                        flex
-                        items-center
-                        justify-center
-                        text-[#C8102E]
-
-                        [&>svg]:w-full
-                        [&>svg]:h-full
-
-                        [&>svg]:!stroke-[#C8102E]
-                      "
-                      style={{
-                        color: "#C8102E",
-                      }}
-                    >
-                      <Icon />
-                    </span>
-
-                    {/* TITLE */}
-
-                    <p
-                      className="
-                        text-[17px]
-                        sm:text-[18px]
-                        font-medium
-                        text-ink
-                        leading-snug
-                      "
-                    >
-                      {m.title}
-                    </p>
-                  </div>
-
-                  {/* =====================================================
-                      BACK OF CARD
-                  ===================================================== */}
-
-                  <div
-                    className="
-                      flip-face
-                      flip-back
-                      absolute
-                      inset-0
-                      rounded-[32px]
-                      shadow-xl
-                      flex
-                      items-center
-                      justify-center
-                      text-center
-                      px-6
-                    "
-                    style={{
-                      backgroundColor: "#C8102E",
-                    }}
-                  >
-                    <p
-                      className="
-                        text-[17px]
-                        sm:text-[18px]
-                        font-medium
-                        text-white
-                        leading-relaxed
-                      "
-                    >
-                      {m.body}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* =========================================================
-              CTA CARD
-          ========================================================= */}
-
-          <div className="cta-tilt-wrap w-72 sm:w-80">
             <div
               className="
-                cta-tilt
-                w-72
-                h-64
-                sm:w-80
-                sm:h-72
-                rounded-[32px]
-                shadow-xl
-                flex
-                flex-col
-                items-start
-                justify-center
-                gap-6
-                px-8
+                mt-2.5
+                text-[14.5px]
+                font-semibold
+                text-maroon
               "
-              style={{
-                backgroundColor: "#C8102E",
-              }}
             >
-
-              {/* CTA TEXT */}
-
-              <p
-                className="
-                  text-[23px]
-                  sm:text-[26px]
-                  font-semibold
-                  text-white
-                  leading-snug
-                "
-              >
-                Join us and make a difference.
-              </p>
-
-              {/* BUTTONS */}
-
-              <div className="flex flex-wrap gap-3">
-
-                {/* DONATE BUTTON */}
-
-                <a
-                  href="https://iliberty.org.uk/donate-2/"
-                  className="
-                    group
-                    relative
-                    overflow-hidden
-                    inline-flex
-                    items-center
-                    gap-1.5
-                    px-5
-                    py-2.5
-                    rounded-full
-                    border-2
-                    border-white
-                    text-[15px]
-                    font-semibold
-                  "
-                >
-                  <span
-                    aria-hidden="true"
-                    className="
-                      pointer-events-none
-                      absolute
-                      inset-0
-                      origin-bottom
-                      scale-y-0
-                      transition-transform
-                      duration-500
-                      ease-out
-                      group-hover:scale-y-100
-                    "
-                    style={{
-                      backgroundColor: "#ffffff",
-                    }}
-                  />
-
-                  <span
-                    className="
-                      relative
-                      z-10
-                      text-white
-                      transition-colors
-                      duration-500
-                      group-hover:text-[#C8102E]
-                    "
-                  >
-                    Donate ▸
-                  </span>
-                </a>
-
-                {/* STOP EXECUTIONS BUTTON */}
-
-                <a
-                  href="https://iliberty.org.uk/campaign/stopping-executions-defending-the-vulnerable/"
-                  className="
-                    group
-                    relative
-                    overflow-hidden
-                    inline-flex
-                    items-center
-                    gap-1.5
-                    px-5
-                    py-2.5
-                    rounded-full
-                    border-2
-                    border-white
-                    text-[15px]
-                    font-semibold
-                  "
-                >
-                  <span
-                    aria-hidden="true"
-                    className="
-                      pointer-events-none
-                      absolute
-                      inset-0
-                      origin-bottom
-                      scale-y-0
-                      transition-transform
-                      duration-500
-                      ease-out
-                      group-hover:scale-y-100
-                    "
-                    style={{
-                      backgroundColor: "#ffffff",
-                    }}
-                  />
-
-                  <span
-                    className="
-                      relative
-                      z-10
-                      text-white
-                      transition-colors
-                      duration-500
-                      group-hover:text-[#4C7FAE]
-                    "
-                  >
-                    Stop Executions in Iran ▸
-                  </span>
-                </a>
-
-              </div>
+              {item.price}
             </div>
           </div>
+
+          {/* PRODUCT ARROW */}
+
+          <a
+            href={item.href}
+            aria-label={`View ${item.title}`}
+            className="
+              flex
+              h-11
+              w-11
+              shrink-0
+              items-center
+              justify-center
+              rounded-full
+              bg-[#C8102E]
+              text-white
+              transition-transform
+              duration-300
+              group-hover:rotate-45
+              group-hover:scale-110
+            "
+          >
+            <ArrowIcon className="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+export default function Shop() {
+  return (
+    <section className="bg-paper-dim py-20 sm:py-28">
+      <div
+        className="
+          mx-auto
+          max-w-[1200px]
+          px-5
+          sm:px-8
+        "
+      >
+        {/* =================================================
+            HEADER — pill badge + centered heading
+        ================================================== */}
+
+        <Reveal>
+          <div
+            className="
+              mb-16
+              flex
+              flex-col
+              items-center
+              text-center
+            "
+          >
+            {/* BADGE */}
+
+            <span
+              className="
+                mb-6
+                inline-flex
+                items-center
+                rounded-full
+                border
+                border-black/15
+                px-5
+                py-0
+                -mt-40
+                text-[12.5px]
+                font-bold
+                tracking-wide
+                text-ink
+              "
+            >
+              SHOP FROM ILA
+            </span>
+
+            {/* HEADING */}
+
+            <h2
+              className="
+                mb-4
+                max-w-[18ch]
+                font-Lato
+                text-[36px]
+                font-bold
+                leading-[1.1]
+                tracking-tight
+                text-ink
+                sm:text-[42px]
+                lg:text-[46px]
+              "
+            >
+              Support Our Work, One Purchase At A Time
+            </h2>
+
+            {/* DESCRIPTION */}
+
+            <p
+              className="
+                max-w-[52ch]
+                text-[16px]
+                text-muted-light
+                sm:text-[17px]
+              "
+            >
+              Handmade goods sourced through our network — every purchase
+              helps fund our campaigns.
+            </p>
+          </div>
+        </Reveal>
+
+        {/* =================================================
+            GRID — 3 columns
+        ================================================== */}
+
+        <div
+          className="
+            mb-14
+            grid
+            grid-cols-1
+            gap-x-8
+            gap-y-14
+            sm:grid-cols-2
+            lg:grid-cols-3
+          "
+        >
+          {shopItems.map((item, i) => (
+            <ShopTile
+              key={item.title}
+              item={item}
+              index={i}
+            />
+          ))}
+        </div>
+
+        {/* =================================================
+            VIEW ALL PRODUCTS — BOTTOM RIGHT
+        ================================================== */}
+
+        <div className="flex justify-end">
+          <a
+            href="https://international-liberty-association.myshopify.com/collections/all"
+            className="
+              group
+              relative
+              inline-flex
+              items-center
+              gap-3
+              overflow-hidden
+              rounded-full
+              border
+              border-maroon
+              bg-white
+              py-2.5
+              pl-6
+              pr-2.5
+              text-[16px]
+              font-semibold
+              text-maroon
+              transition-all
+              duration-300
+              hover:text-white
+              sm:py-3
+              sm:pl-8
+              sm:pr-3
+              sm:text-[17px]
+            "
+          >
+            {/* =================================================
+                RED FILL — BOTTOM TO TOP
+            ================================================== */}
+
+            <span
+              aria-hidden="true"
+              className="
+                pointer-events-none
+                absolute
+                inset-x-0
+                bottom-0
+                h-0
+                bg-[#C8102E]
+                transition-all
+                duration-500
+                ease-out
+                group-hover:h-full
+              "
+            />
+
+            {/* =================================================
+                BUTTON TEXT
+            ================================================== */}
+
+            <span className="relative z-10">
+              View all products
+            </span>
+
+            {/* =================================================
+                CIRCULAR ARROW
+            ================================================== */}
+
+            <span
+              className="
+                relative
+                z-10
+                flex
+                h-9
+                w-9
+                shrink-0
+                items-center
+                justify-center
+                rounded-full
+                bg-maroon/10
+                transition-all
+                duration-300
+                group-hover:rotate-45
+                group-hover:bg-white/20
+              "
+            >
+              <ArrowIcon className="h-[18px] w-[18px]" />
+            </span>
+          </a>
         </div>
       </div>
     </section>

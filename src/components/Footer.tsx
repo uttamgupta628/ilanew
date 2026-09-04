@@ -242,9 +242,9 @@ export default function Footer() {
               src={logo}
               alt="International Liberty Association"
               className="
-                mb-5
-                h-16
-                w-16
+                mb-0
+                h-36
+                w-36
                 object-contain
               "
             />
