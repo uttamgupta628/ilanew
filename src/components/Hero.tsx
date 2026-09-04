@@ -28,6 +28,8 @@ const headlineLines = [
   'Communities In The UK',
 ];
 
+const fullHeadlineText = headlineLines.join('\n');
+
 /* =========================================================
    AVATARS
 ========================================================= */
@@ -244,6 +246,61 @@ export default function Hero() {
   );
 
   const primaryStat = stats[0];
+
+  /* =======================================================
+     TYPEWRITER HEADLINE (continuous loop)
+
+     Types out the full headline character by character,
+     pauses, deletes it back out, pauses again, then repeats
+     forever. whiteSpace: 'pre-line' preserves the manual
+     line breaks from headlineLines while typing.
+  ======================================================= */
+
+  const [typedText, setTypedText] =
+    useState('');
+
+  const [isDeleting, setIsDeleting] =
+    useState(false);
+
+  useEffect(() => {
+    const TYPE_SPEED = 45;
+    const DELETE_SPEED = 25;
+    const PAUSE_FULL = 2200;
+    const PAUSE_EMPTY = 600;
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && typedText === fullHeadlineText) {
+      timeout = setTimeout(
+        () => setIsDeleting(true),
+        PAUSE_FULL
+      );
+    } else if (isDeleting && typedText === '') {
+      timeout = setTimeout(
+        () => setIsDeleting(false),
+        PAUSE_EMPTY
+      );
+    } else {
+      timeout = setTimeout(
+        () => {
+          setTypedText((prev) =>
+            isDeleting
+              ? fullHeadlineText.slice(
+                  0,
+                  prev.length - 1
+                )
+              : fullHeadlineText.slice(
+                  0,
+                  prev.length + 1
+                )
+          );
+        },
+        isDeleting ? DELETE_SPEED : TYPE_SPEED
+      );
+    }
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting]);
 
   /* =======================================================
      DESKTOP TORN EDGE SEAM (vertical, rotated -90deg)
@@ -680,7 +737,7 @@ export default function Hero() {
         >
 
           {/* =================================================
-              HEADLINE
+              HEADLINE (continuous typewriter animation)
           ================================================== */}
 
           <h1
@@ -698,43 +755,37 @@ export default function Hero() {
             "
           >
 
-            {headlineLines.map(
-              (line, index) => (
-                <span
-                  key={line}
-                  className="
-                    block
-                    overflow-hidden
-                  "
-                >
+            <span
+              style={{
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {typedText}
+            </span>
 
-                  <motion.span
-                    className="block"
-                    initial={{
-                      y: '110%',
-                    }}
-                    animate={{
-                      y: 0,
-                    }}
-                    transition={{
-                      duration: 0.85,
-                      delay:
-                        0.22 +
-                        index * 0.12,
-                      ease: [
-                        0.2,
-                        0.8,
-                        0.2,
-                        1,
-                      ],
-                    }}
-                  >
-                    {line}
-                  </motion.span>
-
-                </span>
-              )
-            )}
+            <motion.span
+              aria-hidden="true"
+              className="
+                ml-1
+                inline-block
+                w-[3px]
+                translate-y-[2px]
+                bg-current
+                align-middle
+              "
+              style={{
+                height: '0.85em',
+              }}
+              animate={{
+                opacity: [1, 1, 0, 0],
+              }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                ease: 'linear',
+                times: [0, 0.5, 0.5, 1],
+              }}
+            />
 
           </h1>
 

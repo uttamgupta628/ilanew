@@ -76,6 +76,30 @@ function YoutubeIcon({ className = "" }: { className?: string }) {
   );
 }
 
+function InstagramIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.407 24 24 23.407 24 22.675V1.325C24 .593 23.407 0 22.675 0z" />
+    </svg>
+  );
+}
+
 function ShieldIcon({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -112,14 +136,30 @@ function LockIcon({ className = "" }: { className?: string }) {
 }
 
 const menuLinks = [
-  { label: "Home", href: "#top" },
-  { label: "Campaigns", href: "#campaigns" },
   {
-    label: "Donate",
-    href: "https://iliberty.org.uk/donate-2/",
+    label: "Stories & Voices",
+    href: "https://iliberty.org.uk/stories-voices/",
   },
-  { label: "About Us", href: "#about-us" },
-  { label: "Shop", href: "/shop", active: true },
+  {
+    label: "Partnerships",
+    href: "https://iliberty.org.uk/partnerships/",
+  },
+  {
+    label: "Legacy",
+    href: "https://iliberty.org.uk/leave-a-legacy/",
+  },
+  {
+    label: "Privacy Policy",
+    href: "https://iliberty.org.uk/privacy-policy/",
+  },
+  {
+    label: "Contact Us",
+    href: "https://iliberty.org.uk/contact-us/",
+  },
+  {
+    label: "Feedback",
+    href: "https://iliberty.org.uk/feedback-form/",
+  },
 ];
 
 const usefulLinks = [
@@ -155,7 +195,7 @@ export default function Footer() {
       className="
         relative
         bg-ink
-        text-muted-dark
+        text-white
         pt-24
         pb-7
       "
@@ -187,13 +227,12 @@ export default function Footer() {
             left-1/2
             top-1/2
             h-full
+            bg-ink
           "
           style={{
             width: "calc(100% + 20px)",
             transform:
               "translate(-50%, -50%) rotate(180deg)",
-
-            backgroundColor: "#1F1F1B",
 
             WebkitMaskImage: `url(${tornEdge})`,
             maskImage: `url(${tornEdge})`,
@@ -344,7 +383,7 @@ export default function Footer() {
               MENU
           ================================================= */}
           <div>
-            <h5 className="mb-4 text-[13px] font-semibold text-paper">
+            <h5 className="mb-4 text-[13px] font-semibold text-white">
               Menu
             </h5>
 
@@ -353,22 +392,12 @@ export default function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className={`
+                    className="
                       inline-block
                       text-[14.5px]
                       transition-colors
                       hover:text-gold-bright
-                      ${
-                        link.active
-                          ? "border-b pb-0.5"
-                          : "border-b border-transparent pb-0.5"
-                      }
-                    `}
-                    style={
-                      link.active
-                        ? { borderColor: RED }
-                        : undefined
-                    }
+                    "
                   >
                     {link.label}
                   </a>
@@ -381,7 +410,7 @@ export default function Footer() {
               USEFUL LINKS
           ================================================= */}
           <div>
-            <h5 className="mb-4 text-[13px] font-semibold text-paper">
+            <h5 className="mb-4 text-[13px] font-semibold text-white">
               Useful Links
             </h5>
 
@@ -407,13 +436,12 @@ export default function Footer() {
               CTA
           ================================================= */}
           <div>
-            <h5 className="mb-4 text-[13px] font-semibold text-paper">
-              You Can Help Today
+            <h5 className="mb-4 text-[13px] font-semibold text-white">
+              You can help today
             </h5>
 
             <p className="mb-5 text-[14.5px] leading-relaxed">
-              Help raise awareness within the British public of
-              the human rights abuses of the Iranian regime
+              Donate to our Campaigns and Projects
             </p>
 
             {/* =================================================
@@ -491,8 +519,10 @@ export default function Footer() {
             <div
               className="
                 inline-flex
-                items-center
-                gap-1.5
+                w-fit
+                flex-col
+                items-start
+                gap-1
                 rounded-md
                 bg-white
                 px-3
@@ -501,26 +531,48 @@ export default function Footer() {
             >
               <span
                 className="
-                  text-[15px]
-                  font-bold
-                  italic
-                  text-[#003087]
+                  text-[9px]
+                  font-semibold
+                  text-ink/60
                 "
               >
-                Pay
-                <span className="text-[#009cde]">
-                  Pal
-                </span>
+                Secure Payments By:
               </span>
+
+              <div className="flex items-center gap-1.5">
+                <span
+                  className="
+                    text-[15px]
+                    font-bold
+                    italic
+                    text-[#003087]
+                  "
+                >
+                  Pay
+                  <span className="text-[#009cde]">
+                    Pal
+                  </span>
+                </span>
+
+                <span
+                  className="
+                    text-[9px]
+                    font-semibold
+                    text-ink/50
+                  "
+                >
+                  VISA &nbsp;MC&nbsp; AMEX
+                </span>
+              </div>
 
               <span
                 className="
-                  text-[9px]
+                  text-[8px]
                   font-semibold
-                  text-ink/50
+                  text-ink/60
                 "
               >
-                VISA &nbsp;MC&nbsp; AMEX
+                NO PAYPAL ACCOUNT NEEDED!
               </span>
             </div>
           </div>
@@ -541,7 +593,7 @@ export default function Footer() {
           "
         >
           <span>
-            Copyright © 2026, International Liberty
+            Copyright © 2026 International Liberty
             Association – All Rights Reserved.
           </span>
 
@@ -560,7 +612,7 @@ export default function Footer() {
                 justify-center
                 rounded-md
                 bg-[#5B8DBE]/25
-                text-paper
+                text-white
                 transition-colors
                 hover:bg-[#5B8DBE]/45
               "
@@ -579,12 +631,50 @@ export default function Footer() {
                 justify-center
                 rounded-md
                 bg-[#5B8DBE]/25
-                text-paper
+                text-white
                 transition-colors
                 hover:bg-[#5B8DBE]/45
               "
             >
               <YoutubeIcon className="h-3.5 w-3.5" />
+            </a>
+
+            <a
+              href="#"
+              aria-label="Instagram"
+              className="
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
+                rounded-md
+                bg-[#5B8DBE]/25
+                text-white
+                transition-colors
+                hover:bg-[#5B8DBE]/45
+              "
+            >
+              <InstagramIcon className="h-3.5 w-3.5" />
+            </a>
+
+            <a
+              href="#"
+              aria-label="Facebook"
+              className="
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
+                rounded-md
+                bg-[#5B8DBE]/25
+                text-white
+                transition-colors
+                hover:bg-[#5B8DBE]/45
+              "
+            >
+              <FacebookIcon className="h-3.5 w-3.5" />
             </a>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 // Placeholder imports — swap these for your real filenames
@@ -90,6 +90,82 @@ const testimonials = [
       'so much, your work is so valuable, and well done.',
   },
 ];
+
+/* =========================================================
+   TYPEWRITER HEADING (continuous loop)
+
+   Types out the given text character by character, pauses,
+   deletes it back out, pauses again, then repeats forever.
+   Used for each testimonial's name so it matches the hero
+   headline's typing animation.
+========================================================= */
+
+function TypewriterHeading({
+  text,
+  className = '',
+}: {
+  text: string;
+  className?: string;
+}) {
+  const [typedText, setTypedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const TYPE_SPEED = 45;
+    const DELETE_SPEED = 25;
+    const PAUSE_FULL = 2200;
+    const PAUSE_EMPTY = 600;
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && typedText === text) {
+      timeout = setTimeout(() => setIsDeleting(true), PAUSE_FULL);
+    } else if (isDeleting && typedText === '') {
+      timeout = setTimeout(() => setIsDeleting(false), PAUSE_EMPTY);
+    } else {
+      timeout = setTimeout(
+        () => {
+          setTypedText((prev) =>
+            isDeleting
+              ? text.slice(0, prev.length - 1)
+              : text.slice(0, prev.length + 1)
+          );
+        },
+        isDeleting ? DELETE_SPEED : TYPE_SPEED
+      );
+    }
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, text]);
+
+  return (
+    <span className={className} style={{ whiteSpace: 'pre-line' }}>
+      {typedText}
+
+      <motion.span
+        aria-hidden="true"
+        className="
+          ml-1
+          inline-block
+          w-[3px]
+          translate-y-[2px]
+          bg-current
+          align-middle
+        "
+        style={{ height: '0.85em' }}
+        animate={{
+          opacity: [1, 1, 0, 0],
+        }}
+        transition={{
+          duration: 1,
+          repeat: Infinity,
+          ease: 'linear',
+          times: [0, 0.5, 0.5, 1],
+        }}
+      />
+    </span>
+  );
+}
 
 /* =========================================================
    TRUNCATED QUOTE WITH "READ MORE" TOGGLE
@@ -304,7 +380,7 @@ function TestimonialRow({
       >
         <h3 className="mb-1 flex items-baseline gap-2 font-Lato text-[28px] font-extrabold leading-tight text-ink sm:text-[34px]">
           <span className="text-maroon">{testimonial.number}</span>
-          {testimonial.title}
+          <TypewriterHeading text={testimonial.title} />
         </h3>
 
         <p className="mb-4 text-[14.5px] text-muted-light">

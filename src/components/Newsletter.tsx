@@ -821,26 +821,7 @@ export default function Newsletter() {
                 "
               >
 
-                <span
-                  className="
-                    mb-4
-                    inline-flex
-                    items-center
-                    rounded-full
-                    border
-                    border-white/40
-                    bg-white/10
-                    px-4
-                    py-1.5
-                    text-[11px]
-                    font-bold
-                    tracking-wide
-                    text-white
-                    sm:text-[11.5px]
-                  "
-                >
-                  STAY IN THE LOOP
-                </span>
+                
 
                 <h3
                   className="

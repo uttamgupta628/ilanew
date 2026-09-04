@@ -2,6 +2,68 @@ import { useEffect, useRef, useState } from 'react';
 import Reveal from './Reveal';
 import { helpCards } from '../data/content';
 
+/* =========================================================
+   TYPEWRITER HEADING (continuous loop)
+
+   Types out the given text character by character, pauses,
+   deletes it back out, pauses again, then repeats forever.
+   Matches the hero headline's animation.
+========================================================= */
+
+function TypewriterHeading({
+  text,
+  className = '',
+}: {
+  text: string;
+  className?: string;
+}) {
+  const [typedText, setTypedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const TYPE_SPEED = 45;
+    const DELETE_SPEED = 25;
+    const PAUSE_FULL = 2200;
+    const PAUSE_EMPTY = 600;
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && typedText === text) {
+      timeout = setTimeout(() => setIsDeleting(true), PAUSE_FULL);
+    } else if (isDeleting && typedText === '') {
+      timeout = setTimeout(() => setIsDeleting(false), PAUSE_EMPTY);
+    } else {
+      timeout = setTimeout(
+        () => {
+          setTypedText((prev) =>
+            isDeleting
+              ? text.slice(0, prev.length - 1)
+              : text.slice(0, prev.length + 1)
+          );
+        },
+        isDeleting ? DELETE_SPEED : TYPE_SPEED
+      );
+    }
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, text]);
+
+  return (
+    <span className={className} style={{ whiteSpace: 'pre-line' }}>
+      {typedText}
+
+      <span
+        aria-hidden="true"
+        className="ml-1 inline-block w-[3px] translate-y-[2px] bg-current align-middle"
+        style={{
+          height: '0.85em',
+          animation: 'typewriterBlink 1s linear infinite',
+        }}
+      />
+    </span>
+  );
+}
+
 interface HelpTileProps {
   title: string;
   body: string;
@@ -452,6 +514,18 @@ export default function Gallery() {
         overflow-hidden
       "
     >
+      <style>{`
+        @keyframes typewriterBlink {
+          0%, 50% {
+            opacity: 1;
+          }
+
+          50.01%, 100% {
+            opacity: 0;
+          }
+        }
+      `}</style>
+
       <div
         className="
           max-w-[90%]
@@ -473,7 +547,7 @@ export default function Gallery() {
           >
             <h2
               className="
-                font-serif
+                font-Arial
                 font-bold
                 text-[32px]
                 sm:text-[40px]
@@ -483,7 +557,7 @@ export default function Gallery() {
                 text-ink
               "
             >
-              Join Us In Making A Tangible Difference
+              <TypewriterHeading text="Join Us In Making A Tangible Difference" />
             </h2>
 
             <div

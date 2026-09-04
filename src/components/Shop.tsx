@@ -1,7 +1,82 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Reveal from './Reveal';
 import { shopItems } from '../data/content';
+
+/* =========================================================
+   TYPEWRITER HEADING (continuous loop)
+
+   Types out the given text character by character, pauses,
+   deletes it back out, pauses again, then repeats forever.
+   Matches the hero headline's animation.
+========================================================= */
+
+function TypewriterHeading({
+  text,
+  className = '',
+}: {
+  text: string;
+  className?: string;
+}) {
+  const [typedText, setTypedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const TYPE_SPEED = 45;
+    const DELETE_SPEED = 25;
+    const PAUSE_FULL = 2200;
+    const PAUSE_EMPTY = 600;
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && typedText === text) {
+      timeout = setTimeout(() => setIsDeleting(true), PAUSE_FULL);
+    } else if (isDeleting && typedText === '') {
+      timeout = setTimeout(() => setIsDeleting(false), PAUSE_EMPTY);
+    } else {
+      timeout = setTimeout(
+        () => {
+          setTypedText((prev) =>
+            isDeleting
+              ? text.slice(0, prev.length - 1)
+              : text.slice(0, prev.length + 1)
+          );
+        },
+        isDeleting ? DELETE_SPEED : TYPE_SPEED
+      );
+    }
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, text]);
+
+  return (
+    <span className={className} style={{ whiteSpace: 'pre-line' }}>
+      {typedText}
+
+      <motion.span
+        aria-hidden="true"
+        className="
+          ml-1
+          inline-block
+          w-[3px]
+          translate-y-[2px]
+          bg-current
+          align-middle
+        "
+        style={{ height: '0.85em' }}
+        animate={{
+          opacity: [1, 1, 0, 0],
+        }}
+        transition={{
+          duration: 1,
+          repeat: Infinity,
+          ease: 'linear',
+          times: [0, 0.5, 0.5, 1],
+        }}
+      />
+    </span>
+  );
+}
 
 /* =========================================================
    ARROW ICON
@@ -268,7 +343,7 @@ export default function Shop() {
               SHOP FROM ILA
             </span>
 
-            {/* HEADING */}
+            {/* HEADING (continuous typewriter animation) */}
 
             <h2
               className="
@@ -284,7 +359,7 @@ export default function Shop() {
                 lg:text-[46px]
               "
             >
-              Support Our Work, One Purchase At A Time
+              <TypewriterHeading text="Support Our Work, One Purchase At A Time" />
             </h2>
 
             {/* DESCRIPTION */}

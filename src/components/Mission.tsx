@@ -1,8 +1,69 @@
-
 import { useEffect, useRef, useState } from "react";
 import Reveal from "./Reveal";
 import { missionItems } from "../data/content";
 import { iconMap } from "./Icons";
+
+/* =========================================================
+   TYPEWRITER HEADING (continuous loop)
+
+   Types out the given text character by character, pauses,
+   deletes it back out, pauses again, then repeats forever.
+   Matches the hero headline's animation.
+========================================================= */
+
+function TypewriterHeading({
+  text,
+  className = "",
+}: {
+  text: string;
+  className?: string;
+}) {
+  const [typedText, setTypedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const TYPE_SPEED = 45;
+    const DELETE_SPEED = 25;
+    const PAUSE_FULL = 2200;
+    const PAUSE_EMPTY = 600;
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && typedText === text) {
+      timeout = setTimeout(() => setIsDeleting(true), PAUSE_FULL);
+    } else if (isDeleting && typedText === "") {
+      timeout = setTimeout(() => setIsDeleting(false), PAUSE_EMPTY);
+    } else {
+      timeout = setTimeout(
+        () => {
+          setTypedText((prev) =>
+            isDeleting
+              ? text.slice(0, prev.length - 1)
+              : text.slice(0, prev.length + 1)
+          );
+        },
+        isDeleting ? DELETE_SPEED : TYPE_SPEED
+      );
+    }
+
+    return () => clearTimeout(timeout);
+  }, [typedText, isDeleting, text]);
+
+  return (
+    <span className={className} style={{ whiteSpace: "pre-line" }}>
+      {typedText}
+
+      <span
+        aria-hidden="true"
+        className="ml-1 inline-block w-[3px] translate-y-[2px] bg-current align-middle"
+        style={{
+          height: "0.85em",
+          animation: "typewriterBlink 1s linear infinite",
+        }}
+      />
+    </span>
+  );
+}
 
 export default function Mission() {
   const [inView, setInView] = useState(false);
@@ -56,6 +117,16 @@ export default function Mission() {
             opacity: 1;
             transform: translateY(0);
             filter: blur(0);
+          }
+        }
+
+        @keyframes typewriterBlink {
+          0%, 50% {
+            opacity: 1;
+          }
+
+          50.01%, 100% {
+            opacity: 0;
           }
         }
 
@@ -118,17 +189,7 @@ export default function Mission() {
                 text-ink
               "
             >
-              {"Our Mission".split(" ").map((word, i) => (
-                <span
-                  key={i}
-                  className="inline-block opacity-0 mr-[0.28em]"
-                  style={{
-                    animation: `headingWordIn 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 0.04}s forwards`,
-                  }}
-                >
-                  {word}
-                </span>
-              ))}
+              <TypewriterHeading text="Our Mission" />
             </h2>
           </Reveal>
 
