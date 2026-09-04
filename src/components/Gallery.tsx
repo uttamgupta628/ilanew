@@ -45,7 +45,10 @@ function HelpTile({
         backfaceVisibility: 'hidden',
       }}
     >
-      {/* Image */}
+      {/* =====================================================
+          IMAGE
+      ====================================================== */}
+
       <div className="relative w-full aspect-[4/3] overflow-hidden">
         <img
           src={img}
@@ -61,46 +64,77 @@ function HelpTile({
         />
 
         {/* Very subtle image overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
+        <div
+          className="
+            absolute
+            inset-0
+            bg-gradient-to-t
+            from-black/10
+            via-transparent
+            to-transparent
+            pointer-events-none
+          "
+        />
       </div>
 
-      {/* Content */}
-      <div className="px-8 py-8 sm:px-9 sm:py-9 flex flex-col">
+      {/* =====================================================
+          CONTENT
+      ====================================================== */}
+
+      <div
+        className="
+          px-8
+          py-8
+          sm:px-9
+          sm:py-9
+          flex
+          flex-col
+        "
+      >
+        {/* TITLE */}
+
         <h4
           className="
-            text-[22px]
-            sm:text-[23px]
+            text-[25px]
+            sm:text-[27px]
             font-bold
             text-ink
-            mb-3
+            mb-4
             leading-snug
           "
         >
           {title}
         </h4>
 
+        {/* BODY */}
+
         <p
           className="
-            text-[15px]
-            sm:text-[15.5px]
+            text-[17px]
+            sm:text-[18px]
             text-gray-600
             leading-[1.75]
-            mb-6
+            mb-7
           "
         >
           {body}
         </p>
 
+        {/* CTA */}
+
         <span
           className="
             inline-flex
             items-center
-            gap-2
-            text-[15px]
+            gap-2.5
+            text-[17px]
+            sm:text-[18px]
             font-bold
             mt-auto
           "
-          style={{ color: '#C8102E' }}
+          style={{
+            color: '#C8102E',
+          }}
         >
           {cta}
 
@@ -109,6 +143,7 @@ function HelpTile({
               inline-flex
               items-center
               justify-center
+              text-[19px]
               transition-transform
               duration-300
             "
@@ -185,7 +220,10 @@ export default function Gallery() {
 
       const delta = shortestDistance(i, position);
 
-      const absDelta = Math.min(Math.abs(delta), 1.6);
+      const absDelta = Math.min(
+        Math.abs(delta),
+        1.6
+      );
 
       /*
        * Horizontal movement
@@ -201,44 +239,47 @@ export default function Gallery() {
        * Scale
        */
       const scale =
-        1 - absDelta * (1 - SIDE_SCALE);
+        1 -
+        absDelta *
+          (1 - SIDE_SCALE);
 
       /*
-       * Rotate cards slightly toward the center.
-       *
-       * Left card  -> positive rotation
-       * Right card -> negative rotation
+       * Rotate cards slightly toward the center
        */
       const rotateY = delta * -10;
 
       /*
-       * Slight vertical movement.
-       * This makes the carousel feel less flat.
+       * Slight vertical movement
        */
       const y = absDelta * 7;
 
       /*
-       * Smooth opacity.
+       * Smooth opacity
        */
       let opacity = 1;
 
       if (absDelta > 0.85) {
         opacity =
           1 -
-          (absDelta - 0.85) / 0.65;
+          (absDelta - 0.85) /
+            0.65;
 
-        opacity = Math.max(0, opacity);
+        opacity = Math.max(
+          0,
+          opacity
+        );
       }
 
       /*
-       * Center card gets highest z-index.
+       * Center card gets highest z-index
        */
       const zIndex = Math.round(
-        2000 - absDelta * 700
+        2000 -
+          absDelta * 700
       );
 
       /*
-       * Hide cards far outside the visible area.
+       * Hide cards far outside visible area
        */
       const pointerEvents =
         opacity < 0.12
@@ -246,18 +287,13 @@ export default function Gallery() {
           : 'auto';
 
       /*
-       * Slight shadow variation.
-       *
-       * Center card:
-       * stronger shadow
-       *
-       * Side cards:
-       * softer shadow
+       * Slight shadow variation
        */
       const shadowStrength =
         Math.max(
           0.08,
-          0.22 - absDelta * 0.07
+          0.22 -
+            absDelta * 0.07
         );
 
       el.style.transform = `
@@ -267,11 +303,14 @@ export default function Gallery() {
         scale(${scale})
       `;
 
-      el.style.opacity = String(opacity);
+      el.style.opacity =
+        String(opacity);
 
-      el.style.zIndex = String(zIndex);
+      el.style.zIndex =
+        String(zIndex);
 
-      el.style.pointerEvents = pointerEvents;
+      el.style.pointerEvents =
+        pointerEvents;
 
       el.style.boxShadow = `
         0 ${12 + absDelta * 8}px
@@ -299,11 +338,7 @@ export default function Gallery() {
       }
 
       /*
-       * Smooth interpolation.
-       *
-       * Instead of instantly changing position,
-       * the current position gradually follows
-       * the target position.
+       * Smooth interpolation
        */
       let current =
         positionRef.current;
@@ -312,24 +347,31 @@ export default function Gallery() {
         targetPositionRef.current;
 
       /*
-       * Find shortest circular path.
+       * Find shortest circular path
        */
       let difference =
         target - current;
 
-      if (difference > numCards / 2) {
+      if (
+        difference >
+        numCards / 2
+      ) {
         difference -= numCards;
       }
 
-      if (difference < -numCards / 2) {
+      if (
+        difference <
+        -numCards / 2
+      ) {
         difference += numCards;
       }
 
       current +=
-        difference * SMOOTHING;
+        difference *
+        SMOOTHING;
 
       /*
-       * Normalize.
+       * Normalize
        */
       current =
         (current + numCards) %
@@ -338,7 +380,9 @@ export default function Gallery() {
       positionRef.current =
         current;
 
-      applyTransforms(current);
+      applyTransforms(
+        current
+      );
 
       frameRef.current =
         requestAnimationFrame(
@@ -347,11 +391,14 @@ export default function Gallery() {
     };
 
     frameRef.current =
-      requestAnimationFrame(animate);
+      requestAnimationFrame(
+        animate
+      );
 
     return () => {
       if (
-        frameRef.current !== null
+        frameRef.current !==
+        null
       ) {
         cancelAnimationFrame(
           frameRef.current
@@ -415,17 +462,22 @@ export default function Gallery() {
       >
         {/* =================================================
             SECTION HEADER
-        ================================================= */}
+        ================================================== */}
 
         <Reveal>
-          <div className="text-center mb-14">
+          <div
+            className="
+              text-center
+              mb-14
+            "
+          >
             <h2
               className="
                 font-serif
                 font-bold
-                text-[28px]
-                sm:text-[36px]
-                lg:text-[42px]
+                text-[32px]
+                sm:text-[40px]
+                lg:text-[46px]
                 leading-[1.15]
                 tracking-tight
                 text-ink
@@ -467,7 +519,7 @@ export default function Gallery() {
 
         {/* =================================================
             CAROUSEL
-        ================================================= */}
+        ================================================== */}
 
         <div
           className="relative"
@@ -527,7 +579,7 @@ export default function Gallery() {
 
           {/* =================================================
               LEFT ARROW
-          ================================================= */}
+          ================================================== */}
 
           <button
             type="button"
@@ -575,7 +627,7 @@ export default function Gallery() {
 
           {/* =================================================
               RIGHT ARROW
-          ================================================= */}
+          ================================================== */}
 
           <button
             type="button"

@@ -112,10 +112,22 @@ export default function Navbar() {
   const [mobileDropdown, setMobileDropdown] = useState<string | null>(null);
 
   return (
-    <header className="fixed inset-x-0 top-12 z-50 px-2 pt-2 sm:px-4 sm:pt-3 lg:px-5">
+    <header
+      className="
+        fixed
+        inset-x-0
+        top-12
+        z-50
+        w-full
+        px-2
+        pt-2
+        sm:px-4
+        sm:pt-3
+        lg:px-5
+      "
+    >
       {/* =====================================================
           NAVBAR CONTAINER
-          overflow-visible so the oversized logo can spill out
       ====================================================== */}
 
       <div
@@ -124,10 +136,11 @@ export default function Navbar() {
           mx-auto
           w-full
           max-w-[90%]
+          min-w-0
           overflow-visible
           rounded-[24px]
           bg-paper
-          px-3
+          px-2
           py-1
           shadow-[0_8px_35px_rgba(0,0,0,0.12)]
           sm:rounded-full
@@ -140,51 +153,93 @@ export default function Navbar() {
             MAIN NAV
         ==================================================== */}
 
-        <div className="flex min-h-[54px] items-center justify-between gap-2">
+        <div
+          className="
+            flex
+            min-h-[54px]
+            min-w-0
+            items-center
+            justify-between
+            gap-1
+          "
+        >
           {/* =================================================
               LOGO
-              Sized larger than the pill and allowed to overflow
-              top/bottom via negative margins + z-index
           ================================================== */}
 
           <a
             href="#top"
-            className="relative z-10 flex shrink-0 items-center gap-2 sm:gap-2.5"
+            className="
+              relative
+              z-10
+              flex
+              min-w-0
+              shrink
+              items-center
+              gap-2
+              sm:gap-2.5
+            "
           >
             <img
               src={logo}
               alt="International Liberty Association"
               className="
-    h-14
-    w-14
-    shrink-0
-    object-contain
-    -my-1.5
-    sm:h-20
-    sm:w-20
-    -mx-5.5
-    sm:-my-3
-    lg:h-28
-    lg:w-28
-    lg:-my-4
-  "
+                h-14
+                w-14
+                shrink-0
+                object-contain
+                -my-1.5
+                sm:h-20
+                sm:w-20
+                sm:-mx-5.5
+                sm:-my-3
+                lg:h-28
+                lg:w-28
+                lg:-my-4
+              "
             />
 
-            <span className="hidden flex-col font-serif leading-[1.02] sm:flex">
+            <span
+              className="
+                hidden
+                flex-col
+                font-serif
+                leading-[1.02]
+                sm:flex
+              "
+            >
               <span
                 style={{ color: BLUE }}
-                className="text-[12px] font-semibold sm:text-[13px] lg:text-[14px]"
+                className="
+                  text-[12px]
+                  font-semibold
+                  sm:text-[13px]
+                  lg:text-[14px]
+                "
               >
                 International
               </span>
 
-              <span className="text-[12px] font-extrabold text-ink sm:text-[13px] lg:text-[14px]">
+              <span
+                className="
+                  text-[12px]
+                  font-extrabold
+                  text-ink
+                  sm:text-[13px]
+                  lg:text-[14px]
+                "
+              >
                 Liberty
               </span>
 
               <span
                 style={{ color: BLUE }}
-                className="text-[12px] font-semibold sm:text-[13px] lg:text-[14px]"
+                className="
+                  text-[12px]
+                  font-semibold
+                  sm:text-[13px]
+                  lg:text-[14px]
+                "
               >
                 Association
               </span>
@@ -202,15 +257,21 @@ export default function Navbar() {
                   key={link.label}
                   className="relative"
                   onMouseEnter={() =>
-                    link.dropdown && setDesktopDropdown(link.label)
+                    link.dropdown &&
+                    setDesktopDropdown(link.label)
                   }
                   onMouseLeave={() =>
-                    link.dropdown && setDesktopDropdown(null)
+                    link.dropdown &&
+                    setDesktopDropdown(null)
                   }
                 >
                   <a
                     href={link.href}
-                    style={link.active ? { color: RED } : undefined}
+                    style={
+                      link.active
+                        ? { color: RED }
+                        : undefined
+                    }
                     className={`
                       inline-flex
                       items-center
@@ -221,7 +282,11 @@ export default function Navbar() {
                       transition-colors
                       duration-200
                       2xl:text-[16px]
-                      ${link.active ? "" : "text-ink/80 hover:text-ink"}
+                      ${
+                        link.active
+                          ? ""
+                          : "text-ink/80 hover:text-ink"
+                      }
                     `}
                   >
                     {link.label}
@@ -243,18 +308,30 @@ export default function Navbar() {
                     )}
                   </a>
 
-                  {/* ===========================================
-                      DESKTOP DROPDOWN PANEL
-                  ============================================ */}
+                  {/* =========================================
+                      DESKTOP DROPDOWN
+                  ========================================== */}
 
                   {link.dropdown && (
                     <AnimatePresence>
                       {desktopDropdown === link.label && (
                         <motion.div
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 8 }}
-                          transition={{ duration: 0.18, ease: "easeOut" }}
+                          initial={{
+                            opacity: 0,
+                            y: 8,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            y: 0,
+                          }}
+                          exit={{
+                            opacity: 0,
+                            y: 8,
+                          }}
+                          transition={{
+                            duration: 0.18,
+                            ease: "easeOut",
+                          }}
                           className="
                             absolute
                             left-1/2
@@ -270,39 +347,55 @@ export default function Navbar() {
                           "
                         >
                           <ul>
-                            {link.dropdown.map((item, index) => (
-                              <li key={item.label}>
-                                <a
-                                  href={item.href}
-                                  className={`
-                                    flex
-                                    items-center
-                                    justify-between
-                                    gap-2
-                                    px-2
-                                    py-2.5
-                                    text-[15px]
-                                    font-semibold
-                                    text-ink
-                                    transition-colors
-                                    ${
-                                      index !== link.dropdown!.length - 1
-                                        ? "border-b border-ink/10"
-                                        : ""
+                            {link.dropdown.map(
+                              (item, index) => (
+                                <li key={item.label}>
+                                  <a
+                                    href={item.href}
+                                    className={`
+                                      flex
+                                      items-center
+                                      justify-between
+                                      gap-2
+                                      px-2
+                                      py-2.5
+                                      text-[15px]
+                                      font-semibold
+                                      text-ink
+                                      transition-colors
+                                      ${
+                                        index !==
+                                        link.dropdown!.length -
+                                          1
+                                          ? "border-b border-ink/10"
+                                          : ""
+                                      }
+                                    `}
+                                    onMouseEnter={(e) =>
+                                      (e.currentTarget.style.color =
+                                        RED)
                                     }
-                                  `}
-                                  onMouseEnter={(e) =>
-                                    (e.currentTarget.style.color = RED)
-                                  }
-                                  onMouseLeave={(e) =>
-                                    (e.currentTarget.style.color = "")
-                                  }
-                                >
-                                  <span>{item.label}</span>
-                                  <ChevronRightIcon className="h-4 w-4 shrink-0 opacity-60" />
-                                </a>
-                              </li>
-                            ))}
+                                    onMouseLeave={(e) =>
+                                      (e.currentTarget.style.color =
+                                        "")
+                                    }
+                                  >
+                                    <span>
+                                      {item.label}
+                                    </span>
+
+                                    <ChevronRightIcon
+                                      className="
+                                        h-4
+                                        w-4
+                                        shrink-0
+                                        opacity-60
+                                      "
+                                    />
+                                  </a>
+                                </li>
+                              )
+                            )}
                           </ul>
                         </motion.div>
                       )}
@@ -317,7 +410,15 @@ export default function Navbar() {
               DESKTOP ACTION BUTTONS
           ================================================== */}
 
-          <div className="hidden shrink-0 items-center gap-2.5 xl:flex">
+          <div
+            className="
+              hidden
+              shrink-0
+              items-center
+              gap-2.5
+              xl:flex
+            "
+          >
             {/* Donate */}
 
             <a
@@ -347,7 +448,6 @@ export default function Navbar() {
                 2xl:text-[17px]
               "
             >
-              {/* Background animation starts from bottom */}
               <span
                 className="
                   absolute
@@ -362,7 +462,9 @@ export default function Navbar() {
                 "
               />
 
-              <span className="relative z-10">Donate</span>
+              <span className="relative z-10">
+                Donate
+              </span>
 
               <span
                 className="
@@ -412,7 +514,6 @@ export default function Navbar() {
                 2xl:text-[17px]
               "
             >
-              {/* Background animation starts from bottom */}
               <span
                 className="
                   absolute
@@ -427,7 +528,9 @@ export default function Navbar() {
                 "
               />
 
-              <span className="relative z-10">Shop</span>
+              <span className="relative z-10">
+                Shop
+              </span>
             </a>
           </div>
 
@@ -437,9 +540,13 @@ export default function Navbar() {
 
           <button
             type="button"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={
+              open ? "Close menu" : "Open menu"
+            }
             aria-expanded={open}
-            onClick={() => setOpen((value) => !value)}
+            onClick={() =>
+              setOpen((value) => !value)
+            }
             className="
               relative
               z-10
@@ -456,7 +563,10 @@ export default function Navbar() {
               xl:hidden
             "
           >
-            <AnimatePresence mode="wait" initial={false}>
+            <AnimatePresence
+              mode="wait"
+              initial={false}
+            >
               {open ? (
                 <motion.svg
                   key="close"
@@ -558,35 +668,184 @@ export default function Navbar() {
                   animate="visible"
                   className="flex flex-col gap-1"
                 >
-                  {navLinks.map((link, index) => (
-                    <motion.li
-                      key={link.label}
-                      initial={{
-                        opacity: 0,
-                        x: -15,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        x: 0,
-                      }}
-                      transition={{
-                        delay: index * 0.05,
-                        duration: 0.3,
-                      }}
-                    >
-                      {link.dropdown ? (
-                        <>
-                          <button
-                            type="button"
+                  {navLinks.map(
+                    (link, index) => (
+                      <motion.li
+                        key={link.label}
+                        initial={{
+                          opacity: 0,
+                          x: -15,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          x: 0,
+                        }}
+                        transition={{
+                          delay: index * 0.05,
+                          duration: 0.3,
+                        }}
+                      >
+                        {link.dropdown ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setMobileDropdown(
+                                  (current) =>
+                                    current ===
+                                    link.label
+                                      ? null
+                                      : link.label
+                                )
+                              }
+                              style={
+                                link.active
+                                  ? {
+                                      color: RED,
+                                    }
+                                  : undefined
+                              }
+                              className={`
+                                flex
+                                w-full
+                                items-center
+                                justify-between
+                                rounded-xl
+                                px-3
+                                py-2.5
+                                text-[17px]
+                                font-semibold
+                                transition-colors
+                                ${
+                                  link.active
+                                    ? "bg-red-50"
+                                    : "text-ink hover:bg-black/[0.04]"
+                                }
+                              `}
+                            >
+                              <span>
+                                {link.label}
+                              </span>
+
+                              <ChevronIcon
+                                className={`
+                                  h-4
+                                  w-4
+                                  opacity-60
+                                  transition-transform
+                                  duration-200
+                                  ${
+                                    mobileDropdown ===
+                                    link.label
+                                      ? "rotate-180"
+                                      : ""
+                                  }
+                                `}
+                              />
+                            </button>
+
+                            <AnimatePresence
+                              initial={false}
+                            >
+                              {mobileDropdown ===
+                                link.label && (
+                                <motion.ul
+                                  initial={{
+                                    height: 0,
+                                    opacity: 0,
+                                  }}
+                                  animate={{
+                                    height: "auto",
+                                    opacity: 1,
+                                  }}
+                                  exit={{
+                                    height: 0,
+                                    opacity: 0,
+                                  }}
+                                  transition={{
+                                    duration: 0.25,
+                                    ease: [
+                                      0.22,
+                                      1,
+                                      0.36,
+                                      1,
+                                    ],
+                                  }}
+                                  className="
+                                    overflow-hidden
+                                    pl-4
+                                  "
+                                >
+                                  {link.dropdown.map(
+                                    (item) => (
+                                      <li
+                                        key={
+                                          item.label
+                                        }
+                                      >
+                                        <a
+                                          href={
+                                            item.href
+                                          }
+                                          onClick={() => {
+                                            setOpen(
+                                              false
+                                            );
+                                            setMobileDropdown(
+                                              null
+                                            );
+                                          }}
+                                          className="
+                                            flex
+                                            items-center
+                                            justify-between
+                                            gap-2
+                                            rounded-xl
+                                            px-3
+                                            py-2.5
+                                            text-[15px]
+                                            font-semibold
+                                            text-ink/85
+                                            transition-colors
+                                            hover:bg-black/[0.04]
+                                          "
+                                        >
+                                          <span>
+                                            {
+                                              item.label
+                                            }
+                                          </span>
+
+                                          <ChevronRightIcon
+                                            className="
+                                              h-3.5
+                                              w-3.5
+                                              opacity-50
+                                            "
+                                          />
+                                        </a>
+                                      </li>
+                                    )
+                                  )}
+                                </motion.ul>
+                              )}
+                            </AnimatePresence>
+                          </>
+                        ) : (
+                          <a
+                            href={link.href}
                             onClick={() =>
-                              setMobileDropdown((current) =>
-                                current === link.label ? null : link.label
-                              )
+                              setOpen(false)
                             }
-                            style={link.active ? { color: RED } : undefined}
+                            style={
+                              link.active
+                                ? {
+                                    color: RED,
+                                  }
+                                : undefined
+                            }
                             className={`
                               flex
-                              w-full
                               items-center
                               justify-between
                               rounded-xl
@@ -602,108 +861,37 @@ export default function Navbar() {
                               }
                             `}
                           >
-                            <span>{link.label}</span>
-
-                            <ChevronIcon
-                              className={`
-                                h-4
-                                w-4
-                                opacity-60
-                                transition-transform
-                                duration-200
-                                ${
-                                  mobileDropdown === link.label
-                                    ? "rotate-180"
-                                    : ""
-                                }
-                              `}
-                            />
-                          </button>
-
-                          <AnimatePresence initial={false}>
-                            {mobileDropdown === link.label && (
-                              <motion.ul
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{
-                                  duration: 0.25,
-                                  ease: [0.22, 1, 0.36, 1],
-                                }}
-                                className="overflow-hidden pl-4"
-                              >
-                                {link.dropdown.map((item) => (
-                                  <li key={item.label}>
-                                    <a
-                                      href={item.href}
-                                      onClick={() => {
-                                        setOpen(false);
-                                        setMobileDropdown(null);
-                                      }}
-                                      className="
-                                        flex
-                                        items-center
-                                        justify-between
-                                        gap-2
-                                        rounded-xl
-                                        px-3
-                                        py-2.5
-                                        text-[15px]
-                                        font-semibold
-                                        text-ink/85
-                                        transition-colors
-                                        hover:bg-black/[0.04]
-                                      "
-                                    >
-                                      <span>{item.label}</span>
-                                      <ChevronRightIcon className="h-3.5 w-3.5 opacity-50" />
-                                    </a>
-                                  </li>
-                                ))}
-                              </motion.ul>
-                            )}
-                          </AnimatePresence>
-                        </>
-                      ) : (
-                        <a
-                          href={link.href}
-                          onClick={() => setOpen(false)}
-                          style={link.active ? { color: RED } : undefined}
-                          className={`
-                            flex
-                            items-center
-                            justify-between
-                            rounded-xl
-                            px-3
-                            py-2.5
-                            text-[17px]
-                            font-semibold
-                            transition-colors
-                            ${
-                              link.active
-                                ? "bg-red-50"
-                                : "text-ink hover:bg-black/[0.04]"
-                            }
-                          `}
-                        >
-                          <span>{link.label}</span>
-                        </a>
-                      )}
-                    </motion.li>
-                  ))}
+                            <span>
+                              {link.label}
+                            </span>
+                          </a>
+                        )}
+                      </motion.li>
+                    )
+                  )}
                 </motion.ul>
 
                 {/* =================================================
                     MOBILE ACTION BUTTONS
                 ================================================== */}
 
-                <div className="mt-2 flex gap-2 border-t border-ink/10 pt-3">
+                <div
+                  className="
+                    mt-2
+                    flex
+                    gap-2
+                    border-t
+                    border-ink/10
+                    pt-3
+                  "
+                >
                   <a
                     href="https://iliberty.org.uk/donate-2/"
                     className="
                       group
                       relative
                       flex
+                      min-w-0
                       flex-1
                       items-center
                       justify-center
@@ -723,7 +911,6 @@ export default function Navbar() {
                       hover:text-white
                     "
                   >
-                    {/* Background animation starts from bottom */}
                     <span
                       className="
                         absolute
@@ -738,8 +925,18 @@ export default function Navbar() {
                       "
                     />
 
-                    <span className="relative z-10">Donate</span>
-                    <ArrowIcon className="relative z-10 h-3.5 w-3.5" />
+                    <span className="relative z-10">
+                      Donate
+                    </span>
+
+                    <ArrowIcon
+                      className="
+                        relative
+                        z-10
+                        h-3.5
+                        w-3.5
+                      "
+                    />
                   </a>
 
                   <a
@@ -748,6 +945,7 @@ export default function Navbar() {
                       group
                       relative
                       flex
+                      min-w-0
                       flex-1
                       items-center
                       justify-center
@@ -766,7 +964,6 @@ export default function Navbar() {
                       hover:text-white
                     "
                   >
-                    {/* Background animation starts from bottom */}
                     <span
                       className="
                         absolute
@@ -781,7 +978,9 @@ export default function Navbar() {
                       "
                     />
 
-                    <span className="relative z-10">Shop</span>
+                    <span className="relative z-10">
+                      Shop
+                    </span>
                   </a>
                 </div>
               </div>

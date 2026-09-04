@@ -78,7 +78,7 @@ function ArrowIcon({ className = '' }: { className?: string }) {
 }
 
 /* =========================================================
-   REALISTIC ROPE
+   REALISTIC TWO-ROPE SYSTEM
 ========================================================= */
 
 function HangingRopes() {
@@ -86,21 +86,31 @@ function HangingRopes() {
     <svg
       aria-hidden="true"
       className="
-        pointer-events-none
-        absolute
-        left-0
-        top-0
-        z-20
-        h-[205px]
-        w-full
-        overflow-visible
-      "
+  pointer-events-none
+  absolute
+  left-0
+  top-[15px]
+  z-20
+  h-[205px]
+  w-full
+  overflow-visible
+  max-sm:left-[-4px]
+"
       viewBox="0 0 1000 205"
       preserveAspectRatio="none"
     >
       <defs>
-        {/* Rope texture */}
-        <filter id="ropeTexture" x="-20%" y="-20%" width="140%" height="140%">
+        {/* =====================================================
+            ROPE TEXTURE
+        ====================================================== */}
+
+        <filter
+          id="ropeTexture"
+          x="-20%"
+          y="-20%"
+          width="140%"
+          height="140%"
+        >
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.08"
@@ -118,7 +128,10 @@ function HangingRopes() {
           />
         </filter>
 
-        {/* Soft rope shadow */}
+        {/* =====================================================
+            ROPE SHADOW
+        ====================================================== */}
+
         <filter
           id="ropeShadow"
           x="-30%"
@@ -135,8 +148,17 @@ function HangingRopes() {
           />
         </filter>
 
-        {/* Clip for rope texture */}
-        <linearGradient id="ropeBase" x1="0" y1="0" x2="1" y2="0">
+        {/* =====================================================
+            ROPE BASE
+        ====================================================== */}
+
+        <linearGradient
+          id="ropeBase"
+          x1="0"
+          y1="0"
+          x2="1"
+          y2="0"
+        >
           <stop offset="0%" stopColor="#6E4A2F" />
           <stop offset="18%" stopColor="#B17B4D" />
           <stop offset="38%" stopColor="#8A5C38" />
@@ -145,20 +167,55 @@ function HangingRopes() {
           <stop offset="100%" stopColor="#B47A4A" />
         </linearGradient>
 
-        <linearGradient id="ropeHighlight" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#E0B27B" stopOpacity="0.15" />
-          <stop offset="30%" stopColor="#F2D0A1" stopOpacity="0.75" />
-          <stop offset="55%" stopColor="#D9A66F" stopOpacity="0.2" />
-          <stop offset="80%" stopColor="#F1C895" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#D29A61" stopOpacity="0.15" />
+        {/* =====================================================
+            ROPE HIGHLIGHT
+        ====================================================== */}
+
+        <linearGradient
+          id="ropeHighlight"
+          x1="0"
+          y1="0"
+          x2="1"
+          y2="0"
+        >
+          <stop
+            offset="0%"
+            stopColor="#E0B27B"
+            stopOpacity="0.15"
+          />
+
+          <stop
+            offset="30%"
+            stopColor="#F2D0A1"
+            stopOpacity="0.75"
+          />
+
+          <stop
+            offset="55%"
+            stopColor="#D9A66F"
+            stopOpacity="0.2"
+          />
+
+          <stop
+            offset="80%"
+            stopColor="#F1C895"
+            stopOpacity="0.7"
+          />
+
+          <stop
+            offset="100%"
+            stopColor="#D29A61"
+            stopOpacity="0.15"
+          />
         </linearGradient>
       </defs>
 
       {/* =====================================================
-          ROPE FROM BIRD MOUTH DOWN TO CENTRAL KNOT
-      ===================================================== */}
+          VERTICAL ROPE FROM DOVE TO KNOT
+      ====================================================== */}
 
       {/* Shadow */}
+
       <path
         d="
           M 507 46
@@ -173,7 +230,8 @@ function HangingRopes() {
         filter="url(#ropeShadow)"
       />
 
-      {/* Main vertical rope */}
+      {/* Main rope */}
+
       <path
         d="
           M 507 44
@@ -187,7 +245,8 @@ function HangingRopes() {
         filter="url(#ropeTexture)"
       />
 
-      {/* Twisted dark strand */}
+      {/* Dark twisted strand */}
+
       <path
         d="
           M 505 45
@@ -203,7 +262,8 @@ function HangingRopes() {
         opacity="0.9"
       />
 
-      {/* Twisted light strand */}
+      {/* Light twisted strand */}
+
       <path
         d="
           M 509 46
@@ -221,7 +281,7 @@ function HangingRopes() {
 
       {/* =====================================================
           CENTRAL KNOT
-      ===================================================== */}
+      ====================================================== */}
 
       <ellipse
         cx="500"
@@ -247,6 +307,7 @@ function HangingRopes() {
       />
 
       {/* Knot highlights */}
+
       <path
         d="M489 138 C494 134 498 135 502 140"
         fill="none"
@@ -265,9 +326,10 @@ function HangingRopes() {
 
       {/* =====================================================
           LEFT ROPE
-      ===================================================== */}
+      ====================================================== */}
 
       {/* Shadow */}
+
       <path
         d="
           M 493 143
@@ -282,6 +344,7 @@ function HangingRopes() {
       />
 
       {/* Main rope */}
+
       <path
         d="
           M 493 141
@@ -295,7 +358,8 @@ function HangingRopes() {
         filter="url(#ropeTexture)"
       />
 
-      {/* Rope twist - dark */}
+      {/* Dark twist */}
+
       <path
         d="
           M 489 141
@@ -316,7 +380,8 @@ function HangingRopes() {
         opacity="0.9"
       />
 
-      {/* Rope twist - light */}
+      {/* Light twist */}
+
       <path
         d="
           M 491 144
@@ -340,9 +405,10 @@ function HangingRopes() {
 
       {/* =====================================================
           RIGHT ROPE
-      ===================================================== */}
+      ====================================================== */}
 
       {/* Shadow */}
+
       <path
         d="
           M 507 143
@@ -357,6 +423,7 @@ function HangingRopes() {
       />
 
       {/* Main rope */}
+
       <path
         d="
           M 507 141
@@ -370,7 +437,8 @@ function HangingRopes() {
         filter="url(#ropeTexture)"
       />
 
-      {/* Rope twist - dark */}
+      {/* Dark twist */}
+
       <path
         d="
           M 511 141
@@ -391,7 +459,8 @@ function HangingRopes() {
         opacity="0.9"
       />
 
-      {/* Rope twist - light */}
+      {/* Light twist */}
+
       <path
         d="
           M 509 144
@@ -414,10 +483,9 @@ function HangingRopes() {
       />
 
       {/* =====================================================
-          SMALL LOOPS AT CARD CONNECTIONS
-      ===================================================== */}
+          LEFT ATTACHMENT LOOP
+      ====================================================== */}
 
-      {/* Left attachment loop */}
       <ellipse
         cx="82"
         cy="193"
@@ -438,7 +506,10 @@ function HangingRopes() {
         strokeWidth="1.2"
       />
 
-      {/* Right attachment loop */}
+      {/* =====================================================
+          RIGHT ATTACHMENT LOOP
+      ====================================================== */}
+
       <ellipse
         cx="918"
         cy="193"
@@ -463,7 +534,7 @@ function HangingRopes() {
 }
 
 /* =========================================================
-   NEWSLETTER SECTION
+   NEWSLETTER
 ========================================================= */
 
 export default function Newsletter() {
@@ -471,7 +542,8 @@ export default function Newsletter() {
   const [captchaChecked, setCaptchaChecked] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const canSubmit = email.trim().length > 0 && captchaChecked;
+  const canSubmit =
+    email.trim().length > 0 && captchaChecked;
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -482,10 +554,19 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-white py-20 sm:py-28">
+    <section
+      className="
+        relative
+        overflow-hidden
+        bg-white
+        py-16
+        sm:py-20
+        md:py-28
+      "
+    >
 
       {/* =====================================================
-          DECORATIVE BACKGROUND BLOBS
+          BACKGROUND BLOBS
       ====================================================== */}
 
       <div
@@ -501,7 +582,9 @@ export default function Newsletter() {
           opacity-40
           blur-3xl
         "
-        style={{ backgroundColor: '#78ADD0' }}
+        style={{
+          backgroundColor: '#78ADD0',
+        }}
       />
 
       <div
@@ -517,32 +600,46 @@ export default function Newsletter() {
           opacity-30
           blur-3xl
         "
-        style={{ backgroundColor: '#C8102E' }}
+        style={{
+          backgroundColor: '#C8102E',
+        }}
       />
 
-      <div className="relative mx-auto max-w-[1200px] px-5 sm:px-8">
+      {/* =====================================================
+          MAIN CONTAINER
+      ====================================================== */}
+
+      <div
+        className="
+          relative
+          mx-auto
+          w-full
+          max-w-[1200px]
+          px-4
+          sm:px-8
+        "
+      >
 
         {/* =====================================================
-            BIRD + REALISTIC TWO-ROPE SYSTEM
+            BIRD + ROPE
         ====================================================== */}
 
         <div
           className="
             relative
-            h-[235px]
+            h-[215px]
             sm:h-[255px]
           "
         >
 
-          {/* =================================================
-              ROPE
-              Must stay BEHIND the dove.
-          ================================================= */}
+          {/* ROPE */}
+
           <HangingRopes />
 
           {/* =================================================
               DOVE
           ================================================= */}
+
           <motion.div
             initial={{
               opacity: 0,
@@ -578,12 +675,14 @@ export default function Newsletter() {
               },
             }}
             className="
-              absolute
-              left-[49%]
-              -top-10
-              z-40
-              -translate-x-1/2
-            "
+  absolute
+  left-[49%]
+  -top-8
+  z-40
+  -translate-x-1/2
+  max-sm:left-[44%]
+  max-sm:-top-0
+"
           >
             <img
               src={dove}
@@ -591,8 +690,8 @@ export default function Newsletter() {
               aria-hidden="true"
               draggable={false}
               className="
-                h-[88px]
-                w-[88px]
+                h-[78px]
+                w-[78px]
                 select-none
                 object-contain
                 drop-shadow-[0_9px_18px_rgba(0,0,0,0.16)]
@@ -608,7 +707,15 @@ export default function Newsletter() {
             NEWSLETTER CARD
         ====================================================== */}
 
-        <div className="relative -mt-[28px] pb-10 sm:-mt-[78px] sm:pb-14">
+        <div
+          className="
+            relative
+            -mt-[18px]
+            pb-8
+            sm:-mt-[78px]
+            sm:pb-14
+          "
+        >
 
           <motion.div
             initial={{
@@ -633,12 +740,13 @@ export default function Newsletter() {
             className="
               relative
               overflow-hidden
-              rounded-[26px]
+              rounded-[22px]
               border-2
               border-white/70
               px-6
-              py-10
+              py-8
               shadow-[0_30px_70px_rgba(24,60,90,0.28)]
+              sm:rounded-[26px]
               sm:px-10
               sm:py-12
               lg:px-14
@@ -691,10 +799,12 @@ export default function Newsletter() {
                 relative
                 z-10
                 flex
-                flex-wrap
-                items-center
-                justify-between
-                gap-10
+                flex-col
+                gap-8
+                lg:flex-row
+                lg:items-center
+                lg:justify-between
+                lg:gap-12
               "
             >
 
@@ -702,7 +812,14 @@ export default function Newsletter() {
                   HEADING
               ================================================= */}
 
-              <div className="max-w-[22ch]">
+              <div
+                className="
+                  w-full
+                  max-w-none
+                  flex-1
+                  lg:max-w-[620px]
+                "
+              >
 
                 <span
                   className="
@@ -715,10 +832,11 @@ export default function Newsletter() {
                     bg-white/10
                     px-4
                     py-1.5
-                    text-[11.5px]
+                    text-[11px]
                     font-bold
                     tracking-wide
                     text-white
+                    sm:text-[11.5px]
                   "
                 >
                   STAY IN THE LOOP
@@ -726,14 +844,17 @@ export default function Newsletter() {
 
                 <h3
                   className="
-                    max-w-[14ch]
+                    w-full
+                    max-w-none
                     font-sans
                     text-[32px]
                     font-extrabold
-                    leading-[1.08]
+                    leading-[1.05]
                     tracking-tight
                     text-white
-                    sm:text-[40px]
+                    sm:text-[38px]
+                    md:text-[42px]
+                    lg:max-w-[620px]
                     lg:text-[42px]
                   "
                 >
@@ -746,11 +867,21 @@ export default function Newsletter() {
                   FORM
               ================================================= */}
 
-              <div className="w-full max-w-[420px] flex-1">
+              <div
+                className="
+                  w-full
+                  flex-none
+                  lg:w-[420px]
+                "
+              >
 
                 <AnimatePresence mode="wait">
 
                   {submitted ? (
+
+                    /* =================================================
+                       SUCCESS
+                    ================================================= */
 
                     <motion.p
                       key="success"
@@ -780,6 +911,10 @@ export default function Newsletter() {
 
                   ) : (
 
+                    /* =================================================
+                       FORM
+                    ================================================= */
+
                     <motion.form
                       key="form"
                       onSubmit={handleSubmit}
@@ -789,7 +924,11 @@ export default function Newsletter() {
                       transition={{
                         duration: 0.3,
                       }}
-                      className="flex flex-col gap-4"
+                      className="
+                        flex
+                        flex-col
+                        gap-4
+                      "
                     >
 
                       {/* =================================================
@@ -804,8 +943,8 @@ export default function Newsletter() {
                             absolute
                             left-4
                             top-1/2
-                            h-4.5
-                            w-4.5
+                            h-[18px]
+                            w-[18px]
                             -translate-y-1/2
                             text-ink/40
                           "
@@ -862,29 +1001,39 @@ export default function Newsletter() {
                           type="button"
                           onClick={() =>
                             setCaptchaChecked(
-                              (v) => !v
+                              (value) => !value
                             )
                           }
                           aria-pressed={captchaChecked}
                           className="
                             flex
+                            min-h-[60px]
                             w-full
                             items-center
                             justify-between
-                            gap-6
+                            gap-4
                             rounded-md
                             border
                             border-black/10
                             bg-white
                             px-4
-                            py-3.5
+                            py-3
                             transition-shadow
                             duration-200
                             hover:shadow-[0_6px_18px_rgba(0,0,0,0.12)]
                           "
                         >
 
-                          <span className="flex items-center gap-3">
+                          {/* LEFT */}
+
+                          <span
+                            className="
+                              flex
+                              min-w-0
+                              items-center
+                              gap-3
+                            "
+                          >
 
                             <span
                               className={`
@@ -918,6 +1067,7 @@ export default function Newsletter() {
 
                             <span
                               className="
+                                truncate
                                 text-[14px]
                                 text-ink
                               "
@@ -927,14 +1077,18 @@ export default function Newsletter() {
 
                           </span>
 
+                          {/* RIGHT */}
+
                           <span
                             className="
                               flex
+                              shrink-0
                               flex-col
                               items-center
                               gap-0.5
                             "
                           >
+
                             <RefreshIcon
                               className="
                                 h-6
@@ -952,6 +1106,7 @@ export default function Newsletter() {
                             >
                               reCAPTCHA
                             </span>
+
                           </span>
 
                         </button>
@@ -986,6 +1141,8 @@ export default function Newsletter() {
                         "
                       >
 
+                        {/* Hover background */}
+
                         <span
                           className="
                             absolute
@@ -999,6 +1156,8 @@ export default function Newsletter() {
                             group-enabled:group-hover:h-full
                           "
                         />
+
+                        {/* Button content */}
 
                         <span
                           className="

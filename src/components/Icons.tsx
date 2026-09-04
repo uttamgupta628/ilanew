@@ -1,12 +1,13 @@
-import type { SVGProps } from 'react';
+import type { SVGProps } from "react";
 
 const base: SVGProps<SVGSVGElement> = {
-  viewBox: '0 0 24 24',
-  fill: 'none',
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
   strokeWidth: 1.4,
-  strokeLinecap: 'round',
-  strokeLinejoin: 'round',
-  className: 'w-5 h-5 stroke-gold-bright shrink-0',
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  className: "w-5 h-5 shrink-0",
 };
 
 export const ShieldIcon = () => (
@@ -25,7 +26,12 @@ export const SignalIcon = () => (
 export const CandleIcon = () => (
   <svg {...base}>
     <path d="M12 3v18M6 7h4M14 7h4M4 18h16" />
-    <circle cx="8" cy="7" r="4.2" strokeDasharray="2 3" />
+    <circle
+      cx="8"
+      cy="7"
+      r="4.2"
+      strokeDasharray="2 3"
+    />
   </svg>
 );
 

@@ -130,21 +130,21 @@ export const galleryItems: GalleryItem[] = [
 export const shopItems: ShopItem[] = [
   {
     title: 'Sarouki Persian Rug',
-    desc: '152cm × 103cm — handmade in Markazi Province, Central Iran',
+    desc: 'Sarouki Persian Rug – 152 cm by 103cm Handmade in the Markazi Province in Central Iran',
     price: '£250.00',
     img: shopRug1,
     href: 'https://international-liberty-association.myshopify.com/products/sarouki-persian-rug',
   },
   {
     title: 'Isfahan Persian Rug',
-    desc: '165cm × 110cm — handmade in Isfahan Province, Iran',
+    desc: 'Isfahani Persian Rug – 165cm by 110cm Handmade in Isfahan Province of Iran',
     price: '£1,200.00',
     img: shopRug2,
     href: 'https://international-liberty-association.myshopify.com/products/isfahan-persian-rug',
   },
   {
     title: 'Isfahan Persian Rug',
-    desc: '165cm × 110cm — handmade in Isfahan Province, Iran',
+    desc: 'Isfahani Persian Rug – 165cm by 110cm Handmade in Isfahan Province of Iran',
     price: '£1,200.00',
     img: shopRug2,
     href: 'https://international-liberty-association.myshopify.com/products/isfahan-persian-rug',
