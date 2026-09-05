@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+
 import { motion, type Variants } from 'framer-motion';
 
 // Placeholder imports — swap for your real filenames

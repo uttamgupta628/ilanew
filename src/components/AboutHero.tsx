@@ -5,7 +5,7 @@ import aboutHeroImage from "../assets/images/abouthero.png"; // image 1 (protest
 import tornEdge from "../assets/images/torn-edge.webp"; // image 2 (trimmed mask)
 
 const GOLD = "#C9A227"; // match your bg-gold progress bar; swap to your token if different
-const MAROON = "#7A1F2B"; // match your border-maroon / text-maroon token
+// const MAROON = "#7A1F2B"; // match your border-maroon / text-maroon token
 
 type AboutHeroProps = {
   title?: string;

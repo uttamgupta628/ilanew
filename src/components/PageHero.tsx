@@ -12,7 +12,7 @@ type PageHeroProps = {
   imageAlt?: string;
 };
 
-export default function PageHero({ title, subtitle, image, imageAlt }: PageHeroProps) {
+export default function PageHero({ title, subtitle, image }: PageHeroProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [seamWidth, setSeamWidth] = useState(0);
 
