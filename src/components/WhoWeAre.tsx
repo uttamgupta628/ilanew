@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState , useEffect} from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 // Placeholder imports — swap these for your real filenames
 import testimonial1 from '../assets/images/testimonial-1.png';
@@ -168,33 +169,28 @@ function TypewriterHeading({
 }
 
 /* =========================================================
-   TRUNCATED QUOTE WITH "READ MORE" TOGGLE
+   QUOTE WITH "READ MORE" LINK TO ABOUT PAGE
 ========================================================= */
 
 function ExpandableQuote({ quote }: { quote: string }) {
-  const [expanded, setExpanded] = useState(false);
-
   return (
     <div>
       {/* QUOTE */}
       <p
-        className={`
+        className="
           text-[16px]
           lato
           leading-[1.7]
           text-[#33322B]
-          transition-all
-          duration-300
-          ${expanded ? '' : 'line-clamp-4'}
-        `}
+          line-clamp-4
+        "
       >
         &ldquo;{quote}&rdquo;
       </p>
 
-      {/* READ MORE BUTTON */}
-      <button
-        type="button"
-        onClick={() => setExpanded((prev) => !prev)}
+      {/* READ MORE BUTTON — navigates to About page testimonials section */}
+      <Link
+        to="/about#testimonials"
         className="
           group
           relative
@@ -234,9 +230,7 @@ function ExpandableQuote({ quote }: { quote: string }) {
         />
 
         {/* Button text */}
-        <span className="relative z-10">
-          {expanded ? 'Show less' : 'Read more'}
-        </span>
+        <span className="relative z-10">Read more</span>
 
         {/* Arrow */}
         <span
@@ -271,7 +265,7 @@ function ExpandableQuote({ quote }: { quote: string }) {
             />
           </svg>
         </span>
-      </button>
+      </Link>
     </div>
   );
 }
@@ -399,7 +393,7 @@ function TestimonialRow({
 
 export default function Testimonials() {
   return (
-    <section className="relative bg-paper">
+    <section id="testimonials" className="relative bg-paper">
 
       {/* =================================================
           WHO WE ARE IMAGE

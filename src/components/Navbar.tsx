@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 
 type DropdownItem = {
@@ -31,8 +32,8 @@ const navLinks: NavLink[] = [
     href: "#who-we-are",
     hasChevron: true,
     dropdown: [
-      { label: "About Us", href: "#about-us" },
-      { label: "Stories & Voices", href: "#stories-voices" },
+      { label: "About Us", href: "/about" },
+      { label: "Stories & Voices", href: "/stories" },
       { label: "Contact Us", href: "#contact-us" },
       { label: "Feedback form", href: "#feedback-form" },
       { label: "FAQ", href: "#faq" },
@@ -106,6 +107,83 @@ function ArrowIcon({ className = "" }: { className?: string }) {
   );
 }
 
+/* =========================================================
+   SMART LINK
+
+   Routes each href to the right primitive:
+   - "http..."  -> plain <a>, opens in a new tab
+   - "#..."     -> hash link; jumps in place on "/", or
+                   navigates home first (via location-aware
+                   href) when on any other route like /about
+   - anything else ("/about", "/shop") -> react-router <Link>
+========================================================= */
+
+function SmartLink({
+  href,
+  className,
+  style,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  children,
+}: {
+  href: string;
+  className?: string;
+  style?: React.CSSProperties;
+  onClick?: () => void;
+  onMouseEnter?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  onMouseLeave?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  children: React.ReactNode;
+}) {
+  const location = useLocation();
+
+  if (href.startsWith("http")) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        style={style}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  if (href.startsWith("#")) {
+    const target = location.pathname === "/" ? href : `/${href}`;
+    return (
+      <a
+        href={target}
+        className={className}
+        style={style}
+        onClick={onClick}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      to={href}
+      className={className}
+      style={style}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      {children}
+    </Link>
+  );
+}
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [desktopDropdown, setDesktopDropdown] = useState<string | null>(null);
@@ -167,7 +245,7 @@ export default function Navbar() {
               LOGO
           ================================================== */}
 
-          <a
+          <SmartLink
             href="#top"
             className="
               relative
@@ -244,7 +322,7 @@ export default function Navbar() {
                 Association
               </span>
             </span>
-          </a>
+          </SmartLink>
 
           {/* =================================================
               DESKTOP NAVIGATION
@@ -265,7 +343,7 @@ export default function Navbar() {
                     setDesktopDropdown(null)
                   }
                 >
-                  <a
+                  <SmartLink
                     href={link.href}
                     style={
                       link.active
@@ -306,7 +384,7 @@ export default function Navbar() {
                         `}
                       />
                     )}
-                  </a>
+                  </SmartLink>
 
                   {/* =========================================
                       DESKTOP DROPDOWN
@@ -350,7 +428,7 @@ export default function Navbar() {
                             {link.dropdown.map(
                               (item, index) => (
                                 <li key={item.label}>
-                                  <a
+                                  <SmartLink
                                     href={item.href}
                                     className={`
                                       flex
@@ -392,7 +470,7 @@ export default function Navbar() {
                                         opacity-60
                                       "
                                     />
-                                  </a>
+                                  </SmartLink>
                                 </li>
                               )
                             )}
@@ -421,7 +499,7 @@ export default function Navbar() {
           >
             {/* Donate */}
 
-            <a
+            <SmartLink
               href="https://iliberty.org.uk/donate-2/"
               className="
                 group
@@ -485,11 +563,11 @@ export default function Navbar() {
               >
                 <ArrowIcon className="h-[18px] w-[18px]" />
               </span>
-            </a>
+            </SmartLink>
 
             {/* Shop */}
 
-            <a
+            <SmartLink
               href="/shop"
               className="
                 group
@@ -531,7 +609,7 @@ export default function Navbar() {
               <span className="relative z-10">
                 Shop
               </span>
-            </a>
+            </SmartLink>
           </div>
 
           {/* =================================================
@@ -783,7 +861,7 @@ export default function Navbar() {
                                           item.label
                                         }
                                       >
-                                        <a
+                                        <SmartLink
                                           href={
                                             item.href
                                           }
@@ -823,7 +901,7 @@ export default function Navbar() {
                                               opacity-50
                                             "
                                           />
-                                        </a>
+                                        </SmartLink>
                                       </li>
                                     )
                                   )}
@@ -832,7 +910,7 @@ export default function Navbar() {
                             </AnimatePresence>
                           </>
                         ) : (
-                          <a
+                          <SmartLink
                             href={link.href}
                             onClick={() =>
                               setOpen(false)
@@ -864,7 +942,7 @@ export default function Navbar() {
                             <span>
                               {link.label}
                             </span>
-                          </a>
+                          </SmartLink>
                         )}
                       </motion.li>
                     )
@@ -885,7 +963,7 @@ export default function Navbar() {
                     pt-3
                   "
                 >
-                  <a
+                  <SmartLink
                     href="https://iliberty.org.uk/donate-2/"
                     className="
                       group
@@ -937,9 +1015,9 @@ export default function Navbar() {
                         w-3.5
                       "
                     />
-                  </a>
+                  </SmartLink>
 
-                  <a
+                  <SmartLink
                     href="/shop"
                     className="
                       group
@@ -981,7 +1059,7 @@ export default function Navbar() {
                     <span className="relative z-10">
                       Shop
                     </span>
-                  </a>
+                  </SmartLink>
                 </div>
               </div>
             </motion.div>
