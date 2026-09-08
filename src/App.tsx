@@ -6,6 +6,9 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Stories from "./pages/Stories";
+import Contact from "./pages/contact";
+import Feedback from "./pages/Feedback";
+import FAQ from "./pages/Faq";
 
 function PhoneIcon() {
   return (
@@ -86,6 +89,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/stories" element={<Stories />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/faq" element={<FAQ />} />
         </Routes>
       </main>
 

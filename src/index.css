@@ -32,12 +32,19 @@ html {
 
 body {
   margin: 0;
+  width: 100%;
+  overflow-x: hidden;
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 *,

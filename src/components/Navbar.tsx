@@ -34,9 +34,9 @@ const navLinks: NavLink[] = [
     dropdown: [
       { label: "About Us", href: "/about" },
       { label: "Stories & Voices", href: "/stories" },
-      { label: "Contact Us", href: "#contact-us" },
-      { label: "Feedback form", href: "#feedback-form" },
-      { label: "FAQ", href: "#faq" },
+      { label: "Contact Us", href: "/contact" },
+      { label: "Feedback form", href: "/feedback" },
+      { label: "FAQ", href: "/faq" },
     ],
   },
   {
