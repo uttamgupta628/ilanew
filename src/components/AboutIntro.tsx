@@ -151,22 +151,24 @@ export default function AboutIntro({
         ================================================== */}
 
         <div className="mt-10 flex flex-col gap-6">
-          {paragraphs.map((text, index) => (
-            <motion.p
-              key={index}
-              variants={itemVariants}
-              className="
-                text-[15px]
-                leading-[1.75]
-                text-ink/75
-                sm:text-[16px]
-                lg:text-[17px]
-              "
-            >
-              {text}
-            </motion.p>
-          ))}
-        </div>
+  {paragraphs.map((text, index) => (
+    <motion.p
+      key={index}
+      variants={itemVariants}
+      className="
+        text-left
+        text-justify
+        text-[15px]
+        leading-[1.75]
+        text-ink/75
+        sm:text-[16px]
+        lg:text-[17px]
+      "
+    >
+      {text}
+    </motion.p>
+  ))}
+</div>
       </motion.div>
     </section>
   );

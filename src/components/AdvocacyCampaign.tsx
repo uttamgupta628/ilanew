@@ -7,101 +7,77 @@ import {
 } from "framer-motion";
 
 /* =========================================================
-   DATA
+   DATA — LEFT COLUMN: advocacy activities (accent-card list)
 ========================================================= */
 
-type ListItem = {
-  title?: string; // bold heading line, omit for a plain paragraph-style bullet
+type ActivityItem = {
+  title?: string;
   description: string;
 };
 
-type Group = {
-  heading?: string; // sub-heading above a set of items (e.g. "Reports")
-  items: ListItem[];
-};
-
-const leftColumn: Group[] = [
+const activities: ActivityItem[] = [
   {
-    items: [
-      {
-        title: "Stop Executions Campaign",
-        description:
-          "UK exhibitions, and a 40,000-strong petition for stopping executions.",
-      },
-      {
-        description:
-          "Global advocacy for Women and Children's rights especially in the Middle East.",
-      },
-      {
-        title: "Rights Awareness Workshops",
-        description:
-          "Sessions in faith centres, schools, and public forums highlighting the plight of women and minorities.",
-      },
-      {
-        title: "Nationwide exhibitions.",
-        description: "",
-      },
-      {
-        description: "Engagement with MPs and Peers to table parliamentary questions.",
-      },
-    ],
-  },
-];
-
-const rightColumn: Group[] = [
-  {
-    items: [
-      {
-        description:
-          "Impact Overview \u2013 over the years we have managed to touch the lives of many people in the UK and globally.",
-      },
-    ],
+    title: "Stop Executions Campaign",
+    description:
+      "UK exhibitions, and a 40,000-strong petition for stopping executions.",
   },
   {
-    items: [
-      {
-        description:
-          "Since 2017, more than 3,000 victims of Human Rights abuses resettled from conflict zones with support for housing and medical needs.",
-      },
-      {
-        description:
-          "Annually supporting 800+ individuals through education and community programmes in the UK.",
-      },
-      {
-        description:
-          "Over 4,300 people reached with emergency relief during COVID-19, including food and mental health sessions.",
-      },
-      {
-        description:
-          "600+ participants each year improving language and digital competence across London.",
-      },
-      {
-        description:
-          "Hundreds of youth engaged in leadership and civic workshops yearly.",
-      },
-      {
-        description:
-          "Coordinated over 120 exhibitions and 35 public events in 2024 alone, raising awareness nationwide.",
-      },
-      {
-        description:
-          "Weekly online Cultural sessions with over 120+ weekly participants to bridge the cultural gap.",
-      },
-    ],
+    description:
+      "Global advocacy for Women and Children's rights especially in the Middle East.",
   },
   {
-    heading: "Reports",
-    items: [
-      {
-        description:
-          "Download our Annual Reports for detailed financials and programme analysis (Annual report will be given).",
-      },
-    ],
+    title: "Rights Awareness Workshops",
+    description:
+      "Sessions in faith centres, schools, and public forums highlighting the plight of women and minorities.",
+  },
+  {
+    title: "Nationwide Exhibitions",
+    description: "Touring displays that bring lived testimony directly to UK communities.",
+  },
+  {
+    description: "Engagement with MPs and Peers to table parliamentary questions.",
   },
 ];
 
 /* =========================================================
-   CHECK ICON — with its own 3D pop-in
+   DATA — RIGHT COLUMN: impact stats (pulled out of paragraph
+   copy into scannable numbers, which reads far stronger)
+========================================================= */
+
+type StatItem = {
+  value: string;
+  label: string;
+};
+
+const stats: StatItem[] = [
+  {
+    value: "3,000+",
+    label: "Victims of Human Rights abuses resettled from conflict zones since 2017",
+  },
+  {
+    value: "800+",
+    label: "Individuals supported annually through education & community programmes",
+  },
+  {
+    value: "4,300+",
+    label: "People reached with emergency relief during COVID-19",
+  },
+  {
+    value: "600+",
+    label: "Participants improving language & digital competence across London",
+  },
+  {
+    value: "120+",
+    label: "Exhibitions and 35 public events coordinated in 2024 alone",
+  },
+  {
+    value: "120+",
+    label: "Weekly participants in online cultural exchange sessions",
+  },
+];
+
+/* =========================================================
+   CHECK ICON — 3D pop-in, used on the activities list
 ========================================================= */
 
 function CheckIcon({ delay = 0 }: { delay?: number }) {
@@ -113,10 +89,10 @@ function CheckIcon({ delay = 0 }: { delay?: number }) {
       transition={{
         duration: 0.5,
         delay,
-        ease: [0.34, 1.56, 0.64, 1], // slight overshoot for a "pop"
+        ease: [0.34, 1.56, 0.64, 1],
       }}
       style={{ transformPerspective: 400 }}
-      className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#C8102E]"
+      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#C8102E] text-white"
     >
       <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
         <path
@@ -135,27 +111,33 @@ function CheckIcon({ delay = 0 }: { delay?: number }) {
    ANIMATION VARIANTS
 ========================================================= */
 
-function makeItemVariants(fromLeft: boolean, index: number): Variants {
-  return {
-    hidden: {
-      opacity: 0,
-      x: fromLeft ? -60 : 60,
-      rotateY: fromLeft ? -22 : 22,
-      rotateX: 8,
+const cardVariants: Variants = {
+  hidden: { opacity: 0, x: -50, rotateY: -14 },
+  visible: (index: number) => ({
+    opacity: 1,
+    x: 0,
+    rotateY: 0,
+    transition: {
+      duration: 0.6,
+      delay: index * 0.08,
+      ease: [0.16, 1, 0.3, 1] as const,
     },
-    visible: {
-      opacity: 1,
-      x: 0,
-      rotateY: 0,
-      rotateX: 0,
-      transition: {
-        duration: 0.65,
-        delay: index * 0.06,
-        ease: [0.16, 1, 0.3, 1] as const,
-      },
+  }),
+};
+
+const statVariants: Variants = {
+  hidden: { opacity: 0, y: 30, scale: 0.9 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.55,
+      delay: index * 0.07,
+      ease: [0.16, 1, 0.3, 1] as const,
     },
-  };
-}
+  }),
+};
 
 const headingVariants: Variants = {
   hidden: { opacity: 0, y: 18 },
@@ -167,89 +149,100 @@ const headingVariants: Variants = {
 };
 
 /* =========================================================
-   SINGLE ITEM
+   LEFT COLUMN — activity cards with a maroon accent bar,
+   subtle lift + border glow on hover
 ========================================================= */
 
-function ListRow({
-  item,
-  fromLeft,
-  index,
-}: {
-  item: ListItem;
-  fromLeft: boolean;
-  index: number;
-}) {
+function ActivityCard({ item, index }: { item: ActivityItem; index: number }) {
   return (
     <motion.div
-      variants={makeItemVariants(fromLeft, index)}
+      custom={index}
+      variants={cardVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.35 }}
+      whileHover={{ y: -4 }}
       style={{ transformPerspective: 1000 }}
-      className="flex gap-3"
+      className="
+        group
+        relative
+        flex
+        items-start
+        gap-4
+        overflow-hidden
+        rounded-xl
+        border
+        border-ink/10
+        bg-white
+        p-5
+        shadow-[0_2px_10px_rgba(0,0,0,0.04)]
+        transition-shadow
+        duration-300
+        hover:shadow-[0_12px_28px_rgba(200,16,46,0.12)]
+      "
     >
-      <CheckIcon delay={index * 0.06 + 0.15} />
+      {/* Accent bar */}
+      <span
+        className="absolute inset-y-0 left-0 w-1 bg-[#C8102E] opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+        aria-hidden="true"
+      />
+
+      <CheckIcon delay={index * 0.06 + 0.1} />
+
       <div>
         {item.title && (
-          <h3 className="text-[17px] font-bold leading-snug text-ink sm:text-[18px]">
+          <h3 className="text-[16px] font-bold leading-snug text-ink sm:text-[17px]">
             {item.title}
           </h3>
         )}
-        {item.description && (
-          <p className="mt-1 text-[15px] leading-relaxed text-ink/70">
-            {item.description}
-          </p>
-        )}
+        <p
+          className={`text-[14.5px] leading-relaxed text-ink/65 sm:text-[15px] ${
+            item.title ? "mt-1" : ""
+          }`}
+        >
+          {item.description}
+        </p>
       </div>
     </motion.div>
   );
 }
 
 /* =========================================================
-   COLUMN
+   RIGHT COLUMN — big number stat cards on a soft tinted grid
 ========================================================= */
 
-function AdvocacyColumn({
-  groups,
-  fromLeft,
-}: {
-  groups: Group[];
-  fromLeft: boolean;
-}) {
-  let runningIndex = 0;
-
+function StatCard({ stat, index }: { stat: StatItem; index: number }) {
   return (
-    <div className="flex flex-col gap-8">
-      {groups.map((group, gIdx) => (
-        <div key={gIdx}>
-          {group.heading && (
-            <motion.h3
-              variants={headingVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.6 }}
-              className="mb-4 text-[20px] font-extrabold text-ink"
-            >
-              {group.heading}
-            </motion.h3>
-          )}
-
-          <div className="flex flex-col gap-6">
-            {group.items.map((item, i) => {
-              const idx = runningIndex++;
-              return (
-                <ListRow
-                  key={`${gIdx}-${i}`}
-                  item={item}
-                  fromLeft={fromLeft}
-                  index={idx}
-                />
-              );
-            })}
-          </div>
-        </div>
-      ))}
-    </div>
+    <motion.div
+      custom={index}
+      variants={statVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.4 }}
+      whileHover={{ y: -3 }}
+      className="
+        rounded-xl
+        border
+        border-ink/10
+        bg-gradient-to-b
+        from-[#FBF4F5]
+        to-white
+        p-5
+        text-center
+        shadow-[0_2px_10px_rgba(0,0,0,0.04)]
+        transition-shadow
+        duration-300
+        hover:shadow-[0_12px_28px_rgba(200,16,46,0.14)]
+        sm:text-left
+      "
+    >
+      <p className="font-serif text-[30px] font-extrabold leading-none text-[#C8102E] sm:text-[34px]">
+        {stat.value}
+      </p>
+      <p className="mt-2 text-[13.5px] leading-snug text-ink/65 sm:text-[14px]">
+        {stat.label}
+      </p>
+    </motion.div>
   );
 }
 
@@ -260,21 +253,37 @@ function AdvocacyColumn({
 export default function AdvocacyCampaign() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Subtle whole-section parallax tilt as the user scrolls through —
-  // reinforces the 3D feel beyond just the per-item flip-ins.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
 
-  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [6, 0, -6]);
-  const translateZ = useTransform(scrollYProgress, [0, 0.5, 1], [-40, 0, -40]);
+  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [4, 0, -4]);
+  const translateZ = useTransform(scrollYProgress, [0, 0.5, 1], [-30, 0, -30]);
 
   return (
     <section
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-paper py-16 sm:py-20 lg:py-24"
     >
+      {/* Ambient tint for depth */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          right-0
+          top-0
+          h-[420px]
+          w-[420px]
+          -translate-y-1/3
+          translate-x-1/3
+          rounded-full
+          bg-[#C8102E]/5
+          blur-[100px]
+        "
+        aria-hidden="true"
+      />
+
       {/* =====================================================
           HEADING
       ====================================================== */}
@@ -290,12 +299,12 @@ export default function AdvocacyCampaign() {
         </h2>
         <div className="mx-auto mt-4 flex items-center justify-center gap-2">
           <span className="h-[3px] w-10 rounded-full bg-ink/20" />
-          <span className="h-[3px] w-6 rounded-full bg-maroon" />
+          <span className="h-[3px] w-6 rounded-full bg-[#C8102E]" />
         </div>
       </motion.div>
 
       {/* =====================================================
-          TWO-COLUMN GRID — with a gentle scroll-driven 3D tilt
+          TWO-COLUMN LAYOUT — left: activities, right: impact
       ====================================================== */}
       <motion.div
         style={{
@@ -312,15 +321,215 @@ export default function AdvocacyCampaign() {
           w-full
           max-w-6xl
           grid-cols-1
-          gap-12
+          gap-14
           px-5
           sm:px-8
-          lg:grid-cols-2
-          lg:gap-16
+          lg:grid-cols-[1fr_1.15fr]
+          lg:gap-12
         "
       >
-        <AdvocacyColumn groups={leftColumn} fromLeft={true} />
-        <AdvocacyColumn groups={rightColumn} fromLeft={false} />
+        {/* LEFT — Advocacy activities */}
+        <div className="flex flex-col gap-4">
+          <motion.h3
+            variants={headingVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.6 }}
+            className="mb-1 text-[13px] font-bold uppercase tracking-[0.12em] text-[#C8102E]"
+          >
+            International Advocacy
+          </motion.h3>
+
+          {activities.map((item, i) => (
+            <ActivityCard key={i} item={item} index={i} />
+          ))}
+        </div>
+
+        {/* Vertical divider on desktop */}
+        <div className="relative hidden lg:block">
+          <span className="absolute inset-y-0 left-[-1.5rem] w-px bg-ink/10" />
+
+          <div className="flex flex-col gap-8">
+            <div>
+              <motion.h3
+                variants={headingVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.6 }}
+                className="mb-1 text-[13px] font-bold uppercase tracking-[0.12em] text-[#C8102E]"
+              >
+                Impact Overview
+              </motion.h3>
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-[15px] leading-relaxed text-ink/70"
+              >
+                Over the years we have touched the lives of many people in the
+                UK and globally.
+              </motion.p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {stats.map((stat, i) => (
+                <StatCard key={i} stat={stat} index={i} />
+              ))}
+            </div>
+
+            {/* Reports CTA */}
+            <motion.a
+              href="#"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              whileHover={{ y: -3 }}
+              className="
+                group
+                flex
+                items-center
+                justify-between
+                gap-4
+                rounded-xl
+                bg-ink
+                p-5
+                shadow-[0_8px_24px_rgba(0,0,0,0.15)]
+                transition-shadow
+                duration-300
+                hover:shadow-[0_14px_32px_rgba(0,0,0,0.25)]
+              "
+            >
+              <div>
+                <p className="text-[15px] font-bold text-white">
+                  Annual Reports
+                </p>
+                <p className="mt-1 text-[13.5px] leading-relaxed text-white/65">
+                  Detailed financials and programme analysis, published yearly.
+                </p>
+              </div>
+              <span
+                className="
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-[#C8102E]
+                  text-white
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-1
+                "
+                aria-hidden="true"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M3 8h10m0 0L9 4m4 4L9 12"
+                    stroke="white"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </motion.a>
+          </div>
+        </div>
+
+        {/* MOBILE / TABLET — same right-column content, stacked
+            (the desktop divider block above is hidden below lg) */}
+        <div className="flex flex-col gap-8 lg:hidden">
+          <div>
+            <motion.h3
+              variants={headingVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.6 }}
+              className="mb-1 text-[13px] font-bold uppercase tracking-[0.12em] text-[#C8102E]"
+            >
+              Impact Overview
+            </motion.h3>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-[15px] leading-relaxed text-ink/70"
+            >
+              Over the years we have touched the lives of many people in the
+              UK and globally.
+            </motion.p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            {stats.map((stat, i) => (
+              <StatCard key={i} stat={stat} index={i} />
+            ))}
+          </div>
+
+          <motion.a
+            href="#"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ y: -3 }}
+            className="
+              group
+              flex
+              items-center
+              justify-between
+              gap-4
+              rounded-xl
+              bg-ink
+              p-5
+              shadow-[0_8px_24px_rgba(0,0,0,0.15)]
+              transition-shadow
+              duration-300
+              hover:shadow-[0_14px_32px_rgba(0,0,0,0.25)]
+            "
+          >
+            <div>
+              <p className="text-[15px] font-bold text-white">
+                Annual Reports
+              </p>
+              <p className="mt-1 text-[13.5px] leading-relaxed text-white/65">
+                Detailed financials and programme analysis, published yearly.
+              </p>
+            </div>
+            <span
+              className="
+                flex
+                h-10
+                w-10
+                shrink-0
+                items-center
+                justify-center
+                rounded-full
+                bg-[#C8102E]
+                text-white
+                transition-transform
+                duration-300
+                group-hover:translate-x-1
+              "
+              aria-hidden="true"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3 8h10m0 0L9 4m4 4L9 12"
+                  stroke="white"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </motion.a>
+        </div>
       </motion.div>
     </section>
   );

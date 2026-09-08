@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-import aboutHeroImage from "../assets/images/abouthero.png"; // image 1 (protest/rally photo)
+import aboutHeroImage from "../assets/images/about_hero.png"; // image 1 (protest/rally photo)
 import tornEdge from "../assets/images/torn-edge.webp"; // image 2 (trimmed mask)
 
 const GOLD = "#C9A227"; // match your bg-gold progress bar; swap to your token if different
@@ -74,16 +74,7 @@ export default function AboutHero({
       >
         {/* Dark gradient overlay for text legibility, matching
             the reference screenshot's left-to-right fade */}
-        <div
-          className="
-            absolute
-            inset-0
-            bg-gradient-to-r
-            from-black/75
-            via-black/45
-            to-black/10
-          "
-        />
+        
 
         {/* =================================================
             TITLE — sits above the torn seam, cleared of the

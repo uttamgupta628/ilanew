@@ -153,6 +153,7 @@ const headingVariants: Variants = {
 
 /* =========================================================
    3D TILT CARD — live mouse-tracked perspective tilt
+   + hover background transition to brand red (#C8102E)
 ========================================================= */
 
 function TiltCard({
@@ -218,23 +219,47 @@ function TiltCard({
           ring-1
           ring-white/20
           backdrop-blur-[2px]
+          transition-[background-color,box-shadow]
+          duration-500
+          ease-out
+          hover:bg-[#C8102E]
+          hover:shadow-[0_14px_36px_rgba(200,16,46,0.45)]
+          hover:ring-white/40
         "
       >
         {/* Cursor-following glow — adds the "attractive" 3D sheen */}
         <motion.div
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
-            background: `radial-gradient(220px circle at ${glowX} ${glowY}, rgba(255,255,255,0.25), transparent 70%)`,
+            background: `radial-gradient(220px circle at ${glowX} ${glowY}, rgba(255,255,255,0.3), transparent 70%)`,
           }}
         />
 
+        {/* Accent corner flourish — soft glow that blooms in on hover */}
+        <div
+          className="
+            pointer-events-none
+            absolute
+            -right-6
+            -top-6
+            h-20
+            w-20
+            rounded-full
+            bg-white/0
+            blur-2xl
+            transition-colors
+            duration-500
+            group-hover:bg-white/20
+          "
+        />
+
         <div style={{ transform: "translateZ(30px)" }} className="relative flex gap-3">
-          <CheckIcon className="mt-0.5" />
+          <CheckIcon className="mt-0.5 transition-transform duration-300 group-hover:scale-110" />
           <div>
             <h3 className="text-[16px] font-bold leading-snug text-white sm:text-[17px]">
               {item.title}
             </h3>
-            <p className="mt-1.5 text-[14px] leading-relaxed text-white/85 sm:text-[15px]">
+            <p className="mt-1.5 text-[14px] leading-relaxed text-white/85 transition-colors duration-500 group-hover:text-white sm:text-[15px]">
               {item.description}
             </p>
           </div>
@@ -266,9 +291,10 @@ function CampaignColumn({
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.5 }}
-            className="mb-4 text-[17px] font-extrabold text-white sm:text-[19px]"
+            className="mb-4 inline-flex flex-col text-[17px] font-extrabold text-white sm:text-[19px]"
           >
             {group.heading}
+            <span className="mt-1.5 h-[3px] w-10 rounded-full bg-[#C8102E]" />
           </motion.h3>
 
           <div className="flex flex-col gap-4">
@@ -320,6 +346,27 @@ export default function CampaignHighlights() {
       ref={wrapRef}
       className="relative w-full overflow-hidden bg-[#6E9FC1] py-16 sm:py-20 lg:py-24"
     >
+      {/* =====================================================
+          AMBIENT BACKGROUND GLOW — adds depth so the section
+          doesn't read as a flat color block
+      ====================================================== */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          left-1/2
+          top-1/3
+          z-0
+          h-[500px]
+          w-[500px]
+          -translate-x-1/2
+          -translate-y-1/2
+          rounded-full
+          bg-white/10
+          blur-[120px]
+        "
+      />
+
       {/* =====================================================
           TORN EDGE SEAM — matches AboutHero, transitioning
           from the paper background above into this section
