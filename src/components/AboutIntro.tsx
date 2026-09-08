@@ -1,44 +1,38 @@
 import { motion, type Variants } from "framer-motion";
 
+import birdWatermark from "../assets/images/bird.png";
+
 const RED = "#C8102E";
 
 /* =========================================================
    DECORATIVE WATERMARK
 
-   Placeholder dove silhouette in pale pink, matching the
-   faint top-left shape in your screenshot. If you already
-   have that exact asset (looks like it might be reused from
-   elsewhere on the site), swap this <svg> for an <img> import
-   instead — same absolute positioning will work.
+   Uses the bird.png asset, faded into the background as a
+   subtle top-left watermark.
 ========================================================= */
 
 function DoveWatermark() {
   return (
-    <svg
-      viewBox="0 0 400 400"
-      fill="none"
+    <img
+      src={birdWatermark}
+      alt=""
       aria-hidden="true"
       className="
         pointer-events-none
         absolute
         -left-16
-        -top-10
+        -top-12
         h-[280px]
         w-[280px]
-        text-[#F6D9DE]
+        object-contain
         sm:h-[340px]
         sm:w-[340px]
         lg:-left-10
-        lg:-top-16
+        lg:-top-6
         lg:h-[400px]
         lg:w-[400px]
       "
-    >
-      <path
-        fill="currentColor"
-        d="M60 220c40-60 110-90 170-70-20-40-10-90 30-120 10 50 40 80 80 90-30 10-50 35-55 65 45-5 90 15 110 55-55-10-105 5-135 40 30 15 50 45 55 80-45-20-90-15-125 10-10-45-45-80-90-95-15 45-55 75-100 80 15-45 45-85 60-135z"
-      />
-    </svg>
+    />
   );
 }
 
@@ -151,24 +145,24 @@ export default function AboutIntro({
         ================================================== */}
 
         <div className="mt-10 flex flex-col gap-6">
-  {paragraphs.map((text, index) => (
-    <motion.p
-      key={index}
-      variants={itemVariants}
-      className="
-        text-left
-        text-justify
-        text-[15px]
-        leading-[1.75]
-        text-ink/75
-        sm:text-[16px]
-        lg:text-[17px]
-      "
-    >
-      {text}
-    </motion.p>
-  ))}
-</div>
+          {paragraphs.map((text, index) => (
+            <motion.p
+              key={index}
+              variants={itemVariants}
+              className="
+                text-left
+                text-justify
+                text-[15px]
+                leading-[1.75]
+                text-ink/75
+                sm:text-[16px]
+                lg:text-[17px]
+              "
+            >
+              {text}
+            </motion.p>
+          ))}
+        </div>
       </motion.div>
     </section>
   );

@@ -211,6 +211,11 @@ function TiltCard({
         className="
           group
           relative
+          flex
+          h-full
+          min-h-[132px]
+          flex-col
+          justify-center
           overflow-hidden
           rounded-2xl
           bg-white/15
@@ -219,17 +224,35 @@ function TiltCard({
           ring-1
           ring-white/20
           backdrop-blur-[2px]
-          transition-[background-color,box-shadow]
+          transition-shadow
           duration-500
           ease-out
-          hover:bg-[#C8102E]
           hover:shadow-[0_14px_36px_rgba(200,16,46,0.45)]
           hover:ring-white/40
+          sm:min-h-[140px]
         "
       >
+        {/* Bottom-up fill sweep — same effect as the Donate button */}
+        <span
+          className="
+            pointer-events-none
+            absolute
+            inset-x-0
+            bottom-0
+            z-0
+            h-0
+            bg-[#C8102E]
+            transition-all
+            duration-500
+            ease-out
+            group-hover:h-full
+          "
+          aria-hidden="true"
+        />
+
         {/* Cursor-following glow — adds the "attractive" 3D sheen */}
         <motion.div
-          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
             background: `radial-gradient(220px circle at ${glowX} ${glowY}, rgba(255,255,255,0.3), transparent 70%)`,
           }}
@@ -242,6 +265,7 @@ function TiltCard({
             absolute
             -right-6
             -top-6
+            z-0
             h-20
             w-20
             rounded-full
@@ -253,13 +277,13 @@ function TiltCard({
           "
         />
 
-        <div style={{ transform: "translateZ(30px)" }} className="relative flex gap-3">
+        <div style={{ transform: "translateZ(30px)" }} className="relative z-10 flex gap-3">
           <CheckIcon className="mt-0.5 transition-transform duration-300 group-hover:scale-110" />
           <div>
-            <h3 className="text-[16px] font-bold leading-snug text-white sm:text-[17px]">
+            <h3 className="line-clamp-2 text-[16px] font-bold leading-snug text-white sm:text-[17px]">
               {item.title}
             </h3>
-            <p className="mt-1.5 text-[14px] leading-relaxed text-white/85 transition-colors duration-500 group-hover:text-white sm:text-[15px]">
+            <p className="mt-1.5 line-clamp-3 text-[14px] leading-relaxed text-white/85 transition-colors duration-500 group-hover:text-white sm:text-[15px]">
               {item.description}
             </p>
           </div>
