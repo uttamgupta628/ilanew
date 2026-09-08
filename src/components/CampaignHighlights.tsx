@@ -50,6 +50,21 @@ const leftColumn: CampaignGroup[] = [
         description:
           "Where people from different generations work together in harmony for the greater good of the community.",
       },
+      {
+        title: "Creating an environment",
+        description:
+          "Where people from different generations work together in harmony for the greater good of the community.",
+      },
+      {
+        title: "Creating an environment",
+        description:
+          "Where people from different generations work together in harmony for the greater good of the community.",
+      },
+      {
+        title: "Creating an environment",
+        description:
+          "Where people from different generations work together in harmony for the greater good of the community.",
+      },
     ],
   },
 ];
@@ -62,6 +77,16 @@ const rightColumn: CampaignGroup[] = [
         title: "Youth Leadership Workshops",
         description:
           "Weekly series for an average of 40 participants teaching civic engagement and conflict resolution.",
+      },
+      {
+        title: "Extremism Prevention",
+        description:
+          "Interactive seminars in youth clubs on critical thinking and recognizing radical narratives.",
+      },
+      {
+        title: "Extremism Prevention",
+        description:
+          "Interactive seminars in youth clubs on critical thinking and recognizing radical narratives.",
       },
       {
         title: "Extremism Prevention",
@@ -88,9 +113,18 @@ const rightColumn: CampaignGroup[] = [
         description:
           "Rapid deployment of relief packages and wellbeing resources during crises, like the COVID-19 lockdown.",
       },
+      {
+        title: "Emergency Response",
+        description:
+          "Rapid deployment of relief packages and wellbeing resources during crises, like the COVID-19 lockdown.",
+      },
     ],
   },
 ];
+
+// Combined, in display order: all groups now render as full-width
+// heading + 2-column item grid, instead of two independent columns.
+const allGroups: CampaignGroup[] = [...leftColumn, ...rightColumn];
 
 /* =========================================================
    CHECK ICON
@@ -294,48 +328,34 @@ function TiltCard({
 }
 
 /* =========================================================
-   COLUMN
+   GROUP — full-width heading, items laid out in a 2-column
+   grid beneath it (instead of two independent side columns)
 ========================================================= */
 
-function CampaignColumn({
-  groups,
-  fromLeft,
-}: {
-  groups: CampaignGroup[];
-  fromLeft: boolean;
-}) {
-  let runningIndex = 0;
-
+function CampaignGroupBlock({ group }: { group: CampaignGroup }) {
   return (
-    <div className="flex flex-col gap-8">
-      {groups.map((group) => (
-        <div key={group.heading}>
-          <motion.h3
-            variants={headingVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.5 }}
-            className="mb-4 inline-flex flex-col text-[17px] font-extrabold text-white sm:text-[19px]"
-          >
-            {group.heading}
-            <span className="mt-1.5 h-[3px] w-10 rounded-full bg-[#C8102E]" />
-          </motion.h3>
+    <div>
+      <motion.h3
+        variants={headingVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.5 }}
+        className="mb-5 inline-flex flex-col text-[18px] font-extrabold text-white sm:text-[20px]"
+      >
+        {group.heading}
+        <span className="mt-1.5 h-[3px] w-10 rounded-full bg-[#C8102E]" />
+      </motion.h3>
 
-          <div className="flex flex-col gap-4">
-            {group.items.map((item) => {
-              const idx = runningIndex++;
-              return (
-                <TiltCard
-                  key={item.title}
-                  item={item}
-                  fromLeft={fromLeft}
-                  index={idx}
-                />
-              );
-            })}
-          </div>
-        </div>
-      ))}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {group.items.map((item, i) => (
+          <TiltCard
+            key={item.title}
+            item={item}
+            fromLeft={i % 2 === 0}
+            index={i}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -449,7 +469,8 @@ export default function CampaignHighlights() {
       </motion.div>
 
       {/* =====================================================
-          TWO-COLUMN GRID
+          GROUPS — each stacked full-width: heading on top,
+          items in a 2-column grid below it
       ====================================================== */}
       <div
         style={{ perspective: 1600 }}
@@ -457,19 +478,19 @@ export default function CampaignHighlights() {
           relative
           z-10
           mx-auto
-          grid
+          flex
           w-full
           max-w-6xl
-          grid-cols-1
-          gap-10
+          flex-col
+          gap-12
           px-5
           sm:px-8
-          lg:grid-cols-2
           lg:gap-14
         "
       >
-        <CampaignColumn groups={leftColumn} fromLeft={true} />
-        <CampaignColumn groups={rightColumn} fromLeft={false} />
+        {allGroups.map((group) => (
+          <CampaignGroupBlock key={group.heading} group={group} />
+        ))}
       </div>
     </section>
   );
