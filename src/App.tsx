@@ -9,6 +9,8 @@ import Stories from "./pages/Stories";
 import Contact from "./pages/contact";
 import Feedback from "./pages/Feedback";
 import FAQ from "./pages/Faq";
+import StoppingExecutions from "./pages/Stoppingexecutions";
+import ChildrensRights from "./pages/Childrensrights";
 
 function PhoneIcon() {
   return (
@@ -92,6 +94,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/stopping-executions" element={<StoppingExecutions />} />
+          <Route path="/childrens-rights" element={<ChildrensRights />} />
         </Routes>
       </main>
 

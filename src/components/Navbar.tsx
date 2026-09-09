@@ -3,9 +3,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 
+/* =========================================================
+   TYPES
+========================================================= */
+
 type DropdownItem = {
   label: string;
   href: string;
+  children?: DropdownItem[];
 };
 
 type NavLink = {
@@ -16,50 +21,138 @@ type NavLink = {
   dropdown?: DropdownItem[];
 };
 
+/* =========================================================
+   NAVIGATION LINKS
+========================================================= */
+
 const navLinks: NavLink[] = [
-  { label: "Home", href: "#top", active: true },
+  {
+    label: "Home",
+    href: "#top",
+    active: true,
+  },
+
+  /* =======================================================
+     CAMPAIGNS
+  ======================================================= */
+
   {
     label: "Campaigns",
     href: "#campaigns",
     hasChevron: true,
+
     dropdown: [
-      { label: "Raising Awareness", href: "#raising-awareness" },
-      { label: "Community Support", href: "#community-support" },
+      {
+        label: "Raising Awareness",
+        href: "#raising-awareness",
+
+        children: [
+          {
+            label: "Stopping Executions. Defending the Vulnerable",
+            href: "/stopping-executions",
+          },
+          {
+            label: "Children’s Rights",
+            href: "/childrens-rights",
+          },
+        ],
+      },
+
+      {
+        label: "Community Support",
+        href: "#community-support",
+      },
     ],
   },
+
+  /* =======================================================
+     WHO WE ARE
+  ======================================================= */
+
   {
     label: "Who We Are",
     href: "#who-we-are",
     hasChevron: true,
+
     dropdown: [
-      { label: "About Us", href: "/about" },
-      { label: "Stories & Voices", href: "/stories" },
-      { label: "Contact Us", href: "/contact" },
-      { label: "Feedback form", href: "/feedback" },
-      { label: "FAQ", href: "/faq" },
+      {
+        label: "About Us",
+        href: "/about",
+      },
+      {
+        label: "Stories & Voices",
+        href: "/stories",
+      },
+      {
+        label: "Contact Us",
+        href: "/contact",
+      },
+      {
+        label: "Feedback form",
+        href: "/feedback",
+      },
+      {
+        label: "FAQ",
+        href: "/faq",
+      },
     ],
   },
+
+  /* =======================================================
+     HOW TO HELP
+  ======================================================= */
+
   {
     label: "How To Help",
     href: "#how-to-help",
     hasChevron: true,
+
     dropdown: [
-      { label: "Leave a Legacy", href: "#leave-a-legacy" },
-      { label: "Donate", href: "https://iliberty.org.uk/donate-2/" },
-      { label: "Partnerships", href: "#partnerships" },
-      { label: "Volunteer Form", href: "#volunteer-form" },
+      {
+        label: "Leave a Legacy",
+        href: "#leave-a-legacy",
+      },
+      {
+        label: "Donate",
+        href: "https://iliberty.org.uk/donate-2/",
+      },
+      {
+        label: "Partnerships",
+        href: "#partnerships",
+      },
+      {
+        label: "Volunteer Form",
+        href: "#volunteer-form",
+      },
     ],
   },
+
+  /* =======================================================
+     NEWS
+  ======================================================= */
+
   {
     label: "News & Updates",
     href: "https://iliberty.org.uk/news/",
   },
 ];
 
+/* =========================================================
+   COLORS
+========================================================= */
+
 const RED = "#C8102E";
 const BLUE = "#5B8DBE";
 
-function ChevronIcon({ className = "" }: { className?: string }) {
+/* =========================================================
+   CHEVRON DOWN
+========================================================= */
+
+function ChevronIcon({
+  className = "",
+}: {
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -69,13 +162,22 @@ function ChevronIcon({ className = "" }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
     >
       <path d="M6 9l6 6 6-6" />
     </svg>
   );
 }
 
-function ChevronRightIcon({ className = "" }: { className?: string }) {
+/* =========================================================
+   CHEVRON RIGHT
+========================================================= */
+
+function ChevronRightIcon({
+  className = "",
+}: {
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -85,13 +187,22 @@ function ChevronRightIcon({ className = "" }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
     >
       <path d="M9 6l6 6-6 6" />
     </svg>
   );
 }
 
-function ArrowIcon({ className = "" }: { className?: string }) {
+/* =========================================================
+   ARROW
+========================================================= */
+
+function ArrowIcon({
+  className = "",
+}: {
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -101,6 +212,7 @@ function ArrowIcon({ className = "" }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      aria-hidden="true"
     >
       <path d="M5 12h14M13 6l6 6-6 6" />
     </svg>
@@ -110,12 +222,16 @@ function ArrowIcon({ className = "" }: { className?: string }) {
 /* =========================================================
    SMART LINK
 
-   Routes each href to the right primitive:
-   - "http..."  -> plain <a>, opens in a new tab
-   - "#..."     -> hash link; jumps in place on "/", or
-                   navigates home first (via location-aware
-                   href) when on any other route like /about
-   - anything else ("/about", "/shop") -> react-router <Link>
+   - http:// or https://
+       -> normal anchor
+       -> opens new tab
+
+   - #section
+       -> jumps to section on home
+       -> goes to /#section from another page
+
+   - /about, /stories, etc.
+       -> React Router Link
 ========================================================= */
 
 function SmartLink({
@@ -131,13 +247,24 @@ function SmartLink({
   className?: string;
   style?: React.CSSProperties;
   onClick?: () => void;
-  onMouseEnter?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  onMouseLeave?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  onMouseEnter?: (
+    e: React.MouseEvent<HTMLAnchorElement>
+  ) => void;
+  onMouseLeave?: (
+    e: React.MouseEvent<HTMLAnchorElement>
+  ) => void;
   children: React.ReactNode;
 }) {
   const location = useLocation();
 
-  if (href.startsWith("http")) {
+  /* =======================================================
+     EXTERNAL LINK
+  ======================================================= */
+
+  if (
+    href.startsWith("http://") ||
+    href.startsWith("https://")
+  ) {
     return (
       <a
         href={href}
@@ -154,8 +281,16 @@ function SmartLink({
     );
   }
 
+  /* =======================================================
+     HASH LINK
+  ======================================================= */
+
   if (href.startsWith("#")) {
-    const target = location.pathname === "/" ? href : `/${href}`;
+    const target =
+      location.pathname === "/"
+        ? href
+        : `/${href}`;
+
     return (
       <a
         href={target}
@@ -169,6 +304,10 @@ function SmartLink({
       </a>
     );
   }
+
+  /* =======================================================
+     REACT ROUTER LINK
+  ======================================================= */
 
   return (
     <Link
@@ -184,10 +323,24 @@ function SmartLink({
   );
 }
 
+/* =========================================================
+   NAVBAR
+========================================================= */
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [desktopDropdown, setDesktopDropdown] = useState<string | null>(null);
-  const [mobileDropdown, setMobileDropdown] = useState<string | null>(null);
+
+  const [desktopDropdown, setDesktopDropdown] =
+    useState<string | null>(null);
+
+  const [desktopSubDropdown, setDesktopSubDropdown] =
+    useState<string | null>(null);
+
+  const [mobileDropdown, setMobileDropdown] =
+    useState<string | null>(null);
+
+  const [mobileSubDropdown, setMobileSubDropdown] =
+    useState<string | null>(null);
 
   return (
     <header
@@ -334,15 +487,23 @@ export default function Navbar() {
                 <li
                   key={link.label}
                   className="relative"
-                  onMouseEnter={() =>
-                    link.dropdown &&
-                    setDesktopDropdown(link.label)
-                  }
-                  onMouseLeave={() =>
-                    link.dropdown &&
-                    setDesktopDropdown(null)
-                  }
+                  onMouseEnter={() => {
+                    if (link.dropdown) {
+                      setDesktopDropdown(link.label);
+                      setDesktopSubDropdown(null);
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (link.dropdown) {
+                      setDesktopDropdown(null);
+                      setDesktopSubDropdown(null);
+                    }
+                  }}
                 >
+                  {/* =========================================
+                      MAIN NAV LINK
+                  ========================================== */}
+
                   <SmartLink
                     href={link.href}
                     style={
@@ -377,7 +538,8 @@ export default function Navbar() {
                           transition-transform
                           duration-200
                           ${
-                            desktopDropdown === link.label
+                            desktopDropdown ===
+                            link.label
                               ? "rotate-180"
                               : ""
                           }
@@ -386,99 +548,243 @@ export default function Navbar() {
                     )}
                   </SmartLink>
 
-                  {/* =========================================
-                      DESKTOP DROPDOWN
-                  ========================================== */}
+                 {/* =========================================
+    FIRST LEVEL DROPDOWN
+========================================== */}
 
-                  {link.dropdown && (
-                    <AnimatePresence>
-                      {desktopDropdown === link.label && (
-                        <motion.div
-                          initial={{
-                            opacity: 0,
-                            y: 8,
-                          }}
-                          animate={{
-                            opacity: 1,
-                            y: 0,
-                          }}
-                          exit={{
-                            opacity: 0,
-                            y: 8,
-                          }}
-                          transition={{
-                            duration: 0.18,
-                            ease: "easeOut",
-                          }}
-                          className="
-                            absolute
-                            left-1/2
-                            top-full
-                            z-20
-                            mt-3
-                            w-64
-                            -translate-x-1/2
-                            rounded-2xl
-                            bg-white
-                            p-3
-                            shadow-[0_18px_45px_rgba(0,0,0,0.18)]
-                          "
-                        >
-                          <ul>
-                            {link.dropdown.map(
-                              (item, index) => (
-                                <li key={item.label}>
-                                  <SmartLink
-                                    href={item.href}
-                                    className={`
-                                      flex
-                                      items-center
-                                      justify-between
-                                      gap-2
-                                      px-2
-                                      py-2.5
-                                      text-[15px]
-                                      font-semibold
-                                      text-ink
-                                      transition-colors
-                                      ${
-                                        index !==
-                                        link.dropdown!.length -
-                                          1
-                                          ? "border-b border-ink/10"
-                                          : ""
-                                      }
-                                    `}
-                                    onMouseEnter={(e) =>
-                                      (e.currentTarget.style.color =
-                                        RED)
-                                    }
-                                    onMouseLeave={(e) =>
-                                      (e.currentTarget.style.color =
-                                        "")
-                                    }
-                                  >
-                                    <span>
-                                      {item.label}
-                                    </span>
+{link.dropdown && (
+  <AnimatePresence>
+    {desktopDropdown === link.label && (
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: 8,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        exit={{
+          opacity: 0,
+          y: 8,
+        }}
+        transition={{
+          duration: 0.18,
+          ease: "easeOut",
+        }}
+        /*
+          IMPORTANT:
+          Do NOT use mt-3 here.
 
-                                    <ChevronRightIcon
-                                      className="
-                                        h-4
-                                        w-4
-                                        shrink-0
-                                        opacity-60
-                                      "
-                                    />
-                                  </SmartLink>
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+          Instead we use pt-3 on the wrapper.
+          This keeps the dropdown visually 12px below
+          the navbar while maintaining a hover bridge.
+        */
+        className="
+          absolute
+          left-1/2
+          top-full
+          z-50
+          -translate-x-1/2
+          pt-3
+        "
+      >
+        {/* Actual dropdown box */}
+        <div
+          className="
+            w-64
+            rounded-2xl
+            bg-white
+            p-3
+            shadow-[0_18px_45px_rgba(0,0,0,0.18)]
+          "
+        >
+          <ul>
+            {link.dropdown.map((item, index) => (
+              <li
+                key={item.label}
+                className="relative"
+                onMouseEnter={() => {
+                  if (item.children) {
+                    setDesktopSubDropdown(item.label);
+                  } else {
+                    setDesktopSubDropdown(null);
+                  }
+                }}
+              >
+                {/* =====================================
+                    FIRST LEVEL ITEM
+                ====================================== */}
+
+                <SmartLink
+                  href={item.href}
+                  className={`
+                    flex
+                    items-center
+                    justify-between
+                    gap-2
+                    px-2
+                    py-2.5
+                    text-[15px]
+                    font-semibold
+                    text-ink
+                    transition-colors
+                    duration-200
+                    ${
+                      index !==
+                      link.dropdown!.length - 1
+                        ? "border-b border-ink/10"
+                        : ""
+                    }
+                  `}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = RED;
+
+                    if (item.children) {
+                      setDesktopSubDropdown(item.label);
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "";
+                  }}
+                >
+                  <span>{item.label}</span>
+
+                  {/* Right arrow */}
+                  {item.children && (
+                    <ChevronRightIcon
+                      className="
+                        h-4
+                        w-4
+                        shrink-0
+                        opacity-60
+                      "
+                    />
                   )}
+                </SmartLink>
+
+                {/* =====================================
+                    SECOND LEVEL DROPDOWN
+                ====================================== */}
+
+                {item.children && (
+                  <AnimatePresence>
+                    {desktopSubDropdown === item.label && (
+                      <motion.div
+                        initial={{
+                          opacity: 0,
+                          x: -10,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          x: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          x: -10,
+                        }}
+                        transition={{
+                          duration: 0.18,
+                          ease: "easeOut",
+                        }}
+                        /*
+                          IMPORTANT:
+                          The submenu is attached directly
+                          to the parent item.
+
+                          No gap means mouse can move from
+                          Raising Awareness -> submenu.
+                        */
+                        className="
+                          absolute
+                          left-full
+                          top-0
+                          z-[60]
+                          ml-1
+                          w-[34rem]
+                          rounded-2xl
+                          bg-white
+                          p-3
+                          shadow-[0_18px_45px_rgba(0,0,0,0.18)]
+                        "
+                        onMouseEnter={() => {
+                          setDesktopSubDropdown(item.label);
+                        }}
+                        onMouseLeave={() => {
+                          setDesktopSubDropdown(null);
+                        }}
+                      >
+                        <ul>
+                          {item.children.map(
+                            (child, childIndex) => (
+                              <li
+                                key={child.label}
+                              >
+                                <SmartLink
+                                  href={child.href}
+                                  className={`
+                                    flex
+                                    items-center
+                                    justify-between
+                                    gap-2
+                                    px-2
+                                    py-2.5
+                                    text-[15px]
+                                    font-semibold
+                                    transition-colors
+                                    duration-200
+                                    ${
+                                      childIndex === 0
+                                        ? "text-[#C8102E]"
+                                        : "text-ink"
+                                    }
+                                    ${
+                                      childIndex !==
+                                      item.children!.length - 1
+                                        ? "border-b border-ink/10"
+                                        : ""
+                                    }
+                                  `}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.color =
+                                      RED;
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.color =
+                                      childIndex === 0
+                                        ? RED
+                                        : "";
+                                  }}
+                                >
+                                  <span>
+                                    {child.label}
+                                  </span>
+
+                                  <ChevronRightIcon
+                                    className="
+                                      h-4
+                                      w-4
+                                      shrink-0
+                                      opacity-60
+                                    "
+                                  />
+                                </SmartLink>
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+)}
                 </li>
               ))}
             </ul>
@@ -497,7 +803,9 @@ export default function Navbar() {
               xl:flex
             "
           >
-            {/* Donate */}
+            {/* ===============================================
+                DONATE
+            ================================================ */}
 
             <SmartLink
               href="https://iliberty.org.uk/donate-2/"
@@ -565,7 +873,9 @@ export default function Navbar() {
               </span>
             </SmartLink>
 
-            {/* Shop */}
+            {/* ===============================================
+                SHOP
+            ================================================ */}
 
             <SmartLink
               href="/shop"
@@ -622,9 +932,14 @@ export default function Navbar() {
               open ? "Close menu" : "Open menu"
             }
             aria-expanded={open}
-            onClick={() =>
-              setOpen((value) => !value)
-            }
+            onClick={() => {
+              setOpen((value) => !value);
+
+              if (open) {
+                setMobileDropdown(null);
+                setMobileSubDropdown(null);
+              }
+            }}
             className="
               relative
               z-10
@@ -763,6 +1078,10 @@ export default function Navbar() {
                           duration: 0.3,
                         }}
                       >
+                        {/* ===================================
+                            LINK WITH DROPDOWN
+                        ==================================== */}
+
                         {link.dropdown ? (
                           <>
                             <button
@@ -822,6 +1141,10 @@ export default function Navbar() {
                               />
                             </button>
 
+                            {/* =================================
+                                FIRST MOBILE DROPDOWN
+                            ================================== */}
+
                             <AnimatePresence
                               initial={false}
                             >
@@ -861,47 +1184,208 @@ export default function Navbar() {
                                           item.label
                                         }
                                       >
-                                        <SmartLink
-                                          href={
-                                            item.href
-                                          }
-                                          onClick={() => {
-                                            setOpen(
-                                              false
-                                            );
-                                            setMobileDropdown(
-                                              null
-                                            );
-                                          }}
-                                          className="
-                                            flex
-                                            items-center
-                                            justify-between
-                                            gap-2
-                                            rounded-xl
-                                            px-3
-                                            py-2.5
-                                            text-[15px]
-                                            font-semibold
-                                            text-ink/85
-                                            transition-colors
-                                            hover:bg-black/[0.04]
-                                          "
-                                        >
-                                          <span>
-                                            {
-                                              item.label
-                                            }
-                                          </span>
+                                        {/* =========================
+                                            ITEM HAS CHILDREN
+                                        ========================== */}
 
-                                          <ChevronRightIcon
+                                        {item.children ? (
+                                          <>
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                setMobileSubDropdown(
+                                                  (
+                                                    current
+                                                  ) =>
+                                                    current ===
+                                                    item.label
+                                                      ? null
+                                                      : item.label
+                                                )
+                                              }
+                                              className="
+                                                flex
+                                                w-full
+                                                items-center
+                                                justify-between
+                                                gap-2
+                                                rounded-xl
+                                                px-3
+                                                py-2.5
+                                                text-[15px]
+                                                font-semibold
+                                                text-ink/85
+                                                transition-colors
+                                                hover:bg-black/[0.04]
+                                              "
+                                            >
+                                              <span>
+                                                {
+                                                  item.label
+                                                }
+                                              </span>
+
+                                              <ChevronIcon
+                                                className={`
+                                                  h-3.5
+                                                  w-3.5
+                                                  opacity-50
+                                                  transition-transform
+                                                  ${
+                                                    mobileSubDropdown ===
+                                                    item.label
+                                                      ? "rotate-180"
+                                                      : ""
+                                                  }
+                                                `}
+                                              />
+                                            </button>
+
+                                            {/* =====================
+                                                SECOND MOBILE LEVEL
+                                            ====================== */}
+
+                                            <AnimatePresence
+                                              initial={
+                                                false
+                                              }
+                                            >
+                                              {mobileSubDropdown ===
+                                                item.label && (
+                                                <motion.ul
+                                                  initial={{
+                                                    height: 0,
+                                                    opacity: 0,
+                                                  }}
+                                                  animate={{
+                                                    height:
+                                                      "auto",
+                                                    opacity: 1,
+                                                  }}
+                                                  exit={{
+                                                    height: 0,
+                                                    opacity: 0,
+                                                  }}
+                                                  transition={{
+                                                    duration:
+                                                      0.25,
+                                                  }}
+                                                  className="
+                                                    overflow-hidden
+                                                    pl-4
+                                                  "
+                                                >
+                                                  {item.children.map(
+                                                    (
+                                                      child
+                                                    ) => (
+                                                      <li
+                                                        key={
+                                                          child.label
+                                                        }
+                                                      >
+                                                        <SmartLink
+                                                          href={
+                                                            child.href
+                                                          }
+                                                          onClick={() => {
+                                                            setOpen(
+                                                              false
+                                                            );
+                                                            setMobileDropdown(
+                                                              null
+                                                            );
+                                                            setMobileSubDropdown(
+                                                              null
+                                                            );
+                                                          }}
+                                                          className="
+                                                            flex
+                                                            items-center
+                                                            justify-between
+                                                            gap-2
+                                                            rounded-xl
+                                                            px-3
+                                                            py-2.5
+                                                            text-[14px]
+                                                            font-semibold
+                                                            text-ink/75
+                                                            transition-colors
+                                                            hover:bg-black/[0.04]
+                                                            hover:text-[#C8102E]
+                                                          "
+                                                        >
+                                                          <span>
+                                                            {
+                                                              child.label
+                                                            }
+                                                          </span>
+
+                                                          <ChevronRightIcon
+                                                            className="
+                                                              h-3.5
+                                                              w-3.5
+                                                              opacity-50
+                                                            "
+                                                          />
+                                                        </SmartLink>
+                                                      </li>
+                                                    )
+                                                  )}
+                                                </motion.ul>
+                                              )}
+                                            </AnimatePresence>
+                                          </>
+                                        ) : (
+                                          /* =========================
+                                             NORMAL MOBILE ITEM
+                                          ========================== */
+
+                                          <SmartLink
+                                            href={
+                                              item.href
+                                            }
+                                            onClick={() => {
+                                              setOpen(
+                                                false
+                                              );
+                                              setMobileDropdown(
+                                                null
+                                              );
+                                              setMobileSubDropdown(
+                                                null
+                                              );
+                                            }}
                                             className="
-                                              h-3.5
-                                              w-3.5
-                                              opacity-50
+                                              flex
+                                              items-center
+                                              justify-between
+                                              gap-2
+                                              rounded-xl
+                                              px-3
+                                              py-2.5
+                                              text-[15px]
+                                              font-semibold
+                                              text-ink/85
+                                              transition-colors
+                                              hover:bg-black/[0.04]
                                             "
-                                          />
-                                        </SmartLink>
+                                          >
+                                            <span>
+                                              {
+                                                item.label
+                                              }
+                                            </span>
+
+                                            <ChevronRightIcon
+                                              className="
+                                                h-3.5
+                                                w-3.5
+                                                opacity-50
+                                              "
+                                            />
+                                          </SmartLink>
+                                        )}
                                       </li>
                                     )
                                   )}
@@ -910,6 +1394,10 @@ export default function Navbar() {
                             </AnimatePresence>
                           </>
                         ) : (
+                          /* ===================================
+                              NORMAL MOBILE NAV LINK
+                          ==================================== */
+
                           <SmartLink
                             href={link.href}
                             onClick={() =>
@@ -963,6 +1451,10 @@ export default function Navbar() {
                     pt-3
                   "
                 >
+                  {/* =============================================
+                      MOBILE DONATE
+                  ============================================== */}
+
                   <SmartLink
                     href="https://iliberty.org.uk/donate-2/"
                     className="
@@ -1016,6 +1508,10 @@ export default function Navbar() {
                       "
                     />
                   </SmartLink>
+
+                  {/* =============================================
+                      MOBILE SHOP
+                  ============================================== */}
 
                   <SmartLink
                     href="/shop"
