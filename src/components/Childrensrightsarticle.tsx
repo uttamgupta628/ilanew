@@ -164,17 +164,17 @@ function AccentRectangle({ flip }: { flip: boolean }) {
    DIVIDER — thin accent rule between sections
 ========================================================= */
 
-function SectionDivider() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scaleX: 0 }}
-      whileInView={{ opacity: 1, scaleX: 1 }}
-      viewport={{ once: true, amount: 0.8 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="mx-auto my-14 h-px w-full max-w-xs origin-center bg-ink/10 sm:my-16"
-    />
-  );
-}
+// function SectionDivider() {
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0, scaleX: 0 }}
+//       whileInView={{ opacity: 1, scaleX: 1 }}
+//       viewport={{ once: true, amount: 0.8 }}
+//       transition={{ duration: 0.6, ease: "easeOut" }}
+//       className="mx-auto my-14 h-px w-full max-w-xs origin-center bg-ink/10 sm:my-16"
+//     />
+//   );
+// }
 
 /* =========================================================
    TOPIC TABS — the "Child Marriage / Child labour / Child

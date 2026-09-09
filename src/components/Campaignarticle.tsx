@@ -1,4 +1,4 @@
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 
 // Placeholder imports — replace with the actual campaign photos.
 // Filenames are suggestions only; point these at your real assets.
