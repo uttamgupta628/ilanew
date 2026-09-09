@@ -23,17 +23,26 @@
 
 /* =========================================================
    GLOBAL
+
+   NOTE: overflow-x is set to "clip" rather than "hidden" on
+   html/body/#root. Per spec, overflow-x: hidden with a
+   default overflow-y implicitly forces overflow-y: auto,
+   which turns these elements into scroll containers and
+   breaks position: sticky on nested descendants (like the
+   story-stack effect in StoriesVoices.tsx). "clip" achieves
+   the same horizontal-overflow prevention without that
+   side effect.
 ========================================================= */
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
@@ -44,7 +53,7 @@ body {
 
 #root {
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 *,

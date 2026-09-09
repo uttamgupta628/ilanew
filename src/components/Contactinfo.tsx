@@ -56,6 +56,48 @@ function ArrowIcon({ className = "" }: { className?: string }) {
   );
 }
 
+function UserIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <circle cx="12" cy="8" r="3.4" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M5 20c1.2-3.6 4-5.4 7-5.4s5.8 1.8 7 5.4"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function MailIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <rect x="3.5" y="5.5" width="17" height="13" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M4.5 7l7.5 5.5L19.5 7"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function MessageIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M4 5.5h16v11H9l-4.5 3.5V16.5H4v-11z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 /* =========================================================
    ANIMATION VARIANTS
 ========================================================= */
@@ -135,7 +177,8 @@ function Tilt3D({
 
 /* =========================================================
    INFO CARD — Address / Email rows, now with 3D tilt,
-   accent bar, and a glow that blooms in on hover
+   a darker defined border, and a glow that blooms in on
+   hover
 ========================================================= */
 
 type InfoCardProps = {
@@ -164,15 +207,15 @@ function InfoCard({ icon, label, children, delay = 0 }: InfoCardProps) {
             gap-4
             overflow-hidden
             rounded-2xl
-            bg-ink/[0.04]
+            border
+            border-ink/15
+            bg-ink/[0.03]
             p-5
-            shadow-[0_2px_10px_rgba(0,0,0,0.03)]
-            ring-1
-            ring-transparent
-            transition-shadow
+            shadow-[0_2px_10px_rgba(0,0,0,0.04)]
+            transition-[box-shadow,border-color]
             duration-300
-            hover:shadow-[0_16px_36px_rgba(200,16,46,0.12)]
-            hover:ring-[#C8102E]/15
+            hover:border-[#C8102E]/40
+            hover:shadow-[0_16px_36px_rgba(200,16,46,0.14)]
             sm:p-6
           "
         >
@@ -217,6 +260,8 @@ function InfoCard({ icon, label, children, delay = 0 }: InfoCardProps) {
               items-center
               justify-center
               rounded-xl
+              border
+              border-ink/10
               bg-white
               shadow-[0_2px_10px_rgba(0,0,0,0.06)]
               transition-transform
@@ -245,7 +290,8 @@ function InfoCard({ icon, label, children, delay = 0 }: InfoCardProps) {
 }
 
 /* =========================================================
-   FORM FIELD PRIMITIVES — subtle scale-up on focus
+   FORM FIELD PRIMITIVES — darker defined border, leading
+   icon, subtle scale-up on focus
 ========================================================= */
 
 function TextField({
@@ -253,17 +299,25 @@ function TextField({
   label,
   required,
   type = "text",
+  icon,
 }: {
   id: string;
   label: string;
   required?: boolean;
   type?: string;
+  icon: React.ReactNode;
 }) {
   return (
-    <motion.div whileFocus={{ scale: 1.01 }} className="flex-1">
+    <motion.div whileFocus={{ scale: 1.01 }} className="relative flex-1">
       <label htmlFor={id} className="sr-only">
         {label}
       </label>
+      <span
+        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink/35"
+        aria-hidden="true"
+      >
+        {icon}
+      </span>
       <input
         id={id}
         name={id}
@@ -273,18 +327,22 @@ function TextField({
         className="
           w-full
           rounded-xl
-          bg-ink/[0.04]
-          px-4
+          border
+          border-ink/20
+          bg-ink/[0.03]
           py-3.5
+          pl-11
+          pr-4
           text-[15px]
           text-ink
           placeholder:text-ink/45
           outline-none
-          transition-[box-shadow,background-color]
+          transition-[box-shadow,background-color,border-color]
           duration-200
+          focus:border-maroon
           focus:bg-white
           focus:ring-2
-          focus:ring-maroon/30
+          focus:ring-maroon/25
         "
       />
     </motion.div>
@@ -312,13 +370,13 @@ function RecaptchaPlaceholder() {
         gap-4
         rounded-lg
         border
-        border-ink/15
+        border-ink/25
         bg-white
         px-4
         py-3
         transition-shadow
         duration-300
-        hover:shadow-[0_6px_18px_rgba(0,0,0,0.06)]
+        hover:shadow-[0_6px_18px_rgba(0,0,0,0.08)]
       "
     >
       <label className="flex cursor-pointer items-center gap-3">
@@ -327,7 +385,7 @@ function RecaptchaPlaceholder() {
           checked={checked}
           onChange={(e) => setChecked(e.target.checked)}
           whileTap={{ scale: 0.85 }}
-          className="h-5 w-5 rounded border-ink/30 text-maroon focus:ring-maroon/30"
+          className="h-5 w-5 rounded border-ink/40 text-maroon focus:ring-maroon/30"
         />
         <span className="text-[14px] text-ink/80">I&apos;m not a robot</span>
       </label>
@@ -452,7 +510,7 @@ export default function ContactInfo() {
 
         {/* =================================================
             GET IN TOUCH FORM — 3D flip-in on scroll, subtle
-            tilt follows the cursor
+            tilt follows the cursor, darker defined border
         ================================================== */}
         <motion.div
           initial={{ opacity: 0, y: 40, rotateX: 8, scale: 0.97 }}
@@ -467,14 +525,21 @@ export default function ContactInfo() {
                 relative
                 overflow-hidden
                 rounded-3xl
+                border
+                border-ink/15
                 bg-white
                 p-6
-                shadow-[0_20px_60px_rgba(0,0,0,0.08)]
-                ring-1
-                ring-ink/5
+                shadow-[0_20px_60px_rgba(0,0,0,0.1)]
                 sm:p-10
               "
             >
+              {/* Top accent bar */}
+              <span
+                className="absolute inset-x-0 top-0 h-1.5"
+                style={{ backgroundColor: RED }}
+                aria-hidden="true"
+              />
+
               {/* Decorative gradient corner */}
               <div
                 className="
@@ -502,13 +567,23 @@ export default function ContactInfo() {
                 Get In Touch
               </motion.h2>
 
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="relative mt-2 text-center text-[14.5px] text-ink/55 sm:text-[15px]"
+              >
+                We usually reply within one to two working days.
+              </motion.p>
+
               <motion.div
                 initial={{ opacity: 0, scaleX: 0 }}
                 whileInView={{ opacity: 1, scaleX: 1 }}
                 viewport={{ once: true, amount: 0.6 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 style={{ backgroundColor: RED }}
-                className="relative mx-auto mt-3 h-[3px] w-14 origin-center rounded-full"
+                className="relative mx-auto mt-4 h-[3px] w-14 origin-center rounded-full"
               />
 
               {submitted ? (
@@ -516,7 +591,7 @@ export default function ContactInfo() {
                   initial={{ opacity: 0, y: 8, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                  className="relative mt-8 rounded-xl bg-ink/[0.04] px-5 py-6 text-center text-[15px] text-ink/75"
+                  className="relative mt-8 rounded-xl border border-ink/15 bg-ink/[0.03] px-5 py-6 text-center text-[15px] text-ink/75"
                 >
                   Thanks for reaching out &mdash; we&apos;ll get back to you
                   as soon as we can.
@@ -527,14 +602,20 @@ export default function ContactInfo() {
                   className="relative mt-8 flex flex-col gap-4"
                 >
                   <div className="flex flex-col gap-4 sm:flex-row">
-                    <TextField id="name" label="Name" required />
-                    <TextField id="email" label="Email" type="email" required />
+                    <TextField id="name" label="Name" required icon={<UserIcon className="h-4.5 w-4.5" />} />
+                    <TextField id="email" label="Email" type="email" required icon={<MailIcon className="h-4.5 w-4.5" />} />
                   </div>
 
-                  <div>
+                  <div className="relative">
                     <label htmlFor="message" className="sr-only">
                       Message
                     </label>
+                    <span
+                      className="pointer-events-none absolute left-4 top-4 text-ink/35"
+                      aria-hidden="true"
+                    >
+                      <MessageIcon className="h-4.5 w-4.5" />
+                    </span>
                     <motion.textarea
                       whileFocus={{ scale: 1.01 }}
                       id="message"
@@ -545,18 +626,22 @@ export default function ContactInfo() {
                         w-full
                         resize-none
                         rounded-xl
-                        bg-ink/[0.04]
-                        px-4
+                        border
+                        border-ink/20
+                        bg-ink/[0.03]
                         py-3.5
+                        pl-11
+                        pr-4
                         text-[15px]
                         text-ink
                         placeholder:text-ink/45
                         outline-none
-                        transition-[box-shadow,background-color]
+                        transition-[box-shadow,background-color,border-color]
                         duration-200
+                        focus:border-maroon
                         focus:bg-white
                         focus:ring-2
-                        focus:ring-maroon/30
+                        focus:ring-maroon/25
                       "
                     />
                   </div>
@@ -578,7 +663,7 @@ export default function ContactInfo() {
                         gap-2
                         overflow-hidden
                         rounded-full
-                        border
+                        border-2
                         border-maroon
                         bg-white
                         px-10

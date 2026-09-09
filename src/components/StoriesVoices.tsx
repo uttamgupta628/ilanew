@@ -252,8 +252,8 @@ export default function StoriesVoices() {
               min-h-screen
               items-center
               bg-paper
-              py-20
-              sm:py-28
+              py-6
+              sm:py-10
             "
             style={{ zIndex: index + 1 }}
           >
